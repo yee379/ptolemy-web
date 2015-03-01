@@ -1,0 +1,89 @@
+.input-prepend {
+  margin-bottom: 0px;
+}
+.form-inline {
+  margin-bottom: 0px;
+}
+
+.control_bar {
+  position: relative;
+  float: right;
+}
+.weathermap {
+  position: relative;
+  left: 10px;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.weathermap_pane {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+circle.node {
+  stroke: gray;
+  stroke-opacity: 0.5;
+  stroke-width: 2px;
+  &:hover {
+    fill:  #ffdd3a
+  }
+}
+
+.switch {
+  fill:  #0FD55C;
+}
+.ap {
+  fill:  #507BD5;
+}
+.router {
+  fill:  #FF7B3A;
+}
+.host {
+  fill:  #356AA0;
+}
+.unknown {
+  fill:  #C52F24;
+}
+
+.highlight {
+  fill:  #FFDD3A;
+}
+
+
+text.nodetext {
+  text-anchor:  middle;
+  font-family:  Helvetica Neue;
+  font-size:    9px;
+  font-weight:  bold;
+  stroke-width: 0.25;
+  stroke-opacity: 0.8;
+  stroke:       gray;
+  fill:     black;
+}
+
+line.link {
+  stroke-opacity: 0.6;
+  stroke-width:   3;
+  stroke:         gray;
+  &:hover {
+    stroke-opacity: 1.0;
+  }
+}
+
+path.link {
+  fill: none;
+  stroke:         gray;
+  stroke-width: 2px;
+  &:hover {
+    stroke:  #ffdd3a
+  }
+}
+
+marker#arrow {
+  fill: lightgray;
+  stroke: lightgray;
+  stroke-width: 2px;
+}

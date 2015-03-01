@@ -1,0 +1,26 @@
+<div class="row span12">
+  <h1>Network Device Temperatures<h1>
+</div>
+
+<div id="cubism" class="row span12">
+</div>
+
+
+<%= coffee_script_tag do %>
+
+
+s = cubism.context().ptolemy()
+$.get( '/api/devices/list', (d) ->
+  metrics = []
+  for i in d
+    n = i['i']
+    if /farm/i.test(n)
+      # n = i['i'].split('.').reverse().join('.')
+      metrics.push s.metric( "temperature/" + n ).alias( n )
+
+  view = CubismView( '#cubism', metrics, delay=300000, step=300000, extent=[0,100] )
+
+)
+  
+<% end %>
+  

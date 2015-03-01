@@ -1,0 +1,45 @@
+<%= form_for(@hardware) do |f| %>
+  <% if @hardware.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hardware.errors.count, "error") %> prohibited this hardware from being saved:</h2>
+
+      <ul>
+      <% @hardware.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :vendor %><br>
+    <%= f.text_field :vendor %>
+  </div>
+  <div class="field">
+    <%= f.label :model %><br>
+    <%= f.text_field :model %>
+  </div>
+  <div class="field">
+    <%= f.label :bulletin_url %><br>
+    <%= f.text_field :bulletin_url %>
+  </div>
+  <div class="field">
+    <%= f.label :available %><br>
+    <%= f.date_select :available, { :use_two_digit_numbers => true, :use_month_numbers => true, :include_blank => true, :start_year => Time.now.year - 20, :end_year => Time.now.year + 10 } %>
+  </div>
+  <div class="field">
+    <%= f.label :end_of_sale %><br>
+    <%= f.date_select :end_of_sale, { :use_two_digit_numbers => true, :use_month_numbers => true, :include_blank => true, :start_year => Time.now.year - 20, :end_year => Time.now.year + 10 } %>
+  </div>
+  <div class="field">
+    <%= f.label :end_of_support %><br>
+    <%= f.date_select :end_of_support, { :use_two_digit_numbers => true, :use_month_numbers => true, :include_blank => true, :start_year => Time.now.year - 20, :end_year => Time.now.year + 10 } %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

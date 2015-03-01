@@ -1,0 +1,4 @@
+# group,device,position,type,model,dob,eos,replacement_date,year_to_replace,replacement_model,quantity,cost
+<% @replacements.each do |r| %>
+<%= r.group_name %>,<%= r.entity.device.sub!('.slac.stanford.edu','') %>,<%= r.entity.relative_position %>,<%= r.entity.entity_type %>,<%= r.hardware.model if r.hardware %>,<%= r.property.date_of_purchase if r.property %>,<%= r.hardware.end_of_support if r.hardware %>,<%= r.replacement_date %>,<%= r.replacement_time_delta %>,<%= r.replacement_hardware.model if r.replacement_hardware %>,<%= r.quantity %>,<%= r.replacement_price %>
+<% end %>

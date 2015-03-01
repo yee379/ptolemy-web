@@ -1,0 +1,3 @@
+@neighbours.each do |n|
+  n.device
+end

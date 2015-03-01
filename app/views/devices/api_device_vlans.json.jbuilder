@@ -1,0 +1,1 @@
+json.array! @vlans.collect { |d| '[' + d.name + '] ' + d.vlan.to_s }

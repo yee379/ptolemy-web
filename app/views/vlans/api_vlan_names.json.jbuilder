@@ -1,0 +1,1 @@
+json.array! @vlan_names.collect{ |v| v }

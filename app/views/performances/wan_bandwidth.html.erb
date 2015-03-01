@@ -1,0 +1,73 @@
+<div class="row row-fluid">
+  <div class="row span12">
+    <h1>Wide Area Bandwidth</h1>
+  </div>
+  <div class="pull-right">
+    <div id="step" class="btn-group">
+      <button type="button" class="btn btn-default" id='60'>1min</button>
+      <button type="button" class="btn btn-default" id='300'>5min</button>
+      <button type="button" class="btn btn-default" id='1800'>30min</button>
+      <button type="button" class="btn btn-default" id='3600'>1hour</button>
+      <button type="button" class="btn btn-default" id='10800'>3hour</button>
+      <button type="button" class="btn btn-default" id='21600'>6hour</button>
+    </div>
+  </div>
+
+  <div id="horizon" class="row span12"></div>
+</div>
+
+
+<%= coffee_script_tag do %>
+
+summ = {}
+for d in [ "out", "in" ]
+  summ[d] = []
+  for r in [ "rtr-border1.slac.stanford.edu", "rtr-border2.slac.stanford.edu" ]
+    for i in [ "Te1.1", "Te2.1", "Gi5.1" ]
+      summ[d].push( "port.util."+d+"/"+r+"/"+i )
+
+metrics = [
+  {
+    alias: 'out',
+    metric: summ['out'],
+    height: 200,
+    klass: 'up'
+  },
+  {
+    alias: 'in',
+    metric: summ['in'],
+    multiply: -1,
+    height: 200,
+    klass: 'down'
+  }
+]
+
+
+create_horizon = ( metrics, step, delay ) ->
+  view = new HorizonView( '#horizon', delay=delay*1000, step=step*1000 )
+  view.add metrics
+  return view
+
+
+
+jQuery ->
+
+  # set up bin sizes
+  step = 300
+  $('#step button#'+step).addClass( 'btn-primary' )
+
+  # initial
+  view = create_horizon( metrics, step, step )
+
+  # change
+  $('#step button').on( 'click', (e) ->
+    # remove primary on others
+    step = $(this)[0].id
+    $('#step button').removeClass( 'btn-primary' )
+    $(this).addClass( 'btn-primary' )
+    view.destroy()
+    view = create_horizon( metrics, step, step )
+  ) 
+
+<% end %>
+

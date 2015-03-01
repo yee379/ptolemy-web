@@ -1,0 +1,24 @@
+<li class="span4">
+  <h3>
+    Servers By Switch
+  </h3>
+  <p>
+    Details of what servers are connected to a network switch
+    <form class="form-search" action="<%= techcoords_ports_path %>" method="GET">
+      <div class="input-append">
+        <input id="tech_ports_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="device" type="text">
+        <button class="btn" type="button">Search</button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script> 
+  $('#tech_ports_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_device_list_path %>", { query: q }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

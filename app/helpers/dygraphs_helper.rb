@@ -1,0 +1,2 @@
+module DygraphsHelper
+end

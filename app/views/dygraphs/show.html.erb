@@ -1,0 +1,63 @@
+<div class="row-fluid span12">
+  <h1>Graph</h1>
+</div>
+
+<div class="row-fluid span12">
+  <form class="form-search" method="get">
+    <div class="span8 pull-left ">
+      <div class="input-append">
+        <input id="timeseries_uri" class="search-query span12" type="text" value="" />
+        <button id="uri_button" type="submit" value="fetch" class="btn">Fetch</button>
+      </div>
+    </div>
+    <div class="span4 pull-right">
+      <div id="period" class="btn-group" data-toggle="buttons-radio">
+        <button type="button" class="btn btn-primary">1d</button>
+        <button type="button" class="btn">2d</button>
+        <button type="button" class="btn">1w</button>
+        <button type="button" class="btn">1m</button>
+        <button type="button" class="btn">4m</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="span12">
+  <div id="timeseries"></div>
+  <div id="timeseries_labels"></div>
+</div>
+
+<%= coffee_script_tag do %>
+
+@GRAPH = undefined
+
+draw = ( url, duration ) ->
+  GRAPH = new DygraphTimePane( '#timeseries', '#timeseries_labels' )
+  GRAPH.load( url, duration )
+  fill_window ["#timeseries"]
+
+duration = () ->
+  v = $('#period button.btn-primary').text()
+  if /m$/.test(v)
+    v = v.replace('m','months')
+  return '-' + v
+
+load = () ->
+  draw( $("#timeseries_uri").val(), duration() )
+
+jQuery ->
+  stats_path = $(location).attr('href').replace( /^.+graphs/, '/stats' )
+  $('#timeseries_uri').val( stats_path )
+  load()
+
+  $("#uri_button").on( "click", () ->
+    load()
+  )
+  $('#period button').on( 'click', (e) ->
+    # remove primary on others
+    $('#period button').removeClass( 'btn-primary')
+    $(this).addClass( 'btn-primary' )
+    load()
+  ) 
+
+<% end %>

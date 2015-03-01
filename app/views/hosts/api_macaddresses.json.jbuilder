@@ -1,0 +1,1 @@
+json.array! @macs.collect{ |h| h.mac_address }

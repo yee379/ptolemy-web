@@ -1,0 +1,23 @@
+<h1>Listing vlans</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vlans.each do |vlan| %>
+      <tr>
+        <td><%= link_to 'Show', vlan %></td>
+        <td><%= link_to 'Edit', edit_vlan_path(vlan) %></td>
+        <td><%= link_to 'Destroy', vlan, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vlan', new_vlan_path %>

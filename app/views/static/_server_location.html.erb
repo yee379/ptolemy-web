@@ -1,0 +1,26 @@
+<li class="span4">
+  <h3>
+    Servers
+  </h3>
+  <p>
+    Location of Network Servers
+    <form class="form-search span12" action="<%= techcoords_locations_path %>" method="GET" autocomplete="off">
+      <div class="input-append">
+        <input id="server_location_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="hostname" type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+  $('#server_location_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_hostname_list_path %>", { query: q }, function(d){
+        return process(d)
+      })
+    }
+  });
+</script>

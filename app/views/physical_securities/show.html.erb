@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @physical_security.device %>
+</p>
+
+<p>
+  <strong>Environment Type:</strong>
+  <%= @physical_security.environment_type %>
+</p>
+
+<p>
+  <strong>Environment:</strong>
+  <%= @physical_security.environment %>
+</p>
+
+<p>
+  <strong>Cabinet:</strong>
+  <%= @physical_security.cabinet %>
+</p>
+
+<%= link_to 'Edit', edit_physical_security_path(@physical_security) %> |
+<%= link_to 'Back', physical_securities_path %>

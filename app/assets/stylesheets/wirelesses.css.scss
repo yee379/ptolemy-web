@@ -1,0 +1,101 @@
+
+.overlay {
+  position: absolute;
+  left: -4000px;
+  top: -4000px;
+  width: 8000px;
+  height: 8000px;
+  z-index: -1;  // important!
+}
+
+.marker {
+  width: 100px;
+  height: 100px;
+/*  padding-right: 100px;*/
+/*  font: 0.8em sans-serif;*/
+}
+        
+.marker circle {
+  fill: brown;
+  stroke: black;
+  stroke-width: 1.5px;
+  position: absolute;
+}
+
+
+.marker text {
+/*  stroke: white;    */
+/*  fill: black;*/
+/*  stroke-width: 0.2em;*/
+  font-style: normal;
+  font-weight: lighter;
+  font-size: 0.8em;
+  fill-opacity: 0.8;
+  stroke-linecap: butt;
+  kerning: -1;
+  stroke-linejoin: miter;
+}
+
+.influence_layer circle {
+  width: 500px;
+  height: 500px;
+}
+        
+.influence_layer path {
+  opacity: 0.3;
+  fill: none;
+/*  background: -webkit-gradient(
+    radial, 500 25%, 20, 500 25%, 40, from(blue), to(#eef)
+  );
+  background: -moz-radial-gradient(
+    500px 25%, circle, blue 20px, #eef 40px
+  );
+*/  
+}
+
+/*.influence-key-frame {
+    display: inline-block;
+    position: relative;
+    float: left;
+}
+*/
+span.frequency-key {
+/*    font-color: black;*/
+    font-weight: bold;
+}
+
+path.frequency-2412, span.frequency-2412 {
+    fill: blue;
+    background-color: blue;
+}
+path.frequency-2437, span.frequency-2437  {
+    fill: green;
+    background-color: green;
+}
+path.frequency-2462, span.frequency-2462  {
+    fill: red;
+    background-color: red;
+}
+path.frequency-5180, span.frequency-5180  {
+    fill: cyan;
+    background-color: cyan;
+}
+path.frequency-5200, span.frequency-5200  {
+    fill: yellow;
+    background-color: yellow;
+}
+path.frequency-5220, span.frequency-5220  {
+    fill: magenta;
+    background-color: magenta;
+}
+path.frequency-5240, span.frequency-5240  {
+    fill: Darkorange ;
+    background-color: Darkorange;
+}
+path.frequency-undefined {
+  fill: white;
+}
+
+path.influence-hidden {
+    visibility: hidden;
+}

@@ -1,0 +1,199 @@
+require 'dijkstra'
+
+class TopologiesController < ApplicationController
+
+  include HostsHelper
+
+  def index
+    @topologies = Topology.all
+  end
+
+  def devices
+    p = devices_params
+    neighbours = L1_Neighbour.where 'device ~ ?', p['device']
+    @nodes, @links = graph( neighbours, 'device' )
+  end
+  
+  
+  
+  
+  def paths
+    # works out all intermediate devices between two devices
+    neighbours = topology()
+    p = path_params
+    # logger.error( "%s" % [neighbours])
+    @nodes = []
+    @links = []
+    path = [ 'something', 'something else' ]
+    n = 0
+    while n < path.length and path.length > 1
+
+      g = Dijkstra.new( map_topology(topology) )
+      path, dist = g.shortest_path( p['from'], p['to'] )
+
+      neighbours[path[n]][path[n+1]] = Float::INFINITY
+      logger.error("PATH: %s" % [path.join(" -> ")])
+      if path.length == 1
+        n = n + 1
+      end
+    end
+    
+    # TODO: how to deconstruct the path such that we get all possible paths from -> to?
+    # current: set each edge to inifitity and determine if there is a path
+  end
+  
+  
+  def hosts
+    neighbours = get_hosts host_params
+    @nodes, @links = graph( neighbours, 'host' )
+  end
+
+  def vlans
+    p = vlan_params
+    
+    @nodes = []
+    unless p['vlan'].nil?
+      Vlan.where( 'vlan = ?', p['vlan'] ).select('device').each do |d|
+        @nodes << d['device']
+      end
+    end
+    unless p['vlan_name'].nil?
+      Vlan.where( 'name ~ ?', p['vlan_name'] ).select('device').each do |d|
+        @nodes << d['device']
+      end
+    end
+    
+    logger.error("NODES: %s" % [@nodes])
+    @links = []
+    L1_Neighbour.where( "device IN (?) AND peer_device IN (?)", @nodes, @nodes ).each do |i|
+      @links << construct_graph( i['device'], i['physical_port'], i['peer_device'], i['peer_physical_port'], i['speed'].to_i )
+      @links << construct_graph( i['peer_device'], i['peer_physical_port'], i['device'], i['physical_port'], i['speed'].to_i )
+    end   
+    
+  end
+  
+  
+  private
+
+
+
+    # given an array of items, convert to a graph suitable
+    def graph( items, type )
+      
+      @nodes = []
+      links = []
+
+      def _do( name )
+        name = name.downcase 
+        unless @nodes.include? name
+          @nodes << name
+        end
+        name
+      end
+      
+      items.each do |i|
+        case type
+        when 'device'
+          _do( i['peer_device'].downcase )
+          _do( i['device'].downcase )
+
+          links << construct_graph( i['device'], i['physical_port'], i['peer_device'], i['peer_physical_port'], i['speed'].to_i )
+          links << construct_graph( i['peer_device'], i['peer_physical_port'], i['device'], i['physical_port'], i['speed'].to_i )
+          
+        when 'host'
+          _do( i['hostname'].downcase )
+          _do( i['device'].downcase )
+          # actual physically connected
+          if i['span_device'].nil?
+            # links << { 'source' => s, 'target' => t, 'source_port' => 'nic', 
+            #   'target_port' => i['physical_port'], 'speed' => i['data']['speed'].to_i }
+            # links << { 'source' => t, 'target' => s, 'source_port' => i['physical_port'], 
+            #   'target_port' => 'nic', 'speed' => i['data']['speed'].to_i }
+            links << construct_graph( i['hostname'], 'nic', i['device'], i['physical_port'], i['data']['speed'].to_i )
+            links << construct_graph( i['device'], i['physical_port'], i['hostname'], 'nic', i['data']['speed'].to_i )
+
+          else
+            # work out all hops between span_device and device...
+            logger.error("internmediate hops req")  
+          end
+        when 'vlan'
+          s = _do( i['device'].downcase )
+        else
+          raise 'unsupported topology peer type ' + type
+        end
+      end
+      logger.warn( 'NODES %s' % [ @nodes] )
+      return @nodes, links
+    end
+    
+    def construct_graph( s, s_port, t, t_port, speed )
+      return { 'source' => s.downcase, 'target' => t.downcase, 'source_port' => s_port, 
+                  'target_port' => t_port, 'speed' => speed }
+    end
+
+
+    def topology()
+      neighbours = {}
+      L1_Neighbour.all.select('device','peer_device','speed').group('device','peer_device','speed').each do |n|
+        # TODO: multiple links of different speeds?
+        if neighbours[n['device']].nil?
+          neighbours[n['device']] = {}
+        end
+        neighbours[n['device']][n['peer_device']] = 1.0 / n['speed'].to_i
+      end
+      neighbours
+    end
+    
+    def map_topology( neighbours )
+      # format for path()
+      map = []
+      neighbours.each_key do |n|
+        neighbours[n].each_key do |m|
+          map << [ n, m, neighbours[n][m] ]
+        end
+      end
+      map
+    end
+
+    def path( map, from, to  )
+      g = Dijkstra.new( map )
+      path, dist = g.shortest_path( from, to )
+      logger.error "PATH %s to %s: %s" % [path_params['from'],path_params['to'],path.join(" -> ")]
+      links = []
+      prev = nil
+
+      def _do( name )
+        name.downcase
+      end
+      
+      path.each do |n|
+        # look up ports and stuff
+        unless prev.nil?
+          L1_Neighbour.where( 'device=? AND peer_device=?', prev, n ).each do |i|
+            links << construct_graph( i['device'], i['physical_port'], i['peer_device'], i['peer_physical_port'], i['speed'].to_i )
+            links << construct_graph( i['peer_device'], i['peer_physical_port'], i['device'], i['physical_port'], i['speed'].to_i )
+          end
+        end
+        prev = n
+      end
+      return path, links
+    end
+
+
+    def path_params
+      params.permit( :from,:to )
+    end
+    
+    def devices_params
+      params.permit( :device )
+    end
+
+    def host_params
+      params.permit( :hostname, :ip_address, :mac_address )
+    end    
+
+    def vlan_params
+      params.permit( :vlan, :vlan_name )
+    end    
+    
+end

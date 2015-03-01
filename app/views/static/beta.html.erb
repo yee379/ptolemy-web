@@ -1,0 +1,31 @@
+<div class="hero-unit">
+  <h1>
+    <%= image_tag "testtube1.svg", :width => 56 %>Beta Pages
+  </h1>
+  <p>
+    Links to beta features of the network monitoring site
+  </p>
+</div>
+
+<div class="row-fluid">
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+
+      <%= render :partial => 'topology' %>
+
+    </ul>
+  </div>
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'subnets_dashboard' %>
+      <%= render :partial => 'subnets_wheel' %>
+
+      <%= render :partial => 'subnets_ips' %>
+
+    </ul>
+  </div>
+
+
+</div>

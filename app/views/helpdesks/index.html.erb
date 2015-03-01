@@ -1,0 +1,25 @@
+<h1>Listing helpdesks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @helpdesks.each do |helpdesk| %>
+    <tr>
+      <td><%= link_to 'Show', helpdesk %></td>
+      <td><%= link_to 'Edit', edit_helpdesk_path(helpdesk) %></td>
+      <td><%= link_to 'Destroy', helpdesk, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Helpdesk', new_helpdesk_path %>

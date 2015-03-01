@@ -1,0 +1,1 @@
+json.array! @ips.collect{ |h| h.ip }

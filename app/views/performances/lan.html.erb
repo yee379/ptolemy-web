@@ -1,0 +1,134 @@
+<h1>LAN Performance Metrics</h1>
+
+<div class="span12">
+  <ul class="thumbnails">
+    <li class="span3">
+      <div id='core_capacity' class="span12"></div>
+    </li>
+    <li class="span3">
+      <div id='serv_capacity' class="span12"></div>
+    </li>
+    <li class="span3">
+      <div id='farm_capacity' class="span12"></div>
+    </li>
+    <li class="span3">
+      <div id='campus_capacity' class="span12"></div>
+    </li>
+  </ul>
+</div>
+
+<div class="span12">
+
+  <div id='utilisation'></div>
+
+  <div id="core_utilisation"></div>
+  <div id="serv_utilisation"></div>
+  <div id="farm_utilisation"></div>
+  <div id="campus_utilisation"></div>
+</div>
+
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+      
+  # gauages
+  
+  core_cap = new GaugeView( '#core_capacity', delay=300000, step=300000 )
+  core_cap.add
+    alias: 'core'
+    metric: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.2', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.2' ]
+    collate: 'max'
+    # url: '/graphs.horizon/port/rtr-core1.slac.stanford.edu/Te1.1'
+  
+  serv_cap = new GaugeView( '#serv_capacity', delay=300000, step=300000 )
+  serv_cap.add
+    alias: 'serv'
+    metric: [ 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth1.3', 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth1.5', 'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth1.3', 'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth1.5', 'port.util.pc.out/rtr-serv03.slac.stanford.edu/Te5.4', 'port.util.pc.out/rtr-serv03.slac.stanford.edu/Te6.4', 'port.util.pc.out/rtr-serv02.slac.stanford.edu/Te1.3', 'port.util.pc.out/rtr-serv02.slac.stanford.edu/Te2.3', 'port.util.pc.out/rtr-serv01.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-serv01.slac.stanford.edu/Te1.2', 'port.util.pc.in/rtr-serv01-01.slac.stanford.edu/Eth1.3', 'port.util.pc.in/rtr-serv01-01.slac.stanford.edu/Eth1.5', 'port.util.pc.in/rtr-serv01-02.slac.stanford.edu/Eth1.3', 'port.util.pc.in/rtr-serv01-02.slac.stanford.edu/Eth1.5', 'port.util.pc.in/rtr-serv03.slac.stanford.edu/Te5.4', 'port.util.pc.in/rtr-serv03.slac.stanford.edu/Te6.4', 'port.util.pc.in/rtr-serv02.slac.stanford.edu/Te1.3', 'port.util.pc.in/rtr-serv02.slac.stanford.edu/Te2.3', 'port.util.pc.in/rtr-serv01.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-serv01.slac.stanford.edu/Te1.2' ] 
+    collate: 'max'
+    # url: '/graphs.horizon/port/rtr-core1.slac.stanford.edu/Te1.1'
+
+  farm_cap = new GaugeView( '#farm_capacity', delay=300000, step=300000 )
+  farm_cap.add
+    alias: 'farm'
+    metric: [ 'port.util.pc.out/rtr-farmcore1.slac.stanford.edu/Te9.2', 'port.util.pc.out/rtr-farmcore1.slac.stanford.edu/Te9.4', 'port.util.pc.out/rtr-farmcore2.slac.stanford.edu/Eth8.5', 'port.util.pc.out/rtr-farmcore2.slac.stanford.edu/Eth7.5', 'port.util.pc.in/rtr-farmcore1.slac.stanford.edu/Te9.2', 'port.util.pc.in/rtr-farmcore1.slac.stanford.edu/Te9.4' ] 
+    collate: 'max'
+
+  campus_cap = new GaugeView( '#campus_capacity', delay=300000, step=300000 )
+  campus_cap.add
+    alias: 'campus'
+    metric: [ 'port.util.pc.out/rtr-bldgcore1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-bldgcore1.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-bldgcore2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-bldgcore2.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-bldgcore1.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-bldgcore1.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-bldgcore2.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-bldgcore2.slac.stanford.edu/Te2.1' ]  
+    collate: 'max'
+    url: '/performance/lan/campus'
+
+
+  # horizon charts
+
+  util = new HorizonView( '#utilisation', delay=300000, step=300000 )
+  util.add [
+    {
+      alias: 'core (aggregate)'
+      metric: null
+      height: 35
+    },
+    {
+      alias: 'out'
+      metric: [ 'port.util.out/rtr-core1.slac.stanford.edu/Te1.1', 'port.util.out/rtr-core1.slac.stanford.edu/Te1.2', 'port.util.out/rtr-core2.slac.stanford.edu/Te1.1', 'port.util.out/rtr-core2.slac.stanford.edu/Te1.2' ]
+    },
+    {
+      alias: 'in'
+      metric: [ 'port.util.in/rtr-core1.slac.stanford.edu/Te1.1', 'port.util.in/rtr-core1.slac.stanford.edu/Te1.2', 'port.util.out/rtr-core2.slac.stanford.edu/Te1.1', 'port.util.out/rtr-core2.slac.stanford.edu/Te1.2' ]
+      multiply: -1
+    },
+    {
+      alias: 'serv (aggregate)'
+      metric: null
+      height: 35
+    },
+
+    {
+      alias: 'out'
+      metric: [ 'port.util.out/rtr-serv01-01.slac.stanford.edu/Eth1.3', 'port.util.out/rtr-serv01-01.slac.stanford.edu/Eth1.5', 'port.util.out/rtr-serv01-02.slac.stanford.edu/Eth1.3', 'port.util.out/rtr-serv01-02.slac.stanford.edu/Eth1.5', 'port.util.out/rtr-serv03.slac.stanford.edu/Te5.4', 'port.util.out/rtr-serv03.slac.stanford.edu/Te6.4', 'port.util.out/rtr-serv02.slac.stanford.edu/Te1.3', 'port.util.out/rtr-serv02.slac.stanford.edu/Te2.3', 'port.util.out/rtr-serv01.slac.stanford.edu/Te2.1', 'port.util.out/rtr-serv01.slac.stanford.edu/Te1.2' ] 
+    },
+    {
+      alias: 'in'
+      metric: [ 'port.util.in/rtr-serv01-01.slac.stanford.edu/Eth1.3', 'port.util.in/rtr-serv01-01.slac.stanford.edu/Eth1.5', 'port.util.in/rtr-serv01-02.slac.stanford.edu/Eth1.3', 'port.util.in/rtr-serv01-02.slac.stanford.edu/Eth1.5', 'port.util.in/rtr-serv03.slac.stanford.edu/Te5.4', 'port.util.in/rtr-serv03.slac.stanford.edu/Te6.4', 'port.util.in/rtr-serv02.slac.stanford.edu/Te1.3', 'port.util.in/rtr-serv02.slac.stanford.edu/Te2.3', 'port.util.in/rtr-serv01.slac.stanford.edu/Te2.1', 'port.util.in/rtr-serv01.slac.stanford.edu/Te1.2' ] 
+      multiply: -1
+    },
+    {
+      alias: 'farm (aggregate)'
+      metric: null
+      height: 35
+    },
+  # ]
+  # 
+  # 
+  # farm_util = new HorizonView( '#farm_utilisation', delay=300000, step=300000 )
+  # farm_util.add [
+    {
+      alias: 'out'
+      metric: [ 'port.util.out/rtr-farmcore1.slac.stanford.edu/Te9.2', 'port.util.out/rtr-farmcore1.slac.stanford.edu/Te9.4', 'port.util.out/rtr-farmcore2.slac.stanford.edu/Eth8.5', 'port.util.out/rtr-farmcore2.slac.stanford.edu/Eth7.5' ] 
+    },
+    {
+      alias: 'in'
+      metric: [ 'port.util.in/rtr-farmcore1.slac.stanford.edu/Te9.2', 'port.util.in/rtr-farmcore1.slac.stanford.edu/Te9.4', 'port.util.in/rtr-farmcore2.slac.stanford.edu/Eth8.5', 'port.util.in/rtr-farmcore2.slac.stanford.edu/Eth7.5' ]
+      multiply: -1
+    },
+    {
+      alias: 'campus (aggregate)'
+      metric: null
+      height: 35
+    },
+    {
+      alias: 'out'
+      metric: [ 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Te1.1', 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Te2.1', 'port.util.out/rtr-bldgcore2.slac.stanford.edu/Te1.1', 'port.util.out/rtr-bldgcore2.slac.stanford.edu/Te2.1' ] 
+    },
+    {
+      alias: 'in'
+      metric: [ 'port.util.in/rtr-bldgcore1.slac.stanford.edu/Te1.1', 'port.util.in/rtr-bldgcore1.slac.stanford.edu/Te2.1', 'port.util.in/rtr-bldgcore2.slac.stanford.edu/Te1.1', 'port.util.in/rtr-bldgcore2.slac.stanford.edu/Te2.1' ]
+      multiply: -1
+    },
+  ]
+  
+<% end %>
+

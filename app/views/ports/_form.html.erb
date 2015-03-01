@@ -1,0 +1,41 @@
+<%= form_for(@port) do |f| %>
+  <% if @port.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@port.errors.count, "error") %> prohibited this port from being saved:</h2>
+
+      <ul>
+      <% @port.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :device %><br />
+    <%= f.text_field :device %>
+  </div>
+  <div class="field">
+    <%= f.label :physical_port %><br />
+    <%= f.text_field :physical_port %>
+  </div>
+  <div class="field">
+    <%= f.label :data %><br />
+    <%= f.text_field :data %>
+  </div>
+  <div class="field">
+    <%= f.label :mac_addresses %><br />
+    <%= f.text_field :mac_addresses %>
+  </div>
+  <div class="field">
+    <%= f.label :created_at %><br />
+    <%= f.time_select :created_at %>
+  </div>
+  <div class="field">
+    <%= f.label :updated_at %><br />
+    <%= f.time_select :updated_at %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

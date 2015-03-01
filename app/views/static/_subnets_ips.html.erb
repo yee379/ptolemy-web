@@ -1,0 +1,26 @@
+<li class="span4">
+  <h3>
+    <%= image_tag "noun_43092_cc.svg", :width => 32 %> IP Availability
+  </h3>
+  <p>
+    Show which ip are free or in use for a subnet
+    <form class="form-search span12" action="<%= subnet_ips_path %>" method="GET" autocomplete="off">
+      <div class="input-append">
+        <input id="subnets_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="name" placeholder="Subnet..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+  $('#subnets_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_subnet_name_list_path %>", { query: q }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

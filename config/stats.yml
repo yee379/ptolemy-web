@@ -1,0 +1,395 @@
+defaults:
+    server: net-graphite02.slac.stanford.edu
+    
+common:
+    
+    keys_for_device_port: &keys_for_device_port
+        - device
+        - physical_port
+    keys_for_subnet: &keys_for_subnet
+        - prefix
+        - len
+
+    # convert to rate
+    rates: &rates
+        - perSecond: null
+    # convert to rate and scale to bits
+    octets_to_rates: &octets_to_rates
+        - scale: 8
+        - perSecond: null
+    # normalise by link capability (dynamic fetch)
+    octets_to_percent: &octets_to_percent
+        - scale: 8
+        - scale: $Port__speed
+        - perSecond: null
+    
+
+statistics:
+    
+    ###########################################################################
+    # port stats
+    ###########################################################################
+    
+    port.util:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_out
+            keys:   *keys_for_device_port
+            functions: *octets_to_rates
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_in
+            keys:   *keys_for_device_port
+            functions: *octets_to_rates
+            
+    port.util.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_in
+            keys:   *keys_for_device_port
+            functions:  *octets_to_rates
+    port.util.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_out
+            keys:   *keys_for_device_port
+            functions:  *octets_to_rates
+
+                
+    port.util.pc.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_out
+            keys:   *keys_for_device_port
+            functions:  *octets_to_percent
+    port.util.pc.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.octets_in
+            keys:   *keys_for_device_port
+            functions:  *octets_to_percent
+
+    port.unicastpkts.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.unicast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.unicastpkts.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.unicast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.broadcastpkts.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.broadcast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.broadcastpkts.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.broadcast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.multicastpkts.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.multicast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.multicastpkts.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.multicast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+
+    port.pkts.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.unicast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.multicast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.broadcast_pkts_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.pkts.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.unicast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.multicast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.broadcast_pkts_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+
+
+    port.err.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.crc_in
+            keys:   *keys_for_device_port
+            functions:  *octets_to_rates
+
+    port.loss:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.discards_out
+            keys:   *keys_for_device_port
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.discards_in
+            keys:   *keys_for_device_port
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.errors_out
+            keys:   *keys_for_device_port
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.errors_in
+            keys:   *keys_for_device_port
+
+    port.discards.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.discards_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.discards.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.discards_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.error.out:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.errors_out
+            keys:   *keys_for_device_port
+            functions:  *rates
+    port.error.in:
+        -
+            metric: ptolemy.%s.port_stats.rfc2863.%s.errors_in
+            keys:   *keys_for_device_port
+            functions:  *rates
+
+    ###########################################################################
+    # transceivers
+    ###########################################################################
+    transceiver:
+        -
+            metric: ptolemy.%s.transceiver.stats.%s.rx
+            keys:   *keys_for_device_port
+
+    ###########################################################################
+    # link with neighbour statistics
+    ###########################################################################
+    # 
+    # link.util.pc.out:
+    #     - prefix
+    #     - len
+
+
+
+
+    ###########################################################################
+    # device stats
+    ###########################################################################
+    psu:
+        - 
+            metric: ptolemy.%s.psu.stats.*.status
+            keys:
+               - device
+    module:
+        -
+            metric: ptolemy.%s.module.stats.*.status
+            keys:
+               - device
+
+    temperature:
+        -
+            metric: ptolemy.%s.temperature.stats.*.value
+            keys:
+               - device
+    stack:
+        -
+            metric: ptolemy.%s.stack.stats.*.status
+            keys:
+               - device
+
+    cpu:
+        - 
+            metric: ptolemy.%s.cpu.stats.*.load_1min
+            keys:
+               - device
+
+    loss:
+        - 
+            metric: ptolemy.%s.reachability.ping.Ping.loss
+            keys:
+               - device
+    ping:
+        - 
+            metric: ptolemy.%s.reachability.ping.Ping.min_rtt
+            keys:
+               - device
+
+    ###########################################################################
+    # other network stats
+    ###########################################################################
+
+    users:
+        -
+            metric: ptolemy.%s.user_stats.neighbour.*.number
+            keys:
+                - device
+    
+    subnet.kpi:
+        - 
+            metric: network.kpi.subnet.prefix.134.79.*.*.len.*.*
+            format: csv
+    
+
+    subnet.rtt:
+        - 
+            metric: network.kpi.subnet.prefix.%s.len.%s.rtt
+            keys:   *keys_for_subnet
+
+    subnet.loss:
+        - 
+            metric: network.kpi.subnet.prefix.%s.len.%s.loss
+            keys:   *keys_for_subnet
+
+    subnet.count:
+        - 
+            metric: network.kpi.subnet.prefix.%s.len.%s.count
+            keys:   *keys_for_subnet
+
+    subnet.jitter:
+        - 
+            metric: network.kpi.subnet.prefix.%s.len.%s.ipdv
+            keys:   *keys_for_subnet
+            
+
+    ###########################################################################
+    # perfsonar related
+    ###########################################################################
+
+    owamp.loss:
+        -
+            metric: network.kpi.wan.source.%s.target.%s.owamp.loss
+            keys:
+                - source
+                - target
+
+    owamp.min:
+        -
+            metric: network.kpi.wan.source.%s.target.%s.owamp.min
+            keys:
+                - source
+                - target
+
+    owamp.jitter:
+        -
+            metric: diffSeries(network.kpi.wan.source.%s.target.%s.owamp.max,network.kpi.wan.source.%s.target.%s.owamp.min)
+            keys:
+                - source
+                - target
+                - source
+                - target
+
+    bwctl:
+        -
+            metric: network.kpi.wan.source.%s.target.%s.bwctl.throughput
+            keys:
+                - source
+                - target
+
+    wan.loss:
+        -
+            metric: network.kpi.wan.source.%s.target.%s.owamp.loss
+            keys:
+                - source
+                - target
+
+    wan.throughput:
+        -
+            metric: network.kpi.wan.source.%s.target.%s.bwctl.throughput
+            keys:
+                - source
+                - target
+                
+
+    ###########################################################################
+    # services
+    ###########################################################################
+
+    visitor.ip_sla:
+        -
+            metric: maxSeries(ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.101.state,ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.102.state,ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.105.state,ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.202.state,ptolemy.edu.stanford.slac.rtr-visitor2.ip_sla.stats.202.state)
+            
+    visitor.uplinks.in:
+        - metric:
+                maxSeries(ptolemy.edu.stanford.slac.swh-visitor1.port_stats.rfc2863.octets_in,ptolemy.edu.stanford.slac.swh-visitor2.port_stats.rfc2863.octets_in)
+
+    ###########################################################################
+    # rabbit stats
+    ###########################################################################
+
+
+
+    rabbit.queued:
+        -
+            metric: profiler.rabbitmq.*.default.stats.queued
+
+    rabbit.carbon:
+        -
+            metric: profiler.rabbitmq.supervised_store@carbon.default.*.stats.queued
+
+
+    ###########################################################################
+    # postgres stats
+    ###########################################################################
+
+    postgres.rows:
+        -
+            metric: profiler.postgres.public.*.stats.rows
+
+    ###########################################################################
+    # carbon stats
+    ###########################################################################
+    
+    carbon.update_operations:
+        -
+            metric: carbon.agents.*.updateOperations
+
+    carbon.update_time:
+        -
+            metric: carbon.agents.*.avgUpdateTime
+    
+    carbon.memory:
+        -
+            metric: carbon.agents.*.memUsage
+
+    carbon.cpu:
+        -
+            metric: carbon.agents.*.cpuUsage
+
+    carbon.status:
+        # -
+        #     metric: carbon.agents.*.updateOperations
+        #     functions:
+        #         - sum: null
+        - 
+            metric: carbon.agents.*.metricsReceived
+            functions:
+                - sum: null
+        -
+            metric: carbon.agents.*.committedPoints
+            functions:
+                - sum: null
+                
+    carbon.received:
+        -
+            metric: carbon.agents.*.metricsReceived
+    carbon.queues:
+        -
+            metric: carbon.agents.*.cache.queues
+            functions: 
+                - scaleToSeconds: 60
+                # - aliasSub: 
+    carbon.cache:
+        -
+            metric: carbon.agents.*.cache.size
+            function:
+                - scaleToSeconds: 60

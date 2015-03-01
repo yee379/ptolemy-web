@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div class="content">
+    
+    <div class="row-fluid">
+      <div class="hero-unit span12">
+        <h1>
+          Ptolemy Internals
+        </h1>
+        <p>
+          Information about ptolemy background processes etc.
+        </p>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span11 offset1">
+        <ul class="thumbnails">
+
+          <li class="span3">
+            <h3>
+              <%= link_to 'PostgresSQL', '/graphs/postgres.rows' %>
+            </h3>
+            <p>
+              Number of rows of each table in postgres
+            </p>
+          </li>
+
+          <li class="span3">
+            <h3>
+              <%= link_to 'RabbitMQ Queue', '/graphs/rabbit.queued' %>
+            </h3>
+            <p>
+              Number of messages pending in amqp
+            </p>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>

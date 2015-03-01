@@ -1,0 +1,17 @@
+<%= form_for(@dygraph) do |f| %>
+  <% if @dygraph.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@dygraph.errors.count, "error") %> prohibited this dygraph from being saved:</h2>
+
+      <ul>
+      <% @dygraph.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

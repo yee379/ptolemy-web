@@ -1,0 +1,66 @@
+<div class="container-fluid">
+  <div class="content span10 offset2">
+    <ul class="thumbnails">
+      <li class="span4">
+        <h3>Campus DHCP</h3>
+        <div id='campus_dhcp' class="span6"></div>
+      </li>
+      <li class="span4">
+        <h3>Visitor DHCP</h3>
+        <div id='visitor' class="span6"></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+
+  campus_dhcp = new SummaryView( 
+
+    el: $('#campus_dhcp')
+
+    viewset:
+      type: 'MetricMeasurements'
+      metrics: [ 'ptolemy.edu.stanford.slac.rtr-bldgcore1.ip_sla.stats.102.state' ]
+
+    top_threshold: 1
+    top_colour: 'green'
+    bottom_threshold: 0
+    bottom_colour: 'red'
+    colour_by: 'mean'
+    
+    width: 120
+    height: 120
+    box_size: 120
+
+    refresh_interval: 300
+
+  )
+
+  
+  campus_dhcp = new SummaryView( 
+
+    el: $('#visitor')
+
+    viewset:
+      type: 'MetricMeasurements'
+      metrics: [ 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.101.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.102.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.105.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.202.state', 'ptolemy.edu.stanford.slac.rtr-visitor2.ip_sla.stats.202.state' ]
+
+    top_threshold: 1
+    top_colour: 'green'
+    bottom_threshold: 0
+    bottom_colour: 'red'
+    colour_by: 'mean'
+    
+    width: 120
+    height: 120
+    box_size: 120
+
+    refresh_interval: 300
+
+  )
+
+<% end %>
+

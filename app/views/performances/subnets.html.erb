@@ -1,0 +1,65 @@
+<h1>Subnet Status</h1>
+
+<div id='cubism' class="">
+</div>
+<p></p>
+
+<%= coffee_script_tag do %>
+
+prefix_len = 
+  '255.255.252.0': 22,
+  '255.255.254.0': 23,
+  '255.255.255.0': 24,
+  '255.255.255.128': 25,
+  '255.255.255.192': 26
+
+# add stats
+jQuery ->
+
+  # get a full list of devices
+  metrics = []
+
+  # # create color scale based on value
+  # tricolour = d3.scale.threshold().domain( [0,10,100] ).range( [ '#c2c2c2', '#c4df9b', '#fdc68a', '#f7977a' ] )
+  # percent_colour_scale = (num) -> 
+  #   if isNaN(num) then '#c2c2c2' else tricolour(num)
+
+  # fetch and display
+  $.getJSON(
+
+    '/api/subnets.json', (json) ->
+
+      # create metrics
+      for s in json
+        n = s.name
+        p = s.prefix
+        k = prefix_len[s.netmask]
+        if p and k and /public/i.test(n) or /kavli/i.test(n)
+        # if p and k and not /SPARE/i.test(n)
+          u = "subnet.loss/"+p+"/"+k
+          # console.log u
+          m = 
+            metric: u
+            alias: s.name
+            scale: percent_colour_scale
+            width: 30
+            height: 30
+            url: '/graphs.horizon/subnet/'+p+'/'+k 
+          metrics.push m
+      
+  )
+  .success( () ->
+  
+    # create tile view
+    view = new TileView( '#cubism', delay=300000, step=300000 )
+    view.add metrics
+  
+  )
+  .error( () ->
+    
+    console.log 'could not load list of devices'
+    
+  )
+
+<% end %>
+

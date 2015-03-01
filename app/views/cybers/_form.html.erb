@@ -1,0 +1,17 @@
+<%= form_for(@cyber) do |f| %>
+  <% if @cyber.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cyber.errors.count, "error") %> prohibited this cyber from being saved:</h2>
+
+      <ul>
+      <% @cyber.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

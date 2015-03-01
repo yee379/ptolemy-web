@@ -1,0 +1,135 @@
+<div class="row-fluid span12">
+  <h1>ACL Checker</h1>
+</div>
+
+<div class="row-fluid span12">
+
+    <div class="span1">
+      <select name="protocol" class="span12">
+        <option value="tcp" selected="selected">tcp</option>
+        <option value="udp">udp</option>
+      </select>
+    </div>
+
+    <div class="span2">
+      <%= text_field_tag(:source, 'any') %>
+    </div>
+    <div class="span1">
+      <%= text_field_tag(:source_port, 'any') %>
+    </div>
+
+    <div class="span1">
+      <i class="icon-arrow-right"></i>
+    </div>
+
+    <div class="span2">
+      <%= text_field_tag(:destination, 'any') %>
+    </div>
+    <div class="span1">
+      <%= text_field_tag(:destination_port, 'any') %>
+    </div>
+
+    <div class="span2">
+      <select name="policy" class="span12">
+      </select>
+    </div>
+
+    <div class="span2">
+      <button name="query" class="btn btn-primary" type="button">Query</button>
+    </div>
+
+</div>
+
+
+<div class="row-fluid span12">
+  <pre id="code">
+  </pre>  
+</div>
+
+
+<%= coffee_script_tag do %>
+
+jQuery -> 
+
+  # get list of authorised acl policies to validate against
+  $.ajax(
+    url: '/acls/list.json'
+    type: 'GET'
+    timeout: 5000
+    data: {}
+    complete: (e,xhr,settings) ->
+      console.log e.status
+      switch e.status
+        when 200 
+          for p in e.responseJSON[0]
+            console.log "adding %o", p
+            $("select[name='policy']").append( $('<option>', { value: p, text: p } ))
+        else
+          console.log "ERROR"
+  )
+
+  # register the query click
+  $("button[name='query']").click( () ->
+    # grab the data and submit
+    data = {
+      protocol: $("select[name='protocol']").val(),
+      policy: $("select[name='policy']").val()
+    }
+    $('input').each( (i,item) ->
+        # console.log item.id + ' ' + item.value
+        data[item.id] = item.value
+    )
+    console.log data
+    
+    $.ajax(
+      url: '/acls/check.json'
+      type: 'GET'
+      timeout: 10000
+      data: data
+      complete: (e,xhr,settings) ->
+        console.log e.status
+
+        switch e.status
+      
+          when 200 
+            console.log "OK"
+            console.log e.responseJSON[0]
+            $('#code').text e.responseJSON[0]['output']
+            
+          when 422
+            console.log e
+
+          when 500
+            console.log e.responseJSON[0]
+
+          when 0
+            console.log '0'
+
+          else
+            console.log 'some unknown error occurered'
+
+    )
+    
+  )
+
+  # clear
+  for i in [ 'input#source', 'input#destination' ]
+
+    # clear on click
+    $(i).on( 'click', ()->
+      @.val('')
+    )
+  
+    # autofil
+    $(i).typeahead({
+      source: (q, process) ->
+        $.get( "<%= autocomplete_hostname_list_path %>", { query: q }, (d) ->
+          process(d)
+        )
+    })
+
+
+  # help
+  # $('#source').popover({ title: 'source address' })
+
+<% end %>

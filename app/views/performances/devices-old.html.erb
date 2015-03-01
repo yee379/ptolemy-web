@@ -1,0 +1,52 @@
+<div class="row-fluid span12">
+  <h1>Network Device Status</h1>
+</div>
+
+<div class="span12">
+  <div id='devices' class="span12"></div>
+</div>
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  # get a full list of devices
+  metrics = []
+
+  $.getJSON(
+
+    '/api/devices.json', (json) ->
+
+      for d in json.data
+        if d.device and not ( /ssrl/i.test(d.device) or /^ap/i.test(d.device) )
+          h = d.device.split('.').reverse().join('.')
+          console.log h
+          metrics .push 'ptolemy.' + h + '.reachability.ping.Ping.loss'
+
+      status = new GridView( 
+      
+        el: $('#devices')
+      
+        viewset:
+          type: 'MetricMeasurements'
+          metrics: metrics 
+          
+        top_threshold: 1
+        top_colour: 'red'
+        bottom_threshold: 0
+        bottom_colour: 'green'
+        colour_by: 'min'
+        
+        width: 1000
+        height: 1000
+        box_size: 25
+        
+        period: '-300s'
+        # refresh_interval: 300
+
+      )
+
+  )
+
+<% end %>
+

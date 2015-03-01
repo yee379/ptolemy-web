@@ -1,0 +1,23 @@
+<h1>Listing cybers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cybers.each do |cyber| %>
+      <tr>
+        <td><%= link_to 'Show', cyber %></td>
+        <td><%= link_to 'Edit', edit_cyber_path(cyber) %></td>
+        <td><%= link_to 'Destroy', cyber, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cyber', new_cyber_path %>

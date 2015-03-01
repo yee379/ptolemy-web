@@ -1,0 +1,411 @@
+
+<div class="row row-fluid">
+  <div class="span1">
+    <%= image_tag "noun_88992_cc.svg", :width=>63 %>
+  </div>
+  <div class="span11">
+    <h1>Network Ports for <%= params[:device] %></h1>
+  </div>
+</div>
+
+
+<div id="split" class="row row-fluid">
+
+  <div class="span2">
+
+    <div class="well sidebar-nav input-append">
+        <input class="span9" placeholder="Filter..." type="text">
+        <button class="btn add-on">
+          <i class="icon-filter"></i>
+        </button>
+    </div>
+
+    <div class="well sidebar-nav facet" for="device"></div>
+    <div class="well sidebar-nav facet" for="speed_duplex"></div>
+    <div class="well sidebar-nav facet" for="vlans"></div>
+    <div class="well sidebar-nav facet" for="status"></div>
+
+  </div>
+
+  <div class="span10">
+
+    <table class="dataTable ports-table table-striped table-bordered table-condensed table-hover"></table>
+
+  </div>
+
+
+</div>
+
+<div style="visibility: hidden">
+  <div id="data_href">/api/ports.json?device=</div>
+  <div id="dataTables_swf"><%= asset_path('copy_csv_xls_pdf.swf') %></div>
+  <div id="search_device"><%= params[:device] %></div>
+</div>
+
+
+
+<%= coffee_script_tag do %>
+
+
+set_port_row = ( row, aoMeta, data ) ->
+  row.find('td').each( (i) ->
+    if aoMeta[i]?
+      meta = aoMeta[i]
+      p = meta.param
+      console.log p
+      if p of data
+        v = data[p]
+        console.log '  commit! ' + v
+        # map back to table fields
+        switch p
+          when 'state'
+            if data.status?
+              v = data.status
+          when 'autoneg'
+            switch v
+              when true
+                v = 'auto'
+              when false
+                v = 'fixed'
+              else
+                console.log p + ' unknown value ' + v
+          when 'vlan'
+            if data.vlan_name?
+              v = '['+data.vlan_name+'] ' + data.vlan
+            else
+              v = data.vlan
+          when 'voice_vlan'
+            if data.voice_vlan? and /\d+/.test( data.voice_vlan )
+              v = 'true'
+            else
+              v = 'false'
+        
+        console.log '  display as: ' + v
+        @.textContent = v
+        
+  )
+
+
+submit_port_edit = ( row, aoMeta, orig_row ) ->
+  console.log 'submitting....'
+  data = get_row_data( row, aoMeta )
+  # clean up device name
+  data['device'] = data['device'] + '.slac.stanford.edu'
+  # clean the vlan:
+  bits = data['vlan'].split(' ')
+  console.log data['vlan']
+  data['subnet'] = bits[0].replace(/(\[|\])/g,'')
+  data['vlan'] = bits[1]
+  # add no commit for now
+  data['no_commit'] = true
+  
+  # voice vlan, only change if diff
+  console.log orig_row['voice_vlan'] + ' -> ' + data['voice_vlan']
+  if orig_row['voice_vlan'] == data['voice_vlan']
+    delete data['voice_vlan']
+  else
+    console.log 'changed voice vlan'
+    if data['voice_vlan'] == 'true'
+      data['voice_vlan'] = true
+    else
+      data['voice_vlan'] = false
+      
+  console.log data
+  # ajax request to delegate
+  item = row.children('td:nth-child(1)').children('i')
+  $.ajax(
+    url: '/delegate/port/'+data['device']+'/'+data['port'].replace(/\//g,'.')
+    type: 'PUT'
+    timeout: 60000
+    data: data
+    complete: (e,xhr,settings) ->
+      console.log e.status
+      switch e.status
+      
+        when 200 
+          editable_state_success( item )
+          # write results back out to row
+          set_port_row( row, aoMeta, e.responseJSON[0] )
+          
+        when 422
+          console.log e
+          editable_state_error( item, e.responseJSON )
+          set_port_row( row, aoMeta, orig_row )
+
+        when 0
+          set_port_row( row, aoMeta, orig_row )
+          editable_state_error( item, 'timed out contacting delegation server' )
+
+        else
+          
+          editable_state_error( item, e.status + ': ' + e.statusText )
+          set_port_row( row, aoMeta, orig_row )
+          console.log 'some unknown error occurered'
+  )
+
+
+fetch_device_vlans = ( data ) ->
+  # need to return as string for matching with selection
+  vlans = []
+  has_visitor = false
+  for v in $.ajax( 
+    type: 'GET',
+    url: '/api/devices/vlans.json?query=' + data.device + '.slac.stanford.edu'
+    async: false
+  ).responseJSON
+    if /\[VISITOR/.test("#{v}")
+      if has_visitor == false
+        vlans.push "[VISITOR] *"
+      has_visitor = true
+    else
+      vlans.push "#{v}"
+    
+  return vlans
+  
+
+build_host_string = ( p ) ->
+  mac = '<a class="mac_address"  title="'+p['h_created_at']+' to '+p['h_updated_at']+'">' + p['mac_address'] + '</a>' if p['mac_address']?
+  ip = '<a class="ip_address" title="'+p['h_created_at']+' to '+p['h_updated_at']+'">' + p['ip_address'] + '</a>' if p['ip_address']?
+  host = '<a class="hostname" title="'+p['a_created_at']+' to '+p['a_updated_at']+'">' + p['hostname'] + '</a>' if p['hostname']?
+  
+  if host? 
+    k = host + ' ('+ip+'@'+mac+')'
+  else 
+    k = if ip? then '('+ip+'@'+mac+')' else '(@'+mac+')'
+
+  k = '<span class="host">' + k + '</span>'
+  return { 'html': k, 'key':  p['hostname'] + '@' + p['mac_address'] + '@' + p['ip_address'] }
+
+jQuery -> 
+
+  # $('#split').split(
+  #   orientation: 'vertical'
+  # )
+    
+  contents_height = (e,h) ->
+    console.log "%o -> %i", e,h
+    
+
+  # $('div.contents > *').resize( (e) ->
+  #   h = $(this).height()
+  #   if $(this).height() == 0
+  #     h = $.map( $(this).children(), (c) -> $(c).height() )
+  #     # console.log 'array: %o', h
+  #     h = Math.max.apply( Math, h )
+  #   # console.log "H: %i", h
+  #   contents_height( e,h )
+  #   # $(this).closest('.contents').height( max_height() )
+  # )
+
+  # intiate any datatables we have
+  oTable = $('.dataTable').dataTable
+
+    sAjaxSource:  $('#data_href').text() + $('#search_device').text()
+    sAjaxDataProp: "",
+    bDeferRender: true,
+    
+    "oLanguage": {
+      "sProcessing": '
+      <div class="progress progress-striped active">
+        <div class="bar" style="width: 40%;"></div>
+      </div>
+      ';
+    },
+    "aoColumns": [
+      mDataProp: "id"
+      sTitle: " "
+      sDefaultContent: <% if @current_user.user.nil? %>'<a href="<%= 'https://' + request.host_with_port + request.fullpath %>">
+<i class="icon-minus" title="Login to edit..."></i></a>'<% else %>'<i class="editable icon-pencil"></i>'<% end %>
+      bSortable:  false
+    ,
+      mDataProp: "device"
+      sTitle: "Device"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        return row['device'].split('\.').shift()
+    ,
+      mDataProp: "physical_port"
+      sTitle: "Port"
+      sDefaultContent: "-"
+      sType: 'physical-port'
+    ,
+      mDataProp: "status"
+      sTitle: "Status"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "alias"
+      sTitle: "Alias"
+      # sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        if row.alias == 'None'
+          return ''
+        row.alias
+    ,
+      mDataProp: "vlans"
+      sTitle: "VLAN(s)"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "speed_duplex"
+      sTitle: "Speed/Duplex"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        if row.speed_duplex == 'auto'
+          unless row.status == 'connected'
+            row.speed_duplex = 'unknown'
+        row.speed_duplex
+    ,
+      mDataProp: "autoneg"
+      sTitle: "Autoneg"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "peers"
+      sTitle: "Neighbour(s)"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        neighbours = []
+        seen = {}
+        if row.peers instanceof Array
+          for p in row.peers
+            if p['peer_device']?
+              neighbours.push p['peer_device'] + ' (' + p['peer_physical_port'] + ')'
+        if row.hosts instanceof Array
+          for p in row.hosts
+            if p['mac_address']?
+              k = build_host_string( p )
+              # add to seen so we don't duplicate
+              if !seen[k['key']]?
+                seen[k['key']] = true
+                neighbours.push k['html']
+        if neighbours.length
+          return neighbours.join(' <br/> ')
+        return '-'
+    ,
+      mDataProp: "voice_vlan"
+      sTitle: "Voice"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        if row.voice_vlan
+          return true
+        return false
+    ,
+      mDataProp: "updated_at"
+      sTitle: "Last Seen"
+      sDefaultContent: "-"
+      sType: 'seen'
+      mRender: (obj,type,row) ->
+        jQuery.timeago(row.updated_at)
+
+    ]
+
+    # ui
+    bProcessing: true
+    bSort: true
+    aaSorting: [ [2,"asc"] ]
+    bJqueryUI:  true
+    iDisplayLength: -1
+    bAutoWidth: false
+    # export types
+    oTableTools:
+      sSwfPath: $('#dataTables_swf').text()
+    sDom:       '<"pull-left"i><"pull-right"T><"span12"t>r<"clear">'
+    fnDrawCallback: () ->
+      # column two click to port graph
+      $('tbody > tr').each () ->
+        
+        # color status
+        s = $(this).children( 'td:nth-child(4)' )
+        s.closest('td').addClass( s.text() )
+        
+        # create link for port graphs
+        d = $(this).children( 'td:nth-child(2)' ).text() + '.slac.stanford.edu'
+        p = $(this).children( 'td:nth-child(3)' )
+        p.replaceWith( () ->
+            # url = "/graphs.horizon/port/" + d + "/" + p.text().replace(/\//g,'.')
+            url = "/graphs.horizon/port/" + d + "/" + p.text() 
+            return '<td><a href="' + url + '" title="show port statistics">' + p.text() + '</a></td>'
+        )
+    fnInitComplete: () ->
+      createFacet()
+      <% if @current_user.user.nil? %>
+      # grey out?
+      <% else %>
+      createEditable()
+      <% end %>
+    fnRowCallback: ( nRow, aData, iDisplayIndex, iDisplayIndexFull ) ->
+      mapping = {
+          'vlans': 5,
+      }
+      for k,v of aData
+        if typeIsArray v
+          n = mapping[k]
+          $('td:eq('+n+')', nRow).html( aData[k].join(', ') )
+          
+  createFacet = ->
+    oTable.facets()
+  
+  createEditable = ->
+    editable_table $('.dataTable'), submit_port_edit, [
+      param:  'action'
+      ignore: true
+    ,
+      param:  'device'
+    ,
+      param: 'port'
+    ,
+      param:  'state'
+      editable: true
+      type: 'choice'
+      choices: [ 'enabled', 'disabled' ]
+      mapping:
+        notconnect: 'disabled'
+        connected: 'enabled'
+    ,
+      param:  'alias'
+      editable: true
+      type: 'string'
+    ,
+      param:  'vlan'
+      editable: true
+      type: 'choice'
+      choices:  fetch_device_vlans
+    ,
+      param:  'speed_duplex'
+      # editable: true
+      type: 'choice'
+      choices:  [ '10/full', '100/full', '1000/full' ]
+    ,
+      param:  'autoneg'
+      editable: true
+      type: 'choice'
+      choices:  [ 'fixed', 'auto' ]
+    ,
+      param: 'peers'
+      ignore: true
+    ,
+      param:  'voice_vlan'
+      editable: true
+      type: 'choice'
+      choices: [ 'true','false' ]
+    
+    ]
+    
+  $('input[type="text"]').keyup( () ->
+    item = $(this).val()
+    delay( ()->
+      oTable.fnFilter( item )
+      oTable.fnUpdateFacets()    
+    , 300 )
+  )
+  
+  $('.facet').resizable(
+      handles: 's',
+      minHeight: 50,
+      minWidth: 175,
+      # alsoResize: '.facet .facet-frame',
+      # resize: (e,ui) ->
+      #   ui.size.width = ui.originalSize.width
+  )
+  return
+
+
+<% end %>

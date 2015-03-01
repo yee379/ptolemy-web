@@ -1,0 +1,17 @@
+<%= form_for(@techcoord) do |f| %>
+  <% if @techcoord.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@techcoord.errors.count, "error") %> prohibited this techcoord from being saved:</h2>
+
+      <ul>
+      <% @techcoord.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

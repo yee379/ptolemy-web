@@ -1,0 +1,109 @@
+@import "twitter/bootstrap/bootstrap";
+@import "twitter/bootstrap/responsive";
+
+// Font Awesome
+@fontAwesomeEotPath: asset-url("fontawesome-webfont.eot");
+@fontAwesomeEotPath_iefix: asset-url("fontawesome-webfont.eot#iefix");
+@fontAwesomeWoffPath: asset-url("fontawesome-webfont.woff");
+@fontAwesomeTtfPath: asset-url("fontawesome-webfont.ttf");
+@fontAwesomeSvgPath: asset-url("fontawesome-webfont.svg#fontawesomeregular");
+@import "fontawesome/font-awesome";
+
+
+// Glyphicons
+@import "twitter/bootstrap/sprites.less";
+@iconSpritePath: asset-path("/twitter/bootstrap/glyphicons-halflings.png");
+@iconWhiteSpritePath: asset-path("/twitter/bootstrap/glyphicons-halflings-white.png");
+
+
+// Your custom LESS stylesheets goes here
+
+// reduce gutter margins
+@gridGutterWidth: 3px;
+@gridGutterWidth1200: 3px;
+@gridGutterWidth768: 3px;
+
+
+// keep side margins for the main container
+div.container-fluid {
+  padding-top: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+// minimise the well padding
+.well {
+  padding-top:  5px;
+  padding-right:  0px;
+  padding-left:  0px;
+  padding-bottom:  10px;
+}
+
+input[type="text"] {
+  min-height: 31px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+
+// navbar
+
+//body
+body {
+  padding-left: 0px;
+  padding-right: 0px;
+  
+  h3 {
+    font-size: 1.6em;
+  }
+}
+
+// hero
+.hero-unit {
+  margin-top: 30px;
+  
+  h1 {
+    font-size: 3.6em;
+  };
+
+  h3 {
+    font-size: 1.6em;
+  };
+  
+}
+
+.alert {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.contents {
+  height: auto;  
+}
+
+
+.input-append button.add-on {
+    height: inherit !important;
+}
+
+// glow around inputs
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus {   
+border-color: rgba(153,0,0,0.6);
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(153,0,0,0.4);
+outline: 0 none;}
+
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  color: white;
+  background-color: rgba(153,0,0,0.90);
+  background-image: none;
+  filter: none;
+}
+
+
+
+
+
+

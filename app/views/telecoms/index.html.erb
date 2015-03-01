@@ -1,0 +1,35 @@
+<h1>Listing telecoms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Context</th>
+      <th>Data</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @telecoms.each do |telecom| %>
+    <tr>
+      <td><%= telecom.id %></td>
+      <td><%= telecom.created_at %></td>
+      <td><%= telecom.updated_at %></td>
+      <td><%= telecom.context %></td>
+      <td><%= telecom.data %></td>
+      <td><%= link_to 'Show', telecom %></td>
+      <td><%= link_to 'Edit', edit_telecom_path(telecom) %></td>
+      <td><%= link_to 'Destroy', telecom, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Telecom', new_telecom_path %>

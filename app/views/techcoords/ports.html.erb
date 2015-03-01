@@ -1,0 +1,176 @@
+<div class="row-fluid span12">
+  <h1>Network Ports</h1>
+</div>
+
+<div class="row-fluid span12">
+
+  <div class="span2">
+
+    <div class="well sidebar-nav input-block-level">
+      <form class="form-search" onsubmit="return false;">
+        <div class="input-append span12">
+          <span class="add-on"><i class="icon-search"></i></span> 
+          <input class="input-wrapper" type="text">
+        </div> 
+      </form>
+    </div>
+  
+    <div class="well sidebar-nav facet" for="device"></div>
+    <div class="well sidebar-nav facet" for="servers"></div>
+
+    <div class="well sidebar-nav facet" for="vlans"></div>
+    <div class="well sidebar-nav facet" for="status"></div>
+
+  </div>
+
+  <div class="span10">
+  
+    <table class="dataTable table-striped table-bordered table-condensed table-hover"></table>
+
+  </div>
+
+  <div style="visibility: hidden">
+    <div id="data_href">/api/techcoords/ports.json?device=</div>
+    <div id="dataTables_swf"><%= asset_path('copy_csv_xls_pdf.swf') %></div>
+    <div id="search_device"><%= params[:device] %></div>
+  </div>
+
+</div>
+
+<%= coffee_script_tag do %>
+
+
+jQuery -> 
+
+
+  # intiate any datatables we have
+  oTable = $('.dataTable').dataTable
+
+    sAjaxSource:  $('#data_href').text() + $('#search_device').text()
+    sAjaxDataProp: "",
+    bDeferRender: true,
+    
+    "aoColumns": [
+      mDataProp: "device"
+      sTitle: "Device"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "physical_port"
+      sTitle: "Port"
+      sDefaultContent: "-"
+      sType: 'physical-port'
+    ,
+      mDataProp: "status"
+      sTitle: "Status"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "alias"
+      sTitle: "Alias"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        if row.alias == 'None'
+          return '-'
+        row.alias
+    ,
+      mDataProp: "vlans"
+      sTitle: "VLAN(s)"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "peers"
+      sTitle: "Neighbour(s)"
+      sDefaultContent: "-"
+      mRender: (obj,type,row) ->
+        neighbours = []
+        seen = {}
+        if row.peers instanceof Array
+          for p in row.peers
+            if p['peer_device']?
+              neighbours.push p['peer_device'] + ' (' + p['peer_physical_port'] + ')'
+        if row.hosts instanceof Array
+          for p in row.hosts
+            if p['mac_address']?
+              k = null
+              # console.log p['ip_address'] is null
+              if !p['hostname']?
+                k = '(<span class="href ip_address">' + p['ip_address'] + '</span> @ <span class="href mac_address">' + p['mac_address'] + '</span>)'
+              else if !p['ip_address']? or p['ip_address'] is null
+                k = '(<span class="href mac_address">' + p['mac_address'] + '</span>)'
+              else
+                k = '<span class="href hostname">' + p['hostname'] + '</span> (<span class="href ip_address">' + p['ip_address'] + '</span> @ <span class="href mac_address">' + p['mac_address'] + '</span>)'
+              # add to seen so we don't duplicate
+              if !seen[k]?
+                seen[k] = true
+                neighbours.push k
+        if neighbours.length
+          return neighbours.join(' <br/> ')
+        return '-'
+    ,
+    mDataProp: "servers"
+    sTitle: "Locations(s)"
+    sDefaultContent: "-"
+    mRender: (obj,type,row) ->
+      neighbours = []
+      seen = {}
+      if row.servers instanceof Array
+        for s in row.servers
+          if s['rack']?
+            neighbours.push s['rack']
+      if neighbours.length
+        return neighbours.join(' </br> ')
+        return '-'
+
+    ]
+
+    # ui
+    bProcessing: true
+    bSort: true
+    aaSorting: [ [1,"asc"] ]
+    bJqueryUI:  true
+    iDisplayLength: -1
+    bAutoWidth: false
+    # export types
+    oTableTools:
+      sSwfPath: $('#dataTables_swf').text()
+    sDom:       '<"pull-left"i><"pull-right"T><"span12"t>r<"clear">'
+    fnDrawCallback: () ->
+      # console.log 'assigning click'
+      # column two click to port graph
+      $('tbody > tr').each () ->
+        d = $(this).children( 'td:nth-child(1)' ).text()
+        p = $(this).children( 'td:nth-child(2)' )
+        p.addClass "href"
+        p.bind( 'click', () -> 
+          window.location.href = "/graphs/port.util/" + d + "/" + p.text().replace(/\//g,'.')
+        )
+    fnInitComplete: () ->
+      createFacet()
+    fnRowCallback: ( nRow, aData, iDisplayIndex, iDisplayIndexFull ) ->
+      mapping = {
+          'vlans': 4,
+      }
+      for k,v of aData
+        if typeIsArray v
+          n = mapping[k]
+          $('td:eq('+n+')', nRow).html( aData[k].join(', ') )
+          
+  createFacet = ->
+    oTable.facets()
+    
+  
+  
+  $('input[type="text"]').keyup( () ->
+      oTable.fnFilter( $(this).val() )
+      oTable.fnUpdateFacets()
+  )
+  
+  $('.facet').resizable(
+      minHeight: 125,
+      minWidth: 175,
+      alsoResize: '.facet .facet-frame',
+      # resize: (e,ui) ->
+      #   ui.size.width = ui.originalSize.width
+  )
+  return
+
+
+<% end %>

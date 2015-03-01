@@ -1,0 +1,1 @@
+json.array! @subnets.collect{ |s| s.name }

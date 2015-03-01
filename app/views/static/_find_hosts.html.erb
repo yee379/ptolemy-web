@@ -1,0 +1,68 @@
+<li class="span4">
+  <h3>
+    <%= image_tag "laptop123.svg", :size => '24' %> Find a Host
+  </h3>
+  <p>
+    Find out where a computer is located
+    <form class="form-search span12" method="get" action="<%= hosts_path %>" autocomplete="off"> 
+      <div class="input-append">
+        <input id="host_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="q" placeholder="ip, mac or hostname..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+
+  var lookup_urls = {
+    'hostname': "<%= autocomplete_hostname_list_path %>",
+    'mac_address': "<%= autocomplete_mac_address_list_path %>",
+    'ip_address': "<%= autocomplete_ipaddress_list_path %>",
+  }
+
+
+  // do autocomplete based on what i thikn the input is
+  $('#host_autocomplete').typeahead({
+    source: function( q, process ){
+      
+      // wait for at least three characters before continuing
+      if( q.length > 2 ){
+        
+        var type = 'hostname';
+        
+        // 1) if it starts with a number, then it could be ip or mac
+        if( /^\d+/.test(q) ) {
+          // 1a) if it has letters, then it must be mac
+          if( /[a-f]/.test(q) ) {
+            type = 'mac_address';
+            // 1c) else ip
+          } else if ( /(\d|\.)+/.test(q) ) {
+            type = 'ip_address';
+          }
+
+        }
+        // 2) it could be mac or hostname
+        else {
+          // 2a) if it has any special characters (.|:|-), then it's a mac address
+          if( /(\.|:)/.test(q) ) {
+            type = 'mac_address';
+          // 2b) hostname
+          } else {
+            type = 'hostname';
+          }
+          
+        }
+
+        // console.log("%s is a %s", q, type );
+        $.get( lookup_urls[type], { query: q }, function(d){
+          return process( d )
+        })
+
+      }
+      
+    }
+  });
+</script>

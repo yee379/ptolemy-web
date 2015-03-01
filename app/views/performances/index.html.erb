@@ -1,0 +1,189 @@
+<h1>Network Status</h1>
+
+<div class="span12">
+  
+  <table>
+    <tr>
+      <td></td>
+      <td>Wide Area</td>
+      <td>Local Area</td>
+      <td>Visitor</td>
+      <td>SLAC Wireless</td>
+    </tr>
+    <tr>
+      <td>Services</td>
+      <td>
+        <div id="wan-services"></div>
+      </td>
+      <td>
+        <div id="lan-services"></div>
+      </td>
+      <td>
+        <div id="vis-services"></div>
+      </td>
+      <td>
+        <div id="slac-wireless-services"></div>
+      </td>
+    </tr>
+    
+    <tr>
+      <td>Performance</td>
+      <td>
+        <div id="wan-perf"></div>
+      </td>
+      <td>
+        <div id="lan-perf"></div>
+      </td>
+      <td>
+        <div id="vis-perf"></div>
+      </td>
+      <td>
+        <div id="slac-wireless-perf"></div>
+      </td>
+
+    </tr>
+    <tr>
+      <td>Capacity</td>
+      <td>
+        <div id="wan-cap"></div>
+      </td>
+      <td>
+        <div id="lan-cap"></div>
+      </td>
+      <td>
+        <div id="vis-cap"></div>
+      </td>
+      <td>
+        <div id="slac-wireless-cap"></div>
+      </td>
+
+    </tr>
+  </table>
+</div>
+
+<br/>
+
+<div class="span12">
+
+  <h2>Other Links</h2>
+  <%= link_to( "Network Devices", devices_dashboard_path ) %>
+</div>
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+  
+  # create color scale based on value
+  tricolour = d3.scale.threshold().domain( [0,10,size] ).range( [ '#c2c2c2', '#c4df9b', '#fdc68a', '#f7977a' ] )
+  colour_scale = (num) -> 
+    if isNaN(num) then '#c2c2c2' else tricolour(num)
+  
+  size = 90
+    
+  # what is a wan-service? just web? http google?
+  wan_services = new TileView( '#wan-services', delay=300000, step=300000 )
+  wan_services.add
+      alias: 'wan-services'
+      width: size
+      height: size
+      metric: null
+      scale: state_colour_scale
+
+  # wan_metric = []
+  # # for w in [ 'net.es.slac-owamp', 'edu.stanford.netspeed1', 'gov.nersc.perfsonar', 'gov.lbl.nettest', 'gov.ameslab.owamp.external', 'gov.pnl.ndt-scz', 'gov.anl.it.anlborder-ps', 'edu.ou.ochep.ps1', 'org.aglt2.psmsu01g', 'gov.bnl.lhcperfmon', 'fr.in2p3.ccperfsonar-lhcopn', 'ch.cern.exthost.owamp', 'it.infn.cnaf.perfsonar-ps' ]
+  # for w in [ 'net.es.slac-owamp' ]
+  #   wan_metric.push 'network.kpi.wan.source.edu.stanford.slac.psnr-lat01.target.'+w+'.owamp.loss'
+
+  # just next link to esnet, how is performace?
+  wan_perf = new TileView( '#wan-perf', delay=300000, step=300000 )
+  wan_perf.add
+      alias: 'wan-performance'
+      width: size
+      height: size
+      metric: 'network.kpi.wan.source.edu.stanford.slac.psnr-lat01.target.net.es.slac-owamp.owamp.loss'
+      scale: colour_scale
+      url: '/performance/wan'
+
+  # uplink capacities to esnet and stanford - take max capacity
+  wan_cap = new TileView( '#wan-cap', delay=300000, step=300000 )
+  wan_cap.add
+      alias: 'wan-capacity'
+      width: size
+      height: size
+      metric: [ 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te2.1' ]
+      collate: 'max'
+      scale: colour_scale
+      url: '/performance/wan'
+
+  # dns services - as reported by ipsla
+  lan_services = new TileView( '#lan-services', delay=300000, step=300000 )
+  lan_services.add
+      alias: 'lan-services'
+      metric: [ 'ptolemy.edu.stanford.slac.rtr-bldgcore1.ip_sla.stats.102.state', 'ptolemy.edu.stanford.slac.rtr-serv01.ip_sla.stats.101.state', 'ptolemy.edu.stanford.slac.rtr-serv01.ip_sla.stats.112.state', 'ptolemy.edu.stanford.slac.rtr-serv01.ip_sla.stats.113.state', 'ptolemy.edu.stanford.slac.rtr-serv03.ip_sla.stats.102.state' ]
+      width: size
+      height: size
+      scale: state_colour_scale
+      url: '/performance/lan'
+
+  lan_perf = new TileView( '#lan-perf', delay=300000, step=300000 )
+  lan_perf.add
+      alias: 'lan-performance'
+      metric: 'maxSeries(network.kpi.wan.source.edu.stanford.slac.*.target.edu.stanford.slac.*.owamp.loss)'
+      width: size
+      height: size
+      scale: colour_scale
+      url: '/performance/lan'
+
+  lan_cap = new TileView( '#lan-cap', delay=300000, step=300000 )
+  lan_cap.add
+      alias: 'lan-capacity'
+      metric: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.3', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.3' ]
+      collate: 'max'
+      width: size
+      height: size
+      scale: colour_scale
+      url: '/performance/lan'
+
+
+
+
+  vis_services = new TileView( '#vis-services', delay=300000, step=300000 )
+  vis_services.add
+      alias: 'visitor-services'
+      metric: [ 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.101.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.102.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.105.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.202.state', 'ptolemy.edu.stanford.slac.rtr-visitor2.ip_sla.stats.202.state' ]
+      collate: 'min'
+      width: size
+      height: size
+      scale: state_colour_scale
+      url: '/performance/visitor'
+      
+  vis_cap = new TileView( '#vis-cap', delay=300000, step=300000 )
+  vis_cap.add
+      alias: 'visitor-capacity'
+      metric: [ 'port.util.pc.out/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.pc.in/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.pc.out/swh-visitor2.slac.stanford.edu/Gi1.0.25', 'port.util.pc.in/swh-visitor2.slac.stanford.edu/Gi1.0.25' ]
+      collate: 'max'
+      width: size
+      height: size
+      scale: percent_colour_scale
+      url: '/performance/visitor'
+
+
+  slac_wireless_cap = new TileView( '#slac-wireless-cap', delay=300000, step=300000 )
+  slac_wireless_cap.add
+      alias: 'visitor-capacity'
+      metric: [ 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.38',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.38']
+      collate: 'max'
+      width: size
+      height: size
+      scale: percent_colour_scale
+      url: '/performance/visitor'
+
+
+<% end %>

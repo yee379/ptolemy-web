@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="content">
+    
+    <div class="row-fluid">
+      <div class="hero-unit span12">
+        <h1>
+          Network > Cyber
+        </h1>
+        <p>
+          Cyber Security Networking Pages
+        </p>
+      </div>
+    </div>
+
+
+    <div class="row-fluid">
+      <div class="span11 offset1">
+        <ul class="thumbnails">
+
+          <li class="span4">
+            <h3>
+              Search Autoblocks
+            </h3>
+            <p>
+              Determine if an ip address has been autoblocked by CFM etc.
+              <form id="cfm_form" class="form-search span12" autocomplete="off" method="get" action="<%= cfm_url( :protocol => "https" ) %>">
+                <div class="input-append">
+                  <input id="cfm_input" class="span9 input-medium search-query" name="ip" placeholder="ip address regex..." type="text">
+                  <button class="btn add-on">
+                    <i class="icon-search"></i>
+                  </button>
+                </div>
+              </form>
+            </p>
+          </li>
+
+          <li class="span4">
+            <h3>
+              <%= link_to 'Firewall Access Control Lists', acl_check_path %>
+            </h3>
+            <p>
+              Firewall access list querier
+            </p>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

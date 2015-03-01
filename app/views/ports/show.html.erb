@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @port.device %>
+</p>
+
+<p>
+  <strong>Physical port:</strong>
+  <%= @port.physical_port %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @port.data %>
+</p>
+
+<p>
+  <strong>Mac addresses:</strong>
+  <%= @port.mac_addresses %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @port.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @port.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_port_path(@port) %> |
+<%= link_to 'Back', ports_path %>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Entity  meta:</strong>
+  <%= @replacement.entity__meta %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @replacement.type %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @replacement.quantity %>
+</p>
+
+<p>
+  <strong>Hardware:</strong>
+  <%= @replacement.hardware %>
+</p>
+
+<p>
+  <strong>Replacement:</strong>
+  <%= @replacement.replacement %>
+</p>
+
+<%= link_to 'Edit', edit_replacement_path(@replacement) %> |
+<%= link_to 'Back', replacements_path %>

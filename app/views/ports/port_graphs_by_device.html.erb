@@ -1,0 +1,93 @@
+<div class="row row-fluid">
+  <div class="row span12">
+    <h1>Port Graphs for <span id="device"><%= params[:device] %></span></h1> ordered by percent utilisation
+  </div>
+  <div class="pull-right">
+    <div id="step" class="btn-group">
+      <button type="button" class="btn btn-default" id='60'>1min</button>
+      <button type="button" class="btn btn-default" id='300'>5min</button>
+      <button type="button" class="btn btn-default" id='1800'>30min</button>
+      <button type="button" class="btn btn-default" id='3600'>1hour</button>
+      <button type="button" class="btn btn-default" id='10800'>3hour</button>
+      <button type="button" class="btn btn-default" id='21600'>6hour</button>
+    </div>
+  </div>
+
+  <div id="horizon" class="row span12"></div>
+</div>
+
+<%= coffee_script_tag do %>
+
+create_horizon = ( metrics, step, delay ) ->
+  view = new HorizonView( '#horizon', delay=delay*1000, step=step*1000 )
+  view.add metrics
+  return view
+
+
+jQuery ->
+
+
+  # set up bin sizes
+  step = 300
+  $('#step button#'+step).addClass( 'btn-primary' )
+
+  view = null
+  data = []
+  
+  # load the scoreboard of ports on the device
+  $.ajax(
+    url: "/api/ports/utilisations.json?period=" + step/60 + "&device=" + $('#device').text()
+    type: 'GET'
+    timeout: 5000
+    data: {}
+    complete: (e,xhr,settings) ->
+    
+      switch e.status
+        when 200
+          data = []
+          seen = {}
+          for i in e.responseJSON
+            unless i.physical_port of seen
+              seen[i.physical_port] = true
+              # add
+              d = [
+                {
+                  alias: i.physical_port
+                  metric: 'port.util.out/' + i.device + '/' + i.physical_port.replace(/\//g,'.')
+                  height: 30
+                  klass: 'up'
+                }
+                {
+                  alias: ' '
+                  metric: 'port.util.in/' + i.device + '/' + i.physical_port.replace(/\//g,'.')
+                  height: 30
+                  multiply: -1
+                  klass: 'down'
+                },
+              ]
+              data.push d[0]
+              data.push d[1]
+    
+    
+          # initial
+          view = create_horizon( data, step, step )
+   
+    
+  )
+
+
+
+  # change
+  $('#step button').on( 'click', (e) ->
+    # remove primary on others
+    step = $(this)[0].id
+    $('#step button').removeClass( 'btn-primary' )
+    $(this).addClass( 'btn-primary' )
+    view.destroy()
+    view = create_horizon( data, step, step )
+  ) 
+
+
+
+  
+<% end %>

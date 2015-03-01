@@ -1,0 +1,65 @@
+<div class="row span12">
+  <div class="pull-left">
+    <h1>Campus Network Switch Status</h1>
+  </div>
+</div>
+
+<div id='cubism' class="row span12"></div>
+
+<p></p>
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  # get a full list of devices
+  metrics = []
+
+  # create color scale based on value
+  tricolour = d3.scale.threshold().domain( [0,10,100] ).range( [ '#c2c2c2', '#c4df9b', '#fdc68a', '#f7977a' ] )
+  colour_scale = (num) -> 
+    if isNaN(num) then '#c2c2c2' else tricolour(num)
+
+  items = []
+
+  # fetch and display
+  $.getJSON(
+
+    '/api/devices.json', (json) ->
+
+      items = []
+      
+      # create metrics
+      for d in json
+        n = d.device
+        if d.categories
+          for c in d.categories
+            console.log n + ' -> ' + c
+            if c == 'campus'
+              console.log '  adding ' + n
+              metrics.push 
+                metric: 'loss/'+n
+                alias: n
+                scale: colour_scale
+                width: 30
+                height: 30
+                url: '/performance/device/'+n
+                meta: 
+                  categories: d.categories
+              
+  )
+  .success( () ->
+
+    # create tile view
+    view = new TileView( '#cubism', delay=300000, step=300000 )
+    view.add metrics
+
+  )
+  .error( () ->
+    
+    console.log 'could not load list of devices'
+    
+  )
+
+<% end %>
+

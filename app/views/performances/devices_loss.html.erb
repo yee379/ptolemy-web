@@ -1,0 +1,21 @@
+<div class="row span12">
+  <h1>Network Device Ping Statistics<h1>
+</div>
+
+<div id="cubism" class="row span12">
+</div>
+
+
+<%= coffee_script_tag do %>
+
+view = new CubismView( '#cubism', delay=300000, step=300000, extent=[0,1])
+
+$.get( '/api/devices/list', (d) ->
+  metrics = []
+  for i in d
+    n = i['i'].split('.').reverse().join('.')
+    view.add "ptolemy." + n + ".reachability.ping.Ping.min_rtt", n 
+)
+  
+<% end %>
+  

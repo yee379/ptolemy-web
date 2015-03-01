@@ -1,0 +1,37 @@
+.dygraph {
+  position: relative;
+  left: 10px;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+div.dygraph-label {
+  position: absolute;
+  float: right;
+  text-align: right;
+  top: 132px;
+  right: 30px;
+  width: 1200px;
+}
+
+div.dygraph-label > span {
+  display: none;
+}
+
+div.dygraph-label span.highlight {
+    display: block;
+/*    font-size: 14px;*/
+}
+
+.dygraph > div > input {
+  top: 12px;
+  right: 12px;
+}
+
+.dygraph > div > input {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 30px;
+}

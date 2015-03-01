@@ -1,0 +1,26 @@
+<li class="span4">
+  <h3>
+    Host Connections
+  </h3>
+  <p>
+    What switch is a host connected to
+    <form class="form-search span12" action="<%= hosts_path %>" method="GET" autocomplete="off">
+      <div class="input-append">
+        <input id="switch_ports_by_host_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="q" placeholder="Hostname..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+  $('#switch_ports_by_host_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_hostname_list_path %>", { query: q }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

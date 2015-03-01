@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @telecom.id %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @telecom.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @telecom.updated_at %>
+</p>
+
+<p>
+  <strong>Context:</strong>
+  <%= @telecom.context %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @telecom.data %>
+</p>
+
+<%= link_to 'Edit', edit_telecom_path(@telecom) %> |
+<%= link_to 'Back', telecoms_path %>

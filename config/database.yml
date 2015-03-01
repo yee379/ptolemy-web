@@ -1,0 +1,29 @@
+common: &common
+    adapter: postgresql
+    encoding: unicode
+    pool: 5
+    username: ptolemy
+    password: ptolemy
+    host: net-graphite01.slac.stanford.edu
+    port: 5432
+    
+development:
+    <<: *common
+    database: ptolemy_production
+
+production:
+    <<: *common
+    database: ptolemy_production
+    # 1 min query timeouts
+    timeout: 60000
+    
+long_connection_development:
+    <<: *common
+    database: ptolemy_production
+    
+long_connection_production:
+    <<: *common
+    database: ptolemy_production
+    # 5 min query timeouts
+    timeout: 300000
+    

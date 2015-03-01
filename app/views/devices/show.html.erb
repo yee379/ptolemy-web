@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Device:</strong>
+  <%= @device.device %>
+</p>
+
+<p>
+  <strong>Models:</strong>
+  <%= @device.models %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @device.location %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @device.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @device.updated_at %>
+</p>
+
+<%= link_to 'Edit', edit_device_path(@device) %> |
+<%= link_to 'Back', devices_path %>

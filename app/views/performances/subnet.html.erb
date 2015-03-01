@@ -1,0 +1,35 @@
+<div class="row span12">
+  <h1>Performance of <span id="prefix"><%= @prefix %></span> / <span id="len"><%= @len %></span><h1>
+</div>
+
+<div id="cubism" class="row span12">
+</div>
+
+<%= coffee_script_tag do %>
+
+p = $('span#prefix').text()
+k = $('span#len').text()
+
+view = new HorizonView( '#cubism', delay=600000, step=600000 )
+view.addGroup [
+  {
+    name: 'subnet.loss/' + p + '/' + k
+    alias: 'loss'
+    height: 100 
+  },{
+    name: 'subnet.rtt/' + p + '/' + k
+    alias: 'ping'
+    height: 100
+  },{
+    name: 'subnet.jitter/' + p + '/' + k
+    alias: 'jitter'
+    height: 100
+  },{
+    name: 'subnet.count/' + p + '/' + k
+    alias: 'users'
+    height: 100
+  }
+]
+
+<% end %>
+  

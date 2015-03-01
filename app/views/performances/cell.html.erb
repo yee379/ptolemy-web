@@ -1,0 +1,34 @@
+<div class="row span12">
+  <h1>Cell Test<h1>
+</div>
+
+<div id="cubism" class="">
+</div>
+
+<%= coffee_script_tag do %>
+
+# create color scale based on value
+tricolour = d3.scale.threshold().domain( [0,0.1,0.8] ).range( [ '#C2C2C2', '#c4df9b', '#fdc68a', '#f7977a' ] )
+colour_scale = (num) -> 
+  if isNaN(num) then '#c2c2c2' else tricolour(num)
+
+
+
+context = cubism.context()
+  .serverDelay(60e3)
+  .step(60e3)
+  .size(10)
+
+server = context.ptolemy()
+metrics = [ server.metric("port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.1"), server.metric("port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.2"), server.metric("port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.1"), server.metric("port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.2") ]
+
+d3.select("#cubism").selectAll(".tile")
+    .data( metrics )
+  .enter().insert("div", ".bottom")
+    .attr("class", "tile")
+  .call(
+    context.tile().scale( colour_scale )
+  );
+
+  
+<% end %>

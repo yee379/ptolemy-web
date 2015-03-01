@@ -1,0 +1,99 @@
+
+
+
+/* cubism */
+svg {
+  font: 10px sans-serif;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+sup, sub {
+  line-height: 0;
+}
+
+.axis {
+  font: 1.0em sans-serif;
+}
+
+.axis text {
+  -webkit-transition: fill-opacity 250ms linear;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.horizon {
+  overflow: hidden;
+  position: relative;
+  border-top: solid 1px #000;
+  border-bottom: solid 1px #000;
+}
+
+.horizon + .horizon {
+  border-top: none;
+}
+
+.up {
+  border-bottom: none;
+}
+
+.down {
+  border-top: none;
+}
+
+.horizon canvas {
+  display: block;
+}
+
+.horizon .title,
+.horizon .value {
+  bottom: 0;
+  line-height: 30px;
+  margin: 0 6px;
+  position: absolute;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+
+.horizon .title {
+  left: 0;
+}
+
+.horizon .value {
+  right: 0;
+}
+
+.horizon.down > .value, .horizon.down > .title {
+  top: 1px;
+}
+
+
+.tile  {
+  position: relative;
+  display: inline;
+  margin-right: 1px;
+  margin-bottom: 1px;
+}
+
+
+// required for positioning the .line
+.row-fluid, .row {
+  position: relative;
+}
+
+.line {
+  background: orange;
+  opacity: .6;
+  z-index: 2;
+}

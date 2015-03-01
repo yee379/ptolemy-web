@@ -1,0 +1,102 @@
+<div class="row row-fluid">
+  <div class="row span12">
+    <h1>SLAC Wireless Network Performance</h1>
+  </div>
+
+  <!--
+  <div class="row span12">
+    <ul class="thumbnails">
+      <li class="span4">
+        <h3>DNS</h3>
+        <div id='dns' class="span4"></div>
+      </li>
+      <li class="span4">
+        <h3>DHCP</h3>
+        <div id='dhcp' class="span4"></div>
+      </li>
+      <li class="span4">
+        <h3>Registration</h3>
+        <div id='registration' class="span4"></div>
+      </li>
+    </ul>  
+  </div>
+  -->
+    
+  <div class="row span12">
+    <h3>Aggregate Uplink Capacity</h3>
+    <div id='uplinks'></div>
+  </div>
+
+</div>
+
+
+
+
+  
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  size = 75
+
+  # dns = new TileView( '#dns', delay=300000, step=300000 )
+  # dns.add
+  #   metric: [ 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.101.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.102.state' ]
+  #   collate: 'min'
+  #   alias: 'dns'
+  #   height: size
+  #   width: size
+  #   scale: state_colour_scale
+  # 
+  # dhcp = new TileView( '#dhcp', delay=300000, step=300000 )
+  # dhcp.add
+  #   metric: null
+  #   alias: 'dhcp'
+  #   height: size
+  #   width: size
+  #   scale: state_colour_scale
+  # 
+  # reg = new TileView( '#registration', delay=300000, step=300000 )
+  # reg.add
+  #   metric: 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.105.state'
+  #   alias: 'registration'
+  #   height: size
+  #   width: size
+  #   scale: state_colour_scale
+
+  uplinks = new HorizonView( '#uplinks', delay=60000, step=60000 )
+  uplinks.add [
+    {
+      metric: [ 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.38',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.38']
+      alias: 'out'
+      scale: state_colour_scale
+      klass: 'up'
+      height: 90
+    },
+    {
+      metric: [ 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.38',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.35',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.36',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.37',
+         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.38']
+      multiply: -1
+      alias: 'in'
+      scale: state_colour_scale
+      klass: 'down'
+      height: 90
+    }
+  ]
+    
+<% end %>
+

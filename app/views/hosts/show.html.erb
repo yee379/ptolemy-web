@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @host.id %>
+</p>
+
+<p>
+  <strong>Created at:</strong>
+  <%= @host.created_at %>
+</p>
+
+<p>
+  <strong>Updated at:</strong>
+  <%= @host.updated_at %>
+</p>
+
+<p>
+  <strong>Context:</strong>
+  <%= @host.context %>
+</p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @host.data %>
+</p>
+
+<%= link_to 'Edit', edit_host_path(@host) %> |
+<%= link_to 'Back', hosts_path %>

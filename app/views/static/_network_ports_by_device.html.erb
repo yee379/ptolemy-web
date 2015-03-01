@@ -1,0 +1,27 @@
+<li class="span4">
+  <h3>
+    <%= image_tag "noun_88992_cc.svg", :width => '36' %> Ports on Device
+  </h3>
+  <p>
+    Display the network ports on a specific network device
+    <form class="form-search span12" method="get" action="<%= network_ports_path %>">
+      <div class="input-append">
+        <input id="network_ports_by_device_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="device" placeholder="switch name..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+
+<script>
+  $('#network_ports_by_device_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_device_list_path %>", { query: q }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

@@ -1,0 +1,51 @@
+<h1>Listing hardwares</h1>
+
+<table cellpadding="0" cellspacing="0" border="0" class="dataTable table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Vendor</th>
+      <th>Model</th>
+      <!-- <th>Bulletin url</th> -->
+      <!-- <th>Available</th> -->
+      <th>End of sale</th>
+      <th>End of support</th>
+      <th>Price</th>
+      <th>Edit</th>
+      <th>Del</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @hardwares.each do |hardware| %>
+      <tr>
+        <td><%= hardware.vendor %></td>
+        <td><%= hardware.model %></td>
+        <!-- <td><%= hardware.bulletin_url %></td> -->
+        <!-- <td><%= hardware.available %></td> -->
+        <td><%= hardware.end_of_sale %></td>
+        <td><%= hardware.end_of_support %></td>
+        <td><%= hardware.price %></td>
+        <!-- <td><%= link_to 'Show', hardware %></td> -->
+        <td><%= link_to 'Edit', edit_hardware_path(hardware) %></td>
+        <td><%= link_to 'Del', hardware, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Hardware', new_hardware_path %>
+
+<%= coffee_script_tag do %>
+jQuery ->
+	
+  oTable = $('.dataTable').dataTable
+    iDisplayLength: -1
+    bSort: true
+    aaSorting: [ [1,"asc"] ]
+    bJqueryUI:  true
+    bAutoWidth: false
+    sDom: "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+
+<% end %>

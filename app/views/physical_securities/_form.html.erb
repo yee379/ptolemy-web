@@ -1,0 +1,33 @@
+<%= form_for(@physical_security) do |f| %>
+  <% if @physical_security.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@physical_security.errors.count, "error") %> prohibited this physical_security from being saved:</h2>
+
+      <ul>
+      <% @physical_security.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :device %><br />
+    <%= f.text_field :device %>
+  </div>
+  <div class="field">
+    <%= f.label :environment_type %><br />
+    <%= f.text_field :environment_type %>
+  </div>
+  <div class="field">
+    <%= f.label :environment %><br />
+    <%= f.check_box :environment %>
+  </div>
+  <div class="field">
+    <%= f.label :cabinet %><br />
+    <%= f.check_box :cabinet %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

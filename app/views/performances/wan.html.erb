@@ -1,0 +1,156 @@
+<h1>WAN Performance</h1>
+
+<div class="span10 offset1">
+  <h4>Border Capacity</h4>
+  <ul class="thumbnails">
+    <li class="span6">
+      <div id='border1_capacity' class="span4"></div>
+    </li>
+    <li class="span6">
+      <div id='border2_capacity' class="span4"></div>
+    </li>
+  </ul>
+
+</div>
+
+<div class="span10 offset1">
+  <h4>Measured Performance to/from SLAC</h3>
+  <div class="row">
+    <div class="span1">
+    </div>
+    <div id='header' class="span11"></div>
+  </div>
+  <div class="row">
+    <div class="span1">
+      Loss
+    </div>
+    <div id='loss' class="span11"></div>
+  </div>
+  <div class="row">
+    <div class="span1">
+      Jitter
+    </div>
+    <div id='jitter' class="span11"></div>
+  </div>
+  <div class="row">
+    <div class="span1">
+      Throughput
+    </div>
+    <div id='throughput' class="span11"></div>
+  </div>
+</div>
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+
+  size = 50
+  width = 900
+
+  loss = d3.select('#loss')
+    .append( 'svg' )
+    .attr('width', width)
+    .attr('height', size + 5)
+  jitter = d3.select('#jitter')
+    .append( 'svg' )
+    .attr('width', width)
+    .attr('height', size + 5)
+  throughput = d3.select('#throughput')
+    .append( 'svg' )
+    .attr('width', width)
+    .attr('height', size + 5)
+
+  # draw a polygone
+  line_func = d3.svg.line()
+      .x (d) ->
+        d.x
+      .y (d) ->
+        d.y
+      .interpolate( 'linear' )
+
+  # create new colouring agent
+  owamp_colourisor = new ColourisorView( '#loss', delay=300000, step=300000, delta=250 )
+  bwctl_colourisor = new ColourisorView( '#loss', delay=21600000, step=21600000, delta=250 )
+  
+  _box_func = ( el, name, title, polygon, colourisor, colour_scale ) ->
+    el.append('a')
+      .attr('xlink:href', '/graphs.horizon/' + name )
+      .append( 'path' )
+        .attr( 'id', @format_id(name) )
+        .attr( 'd', (d) -> line_func polygon )
+        .attr( 'fill', 'darkgrey' )
+				.style("stroke", "white" )
+				.style("stroke-width", "2px")
+        .append( 'svg:title' )
+          .text( title )
+    colourisor.add
+      metric: name
+      target: '#'+@format_id(name)
+      scale: colour_scale
+        
+  box_func = ( el, size, fm, to, metric, xoffset=0, yoffset=0, colourisor=owamp_colourisor, colour_scale=@percent_colour_scale ) ->    
+    left_triangle = [
+      { x: xoffset, y: yoffset },
+      { x: xoffset, y: size + yoffset },
+      { x: size + xoffset, y: size + yoffset },
+      { x: xoffset, y: yoffset }
+    ]
+    right_triangle = [
+      { x: xoffset, y: yoffset },
+      { x: size + xoffset, y: yoffset },
+      { x: size + xoffset, y: size + yoffset },
+      { x: xoffset, y: yoffset },
+    ]
+    for m,i in [ metric + '/' + fm + '/' + to, metric + '/' + to + '/' + fm ]
+      polygon = if i % 2 then right_triangle else left_triangle
+      title = if i % 2 then fm + ' -> ' + to else to + ' -> ' + fm
+      _box_func el, m, title, polygon, colourisor, colour_scale
+    
+  
+  header = d3.select( '#header' ).append( 'svg' )
+    .attr('width', width)
+    .attr('height', size + 5)
+  for to, i in [ 'ESnet', 'Stanford', 'NERSC', 'LBNL', 'PNL', 'ANL', 'OU', 'AGLT2', 'BNL', 'IN2P3', 'CERN', 'CNAF' ]
+    trans =
+      rotate: '-90'
+      x:  size*i + size/2
+      y:  size
+    
+    header.append('svg:text')
+      .attr('text-anchor', 'left')
+      .attr('y', trans['y'])
+      .attr('x', trans['x'] )
+      .attr( 'transform', 'rotate(' + trans['rotate'] + ' ' + trans['x'] + ' ' + trans['y'] + ')' )
+      .text( to )
+  
+  for to,i in [ 'net.es.slac-owamp', 'edu.stanford.netspeed1', 'gov.nersc.perfsonar', 'gov.lbl.nettest', 'gov.pnl.ndt-scz', 'gov.anl.it.anlborder-ps', 'edu.ou.ochep.ps1', 'org.aglt2.psmsu01g', 'gov.bnl.lhcperfmon', 'fr.in2p3.ccperfsonar-lhcopn', 'ch.cern.exthost.owamp', 'it.infn.cnaf.perfsonar-ps' ]  
+    box_func( loss, size, 'edu.stanford.slac.psnr-lat01', to, 'owamp.min', xoffset=size*i )
+    box_func( jitter, size, 'edu.stanford.slac.psnr-lat01', to, 'owamp.jitter', xoffset=size*i, yoffset=0 )
+
+
+  for to,i in [ "net.es.slac-pt1", "edu.stanford.netspeed1", "net.es.nersc-pt1", "gov.lbl.nettest", "gov.pnl.ndt-scz", "gov.anl.it.anlborder-ps", "edu.ou.ochep.ps2", "org.aglt2.psum02", "gov.bnl.lbcmon", "fr.in2p3.ccperfsonar-lhcopn", "ch.cern.exthost", "it.infn.cnaf.perfsonar-ps" ]
+    box_func( throughput, size, 'edu.stanford.slac.psnr-bw01', to, 'bwctl', xoffset=size*i, yoffset=0, colourisor=bwctl_colourisor, colour_scale=bw_colour_scale )
+
+
+
+  
+  border1_cap = new GaugeView( '#border1_capacity', delay=60000, step=60000 )
+  border1_cap.add
+    alias: 'border1'
+    metric: [ 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.2', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.2', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.1' ]
+    collate: 'max'
+    # url: '/graphs.horizon/port/rtr-core1.slac.stanford.edu/Te1.1'
+  
+  
+  
+  border2_cap = new GaugeView( '#border2_capacity', delay=60000, step=60000 )
+  border2_cap.add
+    alias: 'border2'
+    metric: [ 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.2', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.2', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te2.1' ]
+    collate: 'max'
+    # url: '/graphs.horizon/port/rtr-core1.slac.stanford.edu/Te1.1'
+  
+
+  
+<% end %>
+

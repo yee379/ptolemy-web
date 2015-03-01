@@ -1,0 +1,88 @@
+<div class="hero-unit">
+  <h1>
+    <%= image_tag "iconmonstr-network-4-icon.svg", :width=>72 %>Welcome
+  </h1>
+  <p>
+    This site contains live information about SLAC's network infrastructure
+  </p>
+</div>
+
+<div class="row-fluid">
+
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <!-- merge these into one view --> 
+      <!-- <%= render :partial => 'switch_ports_by_host' %>
+      <%= render :partial => 'switch_ports_by_ip' %>
+      <%= render :partial => 'switch_ports_by_mac_address' %> -->
+      <%= render :partial => 'find_hosts' %>
+
+    </ul>
+  </div>
+
+  <!-- <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'performance' %>
+      <%= render :partial => 'wan_performance' %>
+      <%= render :partial => 'lan_performance' %>
+      <%= render :partial => 'visitor_performance' %>
+    </ul>
+  </div> -->
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'network_devices' %>
+      <%= render :partial => 'network_ports_by_device' %>
+      <%= render :partial => 'subnets' %>
+      <!-- <li class="span4">
+        <h3>
+          <a href="/assets">Network Assets</a>
+        </h3>
+        <p>
+          Provide reports of network devices
+        </p>
+      </li> -->
+    </ul>
+  </div>
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'port_graphs_by_device' %>
+      <%= render :partial => 'port_graphs_by_uplinks' %>
+    </ul>
+  </div>
+
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'devices_dashboard' %>
+      <%= render :partial => 'device_status' %>
+    </ul>
+  </div>
+
+  <!-- <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'topology' %>
+    </ul>
+  </div> -->
+
+  <!-- <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'subnets_dashboard' %>
+      <%= render :partial => 'subnets_wheel' %>
+      <%= render :partial => 'subnets_ips' %>
+
+    </ul>
+  </div> -->
+
+  <div class="span10 offset2">
+    <ul class="thumbnails">
+      <%= render :partial => 'ap_users' %>
+    </ul>
+  </div>
+
+
+
+
+</div>

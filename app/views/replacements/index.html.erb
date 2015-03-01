@@ -1,0 +1,63 @@
+<h1>Network Hardware Replacement Plan</h1>
+
+<table cellpadding="0" cellspacing="0" border="0" class="dataTable table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>Group</th>
+      <th>Device</th>
+			<th>Pos</th>
+      <th>Type</th>
+      <th>Model</th>
+			<!-- <th>Serial (hw/property)</th> -->
+			<th>DOB</th>
+      <th>EOS</th>
+			<th>Replacement Date</th>
+      <th>Model</th>
+      <th>No.</th>
+      <th>Cost</th>
+      <!-- <th>Edit</th>
+      <th>Del</th> -->
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @replacements.each do |r| %>
+      <tr>
+        <td><%= r.id %></td>
+        <td><%= r.group_name %></td>
+        <td><%= r.entity.device.sub!('.slac.stanford.edu','') %></td>
+        <td><%= r.entity.relative_position %></td>
+        <td><%= r.entity.entity_type %></td>
+        <td><%= r.hardware.model if r.hardware %></td>
+        <!-- <td><%= r.entity.serial %> / <% r.property.serial if r.property %></td> -->
+				<td><%= r.property.date_of_purchase.strftime("%Y-%m-%d") if r.property %></td>
+        <td><%= r.hardware.end_of_support if r.hardware %></td>
+        <td><%= r.replacement_date.strftime("%Y-%m-%d") %></td>
+        <td><%= r.replacement_hardware.model if r.replacement_hardware %></td>
+        <td><%= r.quantity %></td>
+        <td><%= r.replacement_price %></td>
+        <!-- <td><%= link_to 'Edit', edit_replacement_path(r) %></td>
+        <td><%= link_to 'Del', r, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<!-- <%= link_to 'New Replacement', new_replacement_path %> -->
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+	
+  oTable = $('.dataTable').dataTable
+    iDisplayLength: -1
+    bSort: true
+    aaSorting: [ [2,'asc'], [3,'asc'] ]
+    bJqueryUI:  true
+    bAutoWidth: false
+    sDom: "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+
+<% end %>

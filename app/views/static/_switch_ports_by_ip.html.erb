@@ -1,0 +1,26 @@
+<li class="span4">
+  <h3>
+    IP Connections
+  </h3>
+  <p>
+    What switch is a host connected to
+    <form class="form-search span12" method="get" action="<%= hosts_path %>" autocomplete="off"> 
+      <div class="input-append">
+        <input id="switch_ports_by_ip_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="q" placeholder="IP Address..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+  $('#switch_ports_by_ip_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= autocomplete_ipaddress_list_path %>", { query: q }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

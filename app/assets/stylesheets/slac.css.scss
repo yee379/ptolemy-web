@@ -1,0 +1,250 @@
+
+@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+
+h1 {
+  font-size: 3.2em;
+  margin-top: .3em;
+  margin-bottom: .3em;
+}
+
+h1 + h2 {
+  margin-top: 0;
+}
+
+h2 {
+  font-weight: 400;
+  font-size: 2.8em;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Yanone Kaffeesatz";
+  text-rendering: optimizeLegibility;
+}
+
+
+.href {
+  cursor: pointer;
+  text-decoration: underline;
+/*  -moz-text-decoration-color: rgba(153,0,0,0.6); /* Code for Firefox */
+/*  text-decoration-color: rgba(153,0,0,0.6);*/
+/*  border-bottom: 1px solid rgba(153,0,0,0.6);*/
+}
+
+.navbar-brand {
+  display: block;
+  height: 81px;
+  margin-bottom: 0px;
+  margin-top: 0px; }
+
+
+.navbar-logo {
+    
+  background-image: url(/assets/topDivbackground.png);
+  height: 81px;
+  float: left;
+  display: block;
+/*  background-color: rgb(153, 0, 0);*/
+/*  border-color: rgb(153, 0, 0);*/
+
+  .logo {
+/*    border-color: rgb(51, 102, 153);*/
+    border-style: none;
+    border-width: 0px;
+    cursor: auto;
+    display: block;
+    float: left;
+    font-family: Arial, Helvetica, Verdana, sans-serif;
+    height: 37px;
+    margin-left: 16px;
+    margin-top: 20px;
+    width: 199px;
+  }
+
+  .arrow-head {
+    background-image: url(/assets/dot-connector.png);
+    display: block;
+    float: left;
+    height: 82px;
+    width: 32px;
+    margin-left: 10px;
+    margin-right: 5px;
+    background-repeat: no-repeat;
+  }
+
+  .arrow-line {
+    background-image: url(/assets/topDivMiddlebg.png);
+    background-repeat: repeat-x;
+    display: block;
+    float: left;
+    height: 81px;
+    width: 108px;
+    overflow-x: visible;
+    overflow-y: hidden;
+    position: relative;
+    margin-right: 16px;
+  }
+
+
+  .resources {
+    display: block;
+    float: right;
+    font-size: 11px;
+    height: 12px;
+    margin-top: 23px;
+    width: 209px;
+    color: rgb(255, 255, 255);
+    a {
+      color: rgb(255, 255, 255); }
+  }
+
+
+}
+
+
+.navbar {
+  left: 0px;
+  right: 0px;
+  min-height: 38px;
+  height: 28px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  position: relative;
+}
+.navbar-fixed-top {
+  position: fixed;
+}
+div.navbar-inner > ul.nav > li > a {
+  padding-left: 11px;
+  padding-right: 11px;
+}
+
+body {
+  display: block;
+  position: relative;
+  background-image: url(/assets/sitebg.gif);
+  margin-bottom: 0px;
+  margin-top: 0px;
+  background-color: rgb(69,69,69);
+}
+
+/* main canvas */
+.container-fluid {
+  background-color: rgb(255,255,255);
+  margin-bottom: 8px;
+  border-bottom-width: 8px;
+}
+
+
+.navbar-inner {
+  display: block;
+  box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.0980392);
+  -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.0980392);
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+div.navbar-fixed-top > div.navbar-inner {
+  padding-left: 3px;
+  padding-right: 3px;
+  
+}
+
+/* shadow */
+.navbar-inner {
+  font-size: 0.9em;
+  display: block;
+  box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.0980392);
+  -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.0980392);
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border-color: rgb(204, 204, 204);
+  border-style: solid;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-top-width: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+/*  -webkit-box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 10px 0px;
+  box-shadow: rgba(0, 0, 0, 0.0980392) 0px 1px 10px 0px;
+*/
+}
+
+/* side margins */
+.container-fluid, .navbar, .navbar-brand {
+  margin-left: 16px;
+  margin-right: 16px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+}
+
+
+.contents {
+  padding-bottom: 12px;
+  margin-bottom: 0px;
+}
+
+.footer {
+  background-image: url(/assets/bottomBackground.png);
+  display: block;
+  height: 76px;
+  width: auto;
+  font-family: Arial, Helvetica;
+  color: white;
+  cursor: auto;
+  margin-left: 16px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  
+
+  .footer-text {
+    float: left;
+    height: 69px;
+    display: inline;
+    letter-spacing: 1px;
+    font-size: 9px;
+    margin-top: 0px;
+      
+    a:link, a:visited {
+      color: white;
+    }
+    
+    .footerUpperLeftContainer {
+      font-weight: bold;
+      position: relative;
+      height: 23px;
+      width: auto;
+      margin-top: 3px;
+      
+      a {
+        margin-right: 41px;
+      }
+    }
+
+    .footerHorizontalBar {
+      color: rgb( 105,105,105 );
+      display: block;
+      height: 1px;
+      margin-top: 1px;
+      width: 562px;
+      background-image: url(/assets/gray-dot-bg.png);
+    }
+
+    .footerLowerLeftContainer {
+      margin-top: 6px;
+      line-height: 12px;
+    }
+  }
+  .footer-logos {
+    float: right;
+    height: 61px;
+    margin-right: 11px;
+    margin-top: 3px;
+  }
+  
+}

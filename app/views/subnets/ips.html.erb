@@ -1,0 +1,28 @@
+<div class="row-fluid span12">
+  <h1>Subnet <%= @s.inspect %> Grid</h1>
+</div>
+
+<div class="row-fluid span12">
+
+
+</div>
+
+<ul>
+  <% for i in @ips %>
+    <li>
+      <%= i.to_s() %>
+      <% if @arps.has_key? i.to_s() %>
+        <%= @arps[i.to_s()] %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<%= coffee_script_tag do %>
+
+# ondocument
+jQuery -> 
+
+  console.log 'hello'
+
+<% end %>

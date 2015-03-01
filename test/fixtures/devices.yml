@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  device: MyString
+  models: 
+  location: MyString
+  created_at: 2013-03-06 00:14:57
+  updated_at: 2013-03-06 00:14:57
+
+two:
+  device: MyString
+  models: 
+  location: MyString
+  created_at: 2013-03-06 00:14:57
+  updated_at: 2013-03-06 00:14:57

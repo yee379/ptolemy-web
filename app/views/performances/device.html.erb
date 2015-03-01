@@ -1,0 +1,86 @@
+<div class="row row-fluid">
+
+  <div class="span1">
+    <%= image_tag "pulse1.svg", :width=>63 %>
+  </div>
+  <div class="span11">
+    <h1>Performance of <span id="device"><%= @device %></span><h1>
+  </div>
+  <div class="pull-right">
+    <div id="step" class="btn-group">
+      <button type="button" class="btn btn-default" id='60'>1min</button>
+      <button type="button" class="btn btn-default" id='300'>5min</button>
+      <button type="button" class="btn btn-default" id='1800'>30min</button>
+      <button type="button" class="btn btn-default" id='3600'>1hour</button>
+      <button type="button" class="btn btn-default" id='10800'>3hour</button>
+      <button type="button" class="btn btn-default" id='21600'>6hour</button>
+    </div>
+  </div>
+  <div id="cubism" class="row span12">
+  </div>
+</div>
+
+
+<%= coffee_script_tag do %>
+
+device = $('span#device').text()
+
+metrics = [
+  {
+    metric: 'loss'
+    scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
+    extent: [0,100]
+    colours: ["#000000", "#bae4b3","#ed9743","#ed4035"]
+  },{
+    metric: 'ping'
+    extent: [0,1]
+  },{
+    metric: 'cpu'
+    extent: [0,100]
+  },{
+    metric: 'temperature'
+    extent: [0,60]
+  },{
+    metric: 'module'
+    # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
+    # extent: [-2,2]
+  },
+  {
+    metric: 'psu'
+    # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
+    # extent: [-2,2]
+    # height: 50
+  }
+]
+
+# view = new HorizonView( '#cubism', delay=300000, step=300000, extent=[0,1] )
+# view.add metrics, device
+
+
+create_horizon = ( metrics, step, delay ) ->
+  view = new HorizonView( '#cubism', delay=delay*1000, step=step*1000, extent=[0,1] )
+  view.add metrics, device
+  return view
+
+# set up bin sizes
+step = 300
+delay = 150
+$('#step button#'+step).addClass( 'btn-primary' )
+
+# initial
+view = create_horizon( metrics, step, delay  )
+
+# change
+$('#step button').on( 'click', (e) ->
+  # remove primary on others
+  step = $(this)[0].id
+  $('#step button').removeClass( 'btn-primary' )
+  $(this).addClass( 'btn-primary' )
+  view.destroy()
+  view = create_horizon( metrics, step, delay, extent=[0,1] )
+) 
+
+
+
+<% end %>
+  

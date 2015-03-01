@@ -1,0 +1,34 @@
+<li class="span4">
+  <h3>
+    Wireless Users
+  </h3>
+  <p>
+    Show number of users connected to an access point
+    <form id="ap_users" class="form-search span12" autocomplete="off">
+      <div class="input-append">
+        <input id="ap_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="device" placeholder="ap name..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+
+<script>
+  $('#ap_users').submit( function(e){
+    e.preventDefault();
+    var field = $(this).find('input#ap_autocomplete').val();
+    // console.log( field );
+    $(this).attr('action',  "/graphs.horizon/users" );
+    $(this).unbind('submit').submit()
+  });
+  $('#ap_autocomplete').typeahead({
+    source: function( q, process ){
+      $.get( "<%= device_list_path %>", { device: q, device_type: 'wireless' }, function(d){
+        return process( d )
+      })
+    }
+  });
+</script>

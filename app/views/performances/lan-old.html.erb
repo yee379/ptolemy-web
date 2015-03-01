@@ -1,0 +1,222 @@
+<h1>LAN Performance</h1>
+
+<div class="container">
+  <div class="content span12">
+    <ul class="thumbnails">
+      <li class="span4">
+        <h4>Loss</h4>
+        <div id='loss' class="span12"></div>
+      </li>
+      <li class="span4">
+        <h4>Jitter</h4>
+        <div id='jitter' class="span12"></div>
+      </li>
+      <li class="span4">
+        <h4>Throughput</h4>
+        <div id='throughput' class="span12"></div>
+      </li>
+    </ul>
+    <ul>
+      <li class="span4">
+        <h4>Core Capacity</h4>
+        <div id='core_capacity' class="span12"></div>
+      </li>
+      <li class="span4">
+        <h4>Serv Capacity</h4>
+        <div id='serv_capacity' class="span12"></div>
+      </li>
+      <li class="span4">
+        <h4>Farm Capacity</h4>
+        <div id='farm_capacity' class="span12"></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<%= coffee_script_tag do %>
+jQuery ->
+  
+  one_way_jitter = new MatrixView( 
+  
+    el: $('#jitter')
+  
+    viewset:
+      type: 'EndToEndMeasurements'
+      tool: 'owamp'
+      metric: 'min'
+      hosts: 
+        "edu.stanford.slac.psnr-farm04":
+          "edu.stanford.slac.psnr-serv01": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-serv01":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-farm10":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-serv01": null
+      alias:
+        'edu.stanford.slac.psnr-serv01': 'serv01'
+        'edu.stanford.slac.psnr-farm04': 'farm04'
+        'edu.stanford.slac.psnr-farm10': 'farm10'
+      sorted: true
+      
+    top_threshold: 0.1
+    top_colour: 'red'
+    bottom_threshold: 0
+    bottom_colour: 'green'
+    colour_by: 'stdevOnMean'
+    
+    width: 220
+    height: 220
+    box_size: 50
+    
+    xoffset: 58
+    yoffset: 58
+
+    refresh_interval: 300
+  
+  )
+  
+  
+  one_way_loss = new MatrixView( 
+  
+    el: $('#loss')
+  
+    viewset:
+      type: 'EndToEndMeasurements'
+      tool: 'owamp'
+      metric: 'loss'
+      hosts: 
+        "edu.stanford.slac.psnr-farm04":
+          "edu.stanford.slac.psnr-serv01": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-serv01":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-farm10":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-serv01": null
+      alias:
+        'edu.stanford.slac.psnr-serv01': 'serv01'
+        'edu.stanford.slac.psnr-farm04': 'farm04'
+        'edu.stanford.slac.psnr-farm10': 'farm10'
+      sorted: true
+    
+    top_threshold: 4
+    top_colour: 'red'
+    bottom_threshold: 0
+    bottom_colour: 'green'
+    colour_by: 'mean'
+    
+    width: 220
+    height: 220
+    box_size: 50
+    
+    xoffset: 58
+    yoffset: 58
+
+    refresh_interval: 300
+  )
+  
+  
+  throughput = new MatrixView( 
+  
+    el: $('#throughput')
+  
+    viewset:
+      type: 'EndToEndMeasurements'
+      tool: 'bwctl'
+      metric: 'throughput'
+      hosts: 
+        "edu.stanford.slac.psnr-farm04":
+          "edu.stanford.slac.psnr-serv01": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-serv01":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-farm10": null
+        "edu.stanford.slac.psnr-farm10":
+          "edu.stanford.slac.psnr-farm04": null
+          "edu.stanford.slac.psnr-serv01": null
+      alias:
+        'edu.stanford.slac.psnr-serv01': 'serv01'
+        'edu.stanford.slac.psnr-farm04': 'farm04'
+        'edu.stanford.slac.psnr-farm10': 'farm10'
+      sorted: true
+  
+    top_threshold: 5000000000
+    top_colour: 'green'
+    bottom_threshold: 3000000000
+    bottom_colour: 'red'
+    colour_by: 'mean'
+    
+    width: 220
+    height: 220
+    box_size: 50
+    
+    xoffset: 58
+    yoffset: 58
+  
+    refresh_interval: 300
+  
+  )
+
+
+  core_capacity = new GaugeView( 
+  
+    el: $('#core_capacity')
+  
+    viewset:
+      type: 'MetricMeasurements'
+      metrics: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.2', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.3', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.2', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.3', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te3.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te3.3', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te3.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te4.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te4.2', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te4.3', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te4.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te6.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te6.2', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.5', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.6', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.7', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.9', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.10', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.11', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.12', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.13', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Gi9.14'  ]
+    size: 120
+    minorTicks: 2
+    majorTicks: 10
+    label: 'core-util'
+    value: 'max'
+    value_suffix: '&#37;'
+    redZones: [ { from: 90, to: 100 } ]
+    yellowZones: [ { from: 75, to: 90 } ]
+    refresh_interval: 60
+  )
+
+
+  farm_capacity = new GaugeView( 
+  
+    el: $('#farm_capacity')
+  
+    viewset:
+      type: 'MetricMeasurements'
+      metrics: [ 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth1.11', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth1.13', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth1.14', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth1.15', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth1.16', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.1', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.2', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.3', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.9', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.10', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.11', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.12', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.13', 'port.util.pc.out/rtr-farm04.slac.stanford.edu/Eth2.14', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.1', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.2', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.3', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.4', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.5', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.9', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.10', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.11', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth1.12', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.1', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.2', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.3', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.9', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.10', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.11', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.12', 'port.util.pc.out/rtr-farm10.slac.stanford.edu/Eth2.13' ]
+    size: 120
+    minorTicks: 2
+    majorTicks: 10
+    label: 'farm-util'
+    value: 'max'
+    value_suffix: '%'
+    redZones: [ { from: 90, to: 100 } ]
+    yellowZones: [ { from: 75, to: 90 } ]
+    refresh_interval: 60
+  )
+  
+  
+  serv_capacity = new GaugeView( 
+  
+    el: $('#serv_capacity')
+  
+    viewset:
+      type: 'MetricMeasurements'
+      metrics: [ 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth1.3', 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth1.5', 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth1.6', 'port.util.pc.out/rtr-serv01-01.slac.stanford.edu/Eth2.3', 'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth1.3',  'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth1.5',  'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth1.6',  'port.util.pc.out/rtr-serv01-02.slac.stanford.edu/Eth2.3' ]
+    size: 120
+    minorTicks: 2
+    majorTicks: 10
+    label: 'serv-util'
+    value: 'max'
+    value_suffix: '%'
+    redZones: [ { from: 90, to: 100 } ]
+    yellowZones: [ { from: 75, to: 90 } ]
+    refresh_interval: 60
+  )
+
+  
+<% end %>
+

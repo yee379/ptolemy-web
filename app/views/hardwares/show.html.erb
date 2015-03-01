@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Id:</strong>
+  <%= @hardware.id %>
+</p>
+
+<p>
+  <strong>Vendor:</strong>
+  <%= @hardware.vendor %>
+</p>
+
+<p>
+  <strong>Model:</strong>
+  <%= @hardware.model %>
+</p>
+
+<p>
+  <strong>Bulletin url:</strong>
+  <%= @hardware.bulletin_url %>
+</p>
+
+<p>
+  <strong>Available:</strong>
+  <%= @hardware.available %>
+</p>
+
+<p>
+  <strong>End of sale:</strong>
+  <%= @hardware.end_of_sale %>
+</p>
+
+<p>
+  <strong>End of support:</strong>
+  <%= @hardware.end_of_support %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @hardware.price %>
+</p>
+
+<%= link_to 'Edit', edit_hardware_path(@hardware) %> |
+<%= link_to 'Back', hardwares_path %>

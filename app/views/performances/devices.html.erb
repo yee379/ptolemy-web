@@ -1,0 +1,92 @@
+<div class="row row-fluid">
+  <div class="row span12">
+    <div class="pull-left">
+      <h1>Network Devices Status</h1>
+    </div>
+    <div class="pull-right">
+      <select id="category">
+      </select>
+    </div>
+  </div>
+
+  <div id='cubism' class="row span12"></div>
+</div>
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  # get a full list of devices
+  metrics = []
+  items = []
+
+  # fetch and display
+  $.getJSON(
+
+    # '<%= devices_path %>', (json) ->
+    '/devices.json', (json) ->
+
+      items = []
+      
+      # create metrics
+      for d in json
+
+        n = d.device
+        
+        if n and not ( /ssrl/i.test(n) or /^ap/i.test(n) )
+        # if n and /leb/i.test(n) or /-nw/i.test(n) or /-bp/i.test(n) or /-ad/i.test(n) or /-mp/i.test(n)
+          m = 
+            metric: 'loss/'+n
+            alias: n
+            scale: percent_colour_scale
+            width: 30
+            height: 30
+            url: '/performance/device/'+n
+            meta: 
+              categories: d.categories
+
+          metrics.push m
+      
+  )
+  .success( () ->
+
+    # init dropdown
+    c = {}
+    for m in metrics
+      if m.meta.categories
+        for i in m.meta.categories
+          unless i in c
+            c[i] = true
+    categories = _.keys( c ).sort()
+    categories.unshift('ALL')
+
+    for c in categories
+      $('#category').append(
+        $('<option>').attr('value',c)
+            .append( c )
+      )
+  
+    # create tile view
+    view = new TileView( '#cubism', delay=90000, step=90000 )
+    view.add metrics
+
+    window.view = view
+
+    $('#category').on( 'change', ->
+      # get list of nodes of this category
+      console.log 'filtering: ' + $(@).val()
+      view.render
+        'categories': $(@).val()      
+    )
+  
+
+
+  )
+  .error( () ->
+    
+    console.log 'could not load list of devices'
+    
+  )
+
+<% end %>
+

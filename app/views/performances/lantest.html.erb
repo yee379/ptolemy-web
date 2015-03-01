@@ -1,0 +1,26 @@
+<h1>LAN Performance Metrics</h1>
+
+<div class="span12">
+  <ul class="thumbnails">
+    <li class="span3">
+      <div id='core_capacity' class="span12"></div>
+    </li>
+  </ul>
+</div>
+
+
+<%= coffee_script_tag do %>
+jQuery ->
+      
+  # gauages
+  
+  core_cap = new GaugeView( '#core_capacity', delay=300000, step=300000 )
+  core_cap.add
+    alias: 'core'
+    metric: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.2', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.2' ]
+    collate: 'max'
+    multiply: 2
+  
+  
+<% end %>
+

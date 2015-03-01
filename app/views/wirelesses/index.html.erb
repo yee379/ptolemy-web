@@ -1,0 +1,25 @@
+<h1>Listing wirelesses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @wirelesses.each do |wireless| %>
+    <tr>
+      <td><%= link_to 'Show', wireless %></td>
+      <td><%= link_to 'Edit', edit_wireless_path(wireless) %></td>
+      <td><%= link_to 'Destroy', wireless, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Wireless', new_wireless_path %>
