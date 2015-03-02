@@ -12,25 +12,29 @@ cubism_ptolemyParse = (text) ->
   a = meta.lastIndexOf(",", b - 1)
   start = meta.substring(a + 1, b) * 1000
   step = meta.substring(c + 1) * 1000
+  # console.log("i=%s, meta=%s, c=%s, b=%s, a=%s, start=%s, step=%s: data=%o -> %o", i, meta, c,b,a, start, step, text.substring(i + 1).split(","), data );
   # the first value is always None?
   text.substring(i + 1).split(",").slice(1).map (d) ->
     +d
 
 jQuery.extend cubism.context.prototype,
-  "ptolemy": (host) ->
+  "ptolemy": (host,cache=true) ->
 
     host = ""
     source = {}
     context = this
     source.metric = (expression) ->
+      # console.log '  cache: %s', cache
       agg = "avg"
       metric = context.metric( (start, stop, step, callback) ->
         target = expression
         summarize = ((if not (step % 36e5) then step / 36e5 + "hour" else (if not (step % 6e4) then step / 6e4 + "min" else step / 1e3 + "sec"))) + "," + agg
         # off-by-two?
+        cache = if context.options.call()['cache'] then "&cache=1" else ""
         d3.text host + "/stats.raw/" + target \
             + "?summarize=" + summarize \
             + "&keeplast=1" \
+            + cache \
             + "&from=" + cubism_ptolemyFormatDate(start - 2 * step) \
             + "&until=" + cubism_ptolemyFormatDate(stop - 1000), (text) ->
           return callback(new Error("unable to load data"))  unless text
@@ -64,14 +68,12 @@ class CubismView
       .step(@step)
       .size(@size)
       
-    @server = @ctx.ptolemy()
-    # @server = @ctx.graphite()
-    
-    @metrics = []
-    
     @selector = selector
     @setup( selector )
 
+    @server = @ctx.ptolemy()
+    @metrics = []
+    
     console.log 'creating ' + @type + ' cubism view at ' + selector + ', delay=' + @delay + ', step=' + @step + ', number of points=' + @size
 
     @
@@ -89,7 +91,7 @@ class CubismView
       unless group.alias
         group.alias = group.metric
       group.metric = group.metric + '/' + device
-    console.log 'metric ' + group.metric
+    # console.log 'metric ' + group.metric
     # support an array for metrics and collate them in some way
     if typeIsArray( group.metric )
       console.log 'array of metrics '
@@ -97,7 +99,7 @@ class CubismView
       metrics = []
       #@server.metric(group.metric.shift())
       for m in group.metric
-        console.log ' metric ' + m
+        # console.log ' metric ' + m
         metrics.push @server.metric( m )
       # create single metric from list
       metric_ = metrics.shift()
@@ -106,7 +108,7 @@ class CubismView
       for m in metrics
         metric_ = metric_[collate]( m )
     else
-      console.log 'metric ' + group.metric
+      # console.log 'metric ' + group.metric
       metric_ = @server.metric( group.metric )
 
     # deal with metric modifiers
@@ -124,7 +126,7 @@ class CubismView
       group.alias = group.metric
     metric_.alias( group.alias )
 
-    for i in [ 'scale', 'height', 'width', 'colours', 'url', 'meta', 'target', 'style', 'klass', 'extent' ]
+    for i in [ 'scale', 'height', 'width', 'colours', 'url', 'meta', 'target', 'style', 'klass', 'extent', 'cache' ]
       if group[i]
         metric_[i] = group[i]
       else if @[i]
@@ -155,8 +157,7 @@ class CubismView
             values = i['meta'][k]
             unless typeIsArray(values)
               values = [ i['meta'][k] ]
-            # console.log i
-            # console.log values
+            # console.log 'i=%s, %o', i, values
             for w in values
               unless w == v
                 ok = false
@@ -206,6 +207,7 @@ class CubismView
 class TileView extends CubismView
   setup: () ->
     @type = 'tile'
+    @ctx.options( { 'cache': true } )
   view: () ->
     @ctx.tile()
   _destroy: () ->

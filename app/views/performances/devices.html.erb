@@ -42,6 +42,7 @@ jQuery ->
             width: 30
             height: 30
             url: '/performance/device/'+n
+            cache: true
             meta: 
               categories: d.categories
 
@@ -67,7 +68,7 @@ jQuery ->
       )
   
     # create tile view
-    view = new TileView( '#cubism', delay=90000, step=90000 )
+    view = new TileView( '#cubism', delay=60000, step=60000 )
     view.add metrics
 
     window.view = view

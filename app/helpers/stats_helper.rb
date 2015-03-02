@@ -128,8 +128,25 @@ module StatsHelper
     s = Net::HTTP.new( server )
     s.request( req )
   end
-  
-  
+    
+  def redis_fetch( targets, params )
+    
+    keys = []
+    data = $redis.pipelined do
+      keys += targets.collect { |x| "pt:store:%s" % [x.split(".")[0...-1].join('.')] }
+      keys.collect {  |k| $redis.hgetall( k ) }
+    end
+    # logger.info( "REDIS DATA %s\t%s" % [keys,data] )
+
+    out = []
+    keys.each_with_index { |k,i| 
+      # if data[i][params['metric']]
+      out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][params['metric']]]
+        # logger.info(" k=%s\ti=%s\t%s" % [k,i,s])
+      # end
+    }
+    out
+  end
   
   
 end

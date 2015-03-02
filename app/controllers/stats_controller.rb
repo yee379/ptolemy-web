@@ -8,10 +8,29 @@ class StatsController < ApplicationController
   
   def get
     p = stats_params
-    if p['keeplast'] then last = !!p['keeplast'] else last = false end
-    metrics = lookup p, last
-    r = graphite_fetch( metrics, p )
-    send_data r.body, :type => r.content_type, :disposition => 'inline'
+    metrics = lookup p
+
+    logger.info("PARAMS: %s" % [p])
+    found = false
+    unless p['cache'].nil?
+      c = redis_fetch( metrics, p )
+      if c.length > 0
+        logger.debug 'GOT C (%s): %s' % [p['cache'],c]
+        found = true
+        send_data c.join("\n"), :type => 'text/plain', :disposition => 'inline'
+      end
+    end
+
+    unless found
+      # keep last value if there's gaps
+      if p['keeplast'] then last = !!p['keeplast'] else last = false end
+      if last
+        metrics = metrics.collect{ |x| "keepLastValue(%s)" % [x] }
+      end
+
+      r = graphite_fetch( metrics, p )
+      send_data r.body, :type => r.content_type, :disposition => 'inline'
+    end
   end
   
   def proxy
@@ -82,7 +101,7 @@ class StatsController < ApplicationController
 
   private
     def stats_params
-      params.permit( :from, :until, :format, :metric, :device, :physical_port, :prefix, :len, :source, :target, :summarize, :keeplast, :name )
+      params.permit( :from, :until, :format, :metric, :device, :physical_port, :prefix, :len, :source, :target, :summarize, :keeplast, :name, :cache )
     end
 
 end

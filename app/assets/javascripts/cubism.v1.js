@@ -31,6 +31,7 @@ cubism.context = function() {
       event = d3.dispatch("prepare", "beforechange", "change", "focus"),
       scale = context.scale = d3.time.scale().range([0, size]),
       timeout,
+      options = {},
       focus;
 
   function update() {
@@ -41,6 +42,13 @@ cubism.context = function() {
     start1 = new Date(stop1 - size * step);
     scale.domain([start0, stop0]);
     return context;
+  }
+
+  context.options = function(_) {
+    // fetch from cache instead?
+    if (!arguments.length) return options;
+    options = _;
+    return options;
   }
 
   context.start = function() {
@@ -674,13 +682,6 @@ cubism_contextPrototype.horizon = function() {
       } 
       var m = colors_.length >> 1;
 
-      // if( 'extent' in metric_ ){
-      //   console.log("HERE %o", metric_.extent);
-      //   extent_ = typeof metric_.extent === "function" ? metric_.extent.call(that,d,i) : metric_.extent;
-      //   // console.log("set extent from metric %o", metric_.extent )
-      // }
-
-
       canvas.attr('height',metric_.height);
       canvas.datum({id: id, metric: metric_});
       canvas = canvas.node().getContext("2d");
@@ -688,11 +689,11 @@ cubism_contextPrototype.horizon = function() {
       function change(start1, stop) {
         canvas.save();
 
-        // compute the new extent and ready flag
-        var extent = metric_.extent();
-        // var extent = extent_;
         var height = buffer.height = metric_.height;
 
+        // compute the new extent and ready flag
+        var extent = typeof metric_.extent === "function" ? metric_.extent() : metric_.extent;
+        // console.log( "extent: %o %o", metric_, extent );
         ready = extent.every(isFinite);
         if (extent_ != null) extent = extent_;
 

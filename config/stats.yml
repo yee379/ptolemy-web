@@ -1,5 +1,6 @@
 defaults:
     server: net-graphite02.slac.stanford.edu
+    # cache_server: net-amqp01.slac.stanford.edu
     
 common:
     
