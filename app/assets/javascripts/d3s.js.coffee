@@ -90,7 +90,8 @@ class CubismView
     if device
       unless group.alias
         group.alias = group.metric
-      group.metric = group.metric + '/' + device
+      unless group.metric.match( new RegExp(device + '$', 'g') )
+        group.metric = group.metric + '/' + device
     # console.log 'metric ' + group.metric
     # support an array for metrics and collate them in some way
     if typeIsArray( group.metric )
