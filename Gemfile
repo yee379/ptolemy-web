@@ -25,7 +25,10 @@ group :assets do
 
   gem 'uglifier', '>= 1.0.3'
 
-  gem 'twitter-bootstrap-rails'
+  gem 'turbolinks'
+  gem 'less-rails'
+  gem 'jquery-rails'
+  gem 'twitter-bootstrap-rails', '= 2.2.8'
   gem 'jquery-ui-rails'
   gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
 
@@ -40,11 +43,7 @@ group :assets do
 end
 
 # UI
-gem 'jquery-rails'
-gem 'less-rails'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.0.1'

@@ -2,21 +2,10 @@
 
 #= require jquery
 #= require jquery_ujs
-#= require twitter/bootstrap/bootstrap-transition
-#= require twitter/bootstrap/bootstrap-alert
-#= require twitter/bootstrap/bootstrap-modal
-#= require twitter/bootstrap/bootstrap-button
-#= require twitter/bootstrap/bootstrap-collapse
-#= require twitter/bootstrap/bootstrap-dropdown
-#= require twitter/bootstrap/bootstrap-tooltip
-#= require twitter/bootstrap/bootstrap-popover
-#= require twitter/bootstrap/bootstrap-typeahead
 
 #= require dataTables/jquery.dataTables
-#= require dataTables/extras/ZeroClipboard
 #= require jquery.dataTables.facets
 
-#= require jquery.ui.resizable
 #= require rails-timeago
 #= require dygraph-combined
 
@@ -24,7 +13,8 @@
 #= require d3
 #= require cubism.v1
 #= require jquery.splitter
-#= require jquery.ba-resize.min
+
+#= require twitter/bootstrap
 
 #= require_tree .
 
