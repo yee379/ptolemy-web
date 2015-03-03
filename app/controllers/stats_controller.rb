@@ -8,10 +8,11 @@ class StatsController < ApplicationController
   
   def get
     p = stats_params
+    # logger.info("PARAMS: %s" % [p])
     metrics = lookup p
 
-    # logger.info("PARAMS: %s" % [p])
     found = false
+    # try the last value cache first if defined
     unless p['cache'].nil?
       c = redis_fetch( metrics, p )
       if c.length > 0
@@ -21,6 +22,7 @@ class StatsController < ApplicationController
       end
     end
 
+    # fetch from tsdb
     unless found
       # keep last value if there's gaps
       if p['keeplast'] then last = !!p['keeplast'] else last = false end

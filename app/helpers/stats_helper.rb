@@ -1,6 +1,6 @@
 module StatsHelper
   
-  def lookup( params, keepLastValue=false )
+  def lookup( params ) #, keepLastValue=false )
     # use the yaml file and determine if we have a shortcut for this
     metrics = []
     m = params['metric']
@@ -9,7 +9,7 @@ module StatsHelper
       STATS_CONFIG['statistics'][m].each do |i|
         # logger.debug 'METRIC: %s' % [i]
         s = key( i['metric'], i['keys'], params )
-        s = 'keepLastValue(%s)' % [s] if keepLastValue
+        # s = 'keepLastValue(%s)' % [s] if keepLastValue
         # logger.debug ' s: %s' % [s]
         if i.has_key?( 'functions' )
           # logger.debug '  processing functions'
@@ -27,11 +27,11 @@ module StatsHelper
                   # logger.info "looking up MOD %s FIELD %s" % [mod,field]
                   i = mod.constantize.find_by_device_and_physical_port( d, p ).data[field]
                   v = "%.12f" % [ 1 / (i.to_f * 1000000 ) ]
-                  logger.debug "      LOOKUP on %s, field %s (%s %s) = %s" % [ mod,field,d,p,v ]
+                  # logger.debug "      LOOKUP on %s, field %s (%s %s) = %s" % [ mod,field,d,p,v ]
                 end
               end
               s = "%s(%s%s" % [ f, s, v == nil ? ')' : ',%s)' % [ v.to_s ] ]
-              logger.debug '  %s' % [s]
+              # logger.debug '  %s' % [s]
             end
           end
         end
@@ -39,7 +39,6 @@ module StatsHelper
         metrics << s
       end
     else
-      # metrics = [ stats_key( params ) ]
       metrics << "%s" % [ m ]
     end
 

@@ -689,7 +689,7 @@ cubism_contextPrototype.horizon = function() {
       function change(start1, stop) {
         canvas.save();
 
-        console.log('metric_: %o',metric_)
+        // console.log('metric_: %o',metric_)
         var height = buffer.height = metric_.height;
 
         // compute the new extent and ready flag
@@ -746,7 +746,7 @@ cubism_contextPrototype.horizon = function() {
           }
         }
 
-        console.log("NEGATIVE: %s, %s", negative, max);
+        // console.log("NEGATIVE: %s, %s", negative, max);
 
         if (negative) {
           // enable offset mode
