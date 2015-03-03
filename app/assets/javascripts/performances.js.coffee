@@ -14,9 +14,9 @@ constrain_num = (num,min,max) ->
     return min
   num
 
-percent_tricolour = d3.scale.threshold().domain( [0,10,100] ).range( [ grey, green, orange, red ] )
+percent_tricolour = d3.scale.threshold().domain( [0,50,100] ).range( [ grey, green, orange, red ] )
 @percent_colour_scale = (num) -> 
-  if constrain_num(num,10,100) then percent_tricolour(num) else grey
+  if constrain_num(num,50,100) then percent_tricolour(num) else grey
 ( exports ? this ).percent_colour_scale= percent_colour_scale
 bw_tricolour = d3.scale.threshold().domain( [0,250000000,500000000] ).range( [ grey, red, orange, green ] )
 @bw_colour_scale = (num) -> 
