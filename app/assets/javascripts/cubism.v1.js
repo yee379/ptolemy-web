@@ -1,5 +1,5 @@
 (function(exports){
-var cubism = exports.cubism = {version: "1.3.0"};
+var cubism = exports.cubism = {version: "1.6.0-yee379"};
 var cubism_id = 0;
 function cubism_identity(d) { return d; }
 cubism.option = function(name, defaultValue) {
@@ -689,6 +689,7 @@ cubism_contextPrototype.horizon = function() {
       function change(start1, stop) {
         canvas.save();
 
+        console.log('metric_: %o',metric_)
         var height = buffer.height = metric_.height;
 
         // compute the new extent and ready flag
@@ -699,6 +700,8 @@ cubism_contextPrototype.horizon = function() {
 
         // if this is an update (with no extent change), copy old values!
         var i0 = 0, max = Math.max(-extent[0], extent[1]);
+        // console.log("this %o, context %o: %s", this, context, this === context)
+
         if (this === context) {
           if (max == max_) {
             i0 = width - cubism_metricOverlap;
@@ -715,6 +718,7 @@ cubism_contextPrototype.horizon = function() {
         }
 
         // update the domain
+        // console.log("scale max_: %s, max: %s: =: %s", max_, max, max_ = max)
         scale.domain([0, max_ = max]);
 
         // clear for the new data
@@ -723,6 +727,7 @@ cubism_contextPrototype.horizon = function() {
         // record whether there are negative values to display
         var negative;
 
+        // console.log("colours: m=%s, %o, values=%o", m,colors_,metric_['values'] )
         // positive bands
         for (var j = 0; j < m; ++j) {
           canvas.fillStyle = colors_[m + j];
@@ -734,11 +739,14 @@ cubism_contextPrototype.horizon = function() {
 
           for (var i = i0, n = width, y1; i < n; ++i) {
             y1 = metric_.valueAt(i);
+            // console.log('i=%s, y1: %s -> %s', i,y1, scale(y1))
             if (y1 <= 0) { negative = true; continue; }
             if (y1 === undefined) continue;
             canvas.fillRect(i, y1 = scale(y1), 1, y0 - y1);
           }
         }
+
+        console.log("NEGATIVE: %s, %s", negative, max);
 
         if (negative) {
           // enable offset mode
@@ -758,6 +766,7 @@ cubism_contextPrototype.horizon = function() {
 
             for (var i = i0, n = width, y1; i < n; ++i) {
               y1 = metric_.valueAt(i);
+              // console.log( 'neg: %s -> %s', y1, scale(-y1));
               if (y1 >= 0) continue;
               canvas.fillRect(i, scale(-y1), 1, y0 - scale(-y1));
             }
@@ -1824,9 +1833,10 @@ cubism_contextPrototype.axis = function() {
       scale = context.scale,
       axis_ = d3.svg.axis().scale(scale);
 
-  var format = context.step() < 6e4 ? cubism_axisFormatSeconds
+  var formatDefault = context.step() < 6e4 ? cubism_axisFormatSeconds
       : context.step() < 864e5 ? cubism_axisFormatMinutes
       : cubism_axisFormatDays;
+  var format = formatDefault;
 
   function axis(selection) {
     var id = ++cubism_id,
@@ -1871,6 +1881,12 @@ cubism_contextPrototype.axis = function() {
       context.on("change.axis-" + d.id, null);
       context.on("focus.axis-" + d.id, null);
     }
+  };
+
+  axis.focusFormat = function(_) {
+    if (!arguments.length) return format == formatDefault ? null : _;
+    format = _ == null ? formatDefault : _;
+    return axis;
   };
 
   return d3.rebind(axis, axis_,
