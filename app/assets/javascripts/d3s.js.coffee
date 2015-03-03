@@ -31,8 +31,10 @@ jQuery.extend cubism.context.prototype,
         summarize = ((if not (step % 36e5) then step / 36e5 + "hour" else (if not (step % 6e4) then step / 6e4 + "min" else step / 1e3 + "sec"))) + "," + agg
         # off-by-two?
         cache = if context.options.call()['cache'] then "&cache=1" else ""
+        delim = if '?' in target then '&' else '?'
         d3.text host + "/stats.raw/" + target \
-            + "?summarize=" + summarize \
+            + delim \
+            + "summarize=" + summarize \
             + "&keeplast=1" \
             + cache \
             + "&from=" + cubism_ptolemyFormatDate(start - 2 * step) \
