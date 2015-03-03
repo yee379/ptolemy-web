@@ -234,6 +234,15 @@ statistics:
             metric: ptolemy.%s.user_stats.neighbour.*.number
             keys:
                 - device
+            functions:
+                - sum: null
+
+    users.wireless:
+        -
+            metric: ptolemy.edu.stanford.slac.*.user_stats.neighbour.*.number
+            functions:
+                - sum: null
+
     
     subnet.kpi:
         - 
