@@ -10,12 +10,12 @@ class StatsController < ApplicationController
     p = stats_params
     metrics = lookup p
 
-    logger.info("PARAMS: %s" % [p])
+    # logger.info("PARAMS: %s" % [p])
     found = false
     unless p['cache'].nil?
       c = redis_fetch( metrics, p )
       if c.length > 0
-        logger.debug 'GOT C (%s): %s' % [p['cache'],c]
+        # logger.debug 'GOT C (%s): %s' % [p['cache'],c]
         found = true
         send_data c.join("\n"), :type => 'text/plain', :disposition => 'inline'
       end

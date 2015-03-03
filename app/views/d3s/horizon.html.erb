@@ -18,6 +18,22 @@
 
 <%= coffee_script_tag do %>
 
+# value_bits = [Infinity,-Infinity]
+
+min = Infinity
+max = -Infinity
+calc_bits_extents = () ->
+  i = 0
+  n = this.context.size()
+  value
+  while (++i < n)
+    value = this.valueAt(i);
+    if (value < min) 
+      min = value;
+    if (value > max) 
+      max = value;
+  return [min, max];
+
 get_group = ( metric ) ->
   # let's try to group the metrics to provide more meaningful data
   bits = metric.split('/')
@@ -37,7 +53,7 @@ get_group = ( metric ) ->
           alias: 'bits-out'
           metric: metric.replace('port','port.util.out')
           # scale: d3.scale.linear().domain( [0,100] ).range( [0,1] )
-          # extent: [0,500]
+          # extent: calc_bits_extents
           height: 100
           klass: 'up'
         },
@@ -46,9 +62,9 @@ get_group = ( metric ) ->
           metric: metric.replace('port','port.util.in')
           multiply: -1
           # scale: d3.scale.linear().domain( [0,100] ).range( [0,1] )
-          # extent: [-1,0]
+          # extent: calc_bits_extents
           height: 100
-          klass: 'down'
+          # klass: 'down'
         },
         {
           alias: 'unicastpkts-out'
@@ -90,7 +106,7 @@ get_group = ( metric ) ->
           height: 30
           klass: 'down'
         },
-  
+
         {
           alias: 'crc-err'
           metric: metric.replace('port','port.err.in')

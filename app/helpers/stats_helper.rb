@@ -35,7 +35,7 @@ module StatsHelper
             end
           end
         end
-        logger.debug ' >: %s' % [s]
+        # logger.debug ' >: %s' % [s]
         metrics << s
       end
     else
@@ -43,7 +43,7 @@ module StatsHelper
       metrics << "%s" % [ m ]
     end
 
-    logger.debug 'output metric: %s' % [metrics]
+    # logger.debug 'output metric: %s' % [metrics]
     metrics
   end
   
@@ -53,7 +53,7 @@ module StatsHelper
   
   def key( metric, keys, params )
     # no keys, just return the metric
-    logger.debug '  key for %s with %s=%s' % [metric,keys,params] 
+    # logger.debug '  key for %s with %s=%s' % [metric,keys,params]
     if keys.nil?
       return "%s" % [ metric ]
     else

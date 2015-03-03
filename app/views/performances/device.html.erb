@@ -28,32 +28,32 @@ device = $('span#device').text()
 metrics = [
   {
     metric: 'loss'
-    scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
     extent: [0,100]
-    colours: ["#000000", "#bae4b3","#ed9743","#ed4035"]
+    colours: ["#000000","#000000","#000000","#bae4b3","#ed9743","#ed4035"]
   },{
     metric: 'ping'
-    # extent: [0,10]
+    extent: [0,20]
   },{
     metric: 'cpu'
     # extent: [0,100]
   },{
     metric: 'temperature'
-    # extent: [0,60]
+    # extent: [10,50]
   },{
     metric: 'module'
     # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
-    # extent: [-2,2]
+    # extent: [0,2]
+    # colours: ["#000000","#000000","orange","#ed4035"]
   },
   {
     metric: 'psu'
     # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
-    # extent: [-2,2]
-    # height: 50
+    # extent: [0,2]
+    # colours: ["#000000","#000000","orange","#ed4035"]
   }
 ]
 
-# view = new HorizonView( '#cubism', delay=300000, step=300000, extent=[0,1] )
+# view = new HorizonView( '#cubism', delay=300000, step=300000 )
 # view.add metrics, device
 
 
