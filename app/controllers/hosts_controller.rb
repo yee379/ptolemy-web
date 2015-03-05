@@ -43,9 +43,16 @@ class HostsController < ApplicationController
 
 
   def on_subnet
-    @subnet = subnet( subnet_params ).first
-    s = @subnet['prefix'] + '/' + netmask_to_prefix_len( @subnet['netmask'] ).to_s
-    @hosts = CachedHost.where( "ip_address::inet << ?", s )
+    
+    @params = subnet_params
+    if not index_params.include?('format') or index_params['format'] == 'html'
+      @params
+    else
+      @subnet = subnet( @params ).first
+      s = @subnet['prefix'] + '/' + netmask_to_prefix_len( @subnet['netmask'] ).to_s
+      @hosts = CachedHost.where( "ip_address::inet << ?", s )
+    end
+
   end
 
   # provide query frontends about where hosts are on the network

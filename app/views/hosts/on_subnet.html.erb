@@ -3,7 +3,7 @@
     <%= image_tag "laptop123.svg", :width=>48 %>
   </div>
   <div class="span11">
-    <h1>Network Hosts on Subnet <%= @subnet.name %> </h1>
+    <h1>Network Hosts on Subnet <%= @params['name'] %> </h1>
   </div>
 </div>
 
@@ -34,7 +34,7 @@
   <div style="visibility: hidden">
     <div id="data_href"><%= hosts_on_subnet_path( format: 'json' ) %></div>
     <div id="dataTables_swf">copy_cvs_xls_pdf.swf</div>
-    <div id="search">name=<%= @subnet.name %></div>
+    <div id="search">name=<%= @params['name'] %></div>
   </div>
 
 </div>

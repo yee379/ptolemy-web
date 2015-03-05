@@ -12,11 +12,8 @@
 
   <div class="span10 offset2">
     <ul class="thumbnails">
-      <!-- merge these into one view --> 
-      <!-- <%= render :partial => 'switch_ports_by_host' %>
-      <%= render :partial => 'switch_ports_by_ip' %>
-      <%= render :partial => 'switch_ports_by_mac_address' %> -->
       <%= render :partial => 'find_hosts' %>
+      <%= render :partial => 'find_hosts_on_subnet' %>
 
     </ul>
   </div>
