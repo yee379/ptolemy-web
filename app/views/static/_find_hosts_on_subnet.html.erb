@@ -1,0 +1,55 @@
+<li class="span4">
+  <h3>
+    <%= image_tag "laptop123.svg", :size => '24' %> Hosts on Subnet
+  </h3>
+  <p>
+    Find out what computers are on a specific subnet
+    <form class="form-search span12" method="get" action="<%= hosts_on_subnet_path %>" autocomplete="off">
+      <div class="input-append">
+        <input id="host_on_subnet_autocomplete" class="ajax-typeahead span9 input-medium search-query" name="q" placeholder="subnet name..." type="text" autocomplete="off">
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
+
+<script>
+
+  var lookup_urls = {
+    'name': "<%= autocomplete_subnet_name_list_path %>"
+  }
+
+
+  // do autocomplete based on what i thikn the input is
+  $('#host_on_subnet_autocomplete').typeahead({
+    source: function( q, process ){
+
+      // wait for at least three characters before continuing
+      if( q.length > 2 ){
+
+        var type = 'name';
+
+        // 1) if it starts with a number, then it would be a vlan
+        if( /^\d+/.test(q) ) {
+          type = 'vla';
+        }
+        // 2) otherwise name
+        else {
+            type = 'name';
+        }
+
+        // console.log("%s is a %s", q, type );
+        $.get( lookup_urls[type], { query: q }, function(d){
+          return process( d )
+        })
+        
+        // set the search param
+        $('#host_on_subnet_autocomplete').attr('name',type);
+
+      }
+
+    }
+  });
+</script>
