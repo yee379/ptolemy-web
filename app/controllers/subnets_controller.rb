@@ -48,12 +48,13 @@ class SubnetsController < ApplicationController
     @ips = IPAddr.new(@subnet).to_range
     # get arps
     @arps = {}
+    logger.info("SUBNET: %s" % (@subnet))
     Arp.where( 'ip_address << :subnet', { subnet: @subnet }).each do |a|
       ip = a.ip_address.to_s()
       unless @arps[ip]
         @arps[ip] = []
       end
-      @arps[ip] << a      
+      @arps[ip] << a
     end
   end
   

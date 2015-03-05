@@ -39,7 +39,7 @@ PtolemyWeb::Application.routes.draw do
   get '/api/ports', to: 'ports#api_index', :as => 'api_port'
 
   # resources :hosts
-  get '/hosts/on_subnet(.:format)', to: 'hosts#on_subnet', :constraints => { :q => @pcre }
+  get '/hosts/on_subnet(.:format)', to: 'hosts#on_subnet', :constraints => { :q => @pcre }, :as => 'hosts_on_subnet'
   get '/hosts/:q', to: 'hosts#index', :constraints => { :q => @pcre }
   get '/hosts', to: 'hosts#index', :constraints => { :q => @pcre }, :as => 'hosts'
   get '/api/hosts/locations', to: 'hosts#api_host_locations', :as => 'api_hostnames_locations'

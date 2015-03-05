@@ -1,0 +1,162 @@
+<div class="row-fluid span12">
+  <div class="span1">
+    <%= image_tag "laptop123.svg", :width=>48 %>
+  </div>
+  <div class="span11">
+    <h1>Network Hosts on Subnet <%= @subnet.name %> </h1>
+  </div>
+</div>
+
+<div class="row-fluid span12">
+
+  <div class="span2">
+
+    <div class="well sidebar-nav input-append">
+        <input class="span9" placeholder="Filter..." type="text">
+        <button class="btn add-on">
+          <i class="icon-filter"></i>
+        </button>
+    </div>
+
+    <div class="well sidebar-nav facet" for="status"></div>  
+    <div class="well sidebar-nav facet" for="speed_duplex"></div>
+    <div class="well sidebar-nav facet" for="vlans"></div>
+    <div class="well sidebar-nav facet" for="device"></div>
+
+  </div>
+
+  <div class="span10">
+  
+    <table class="dataTable table-striped table-bordered table-condensed table-hover"></table>
+
+  </div>
+
+  <div style="visibility: hidden">
+    <div id="data_href"><%= hosts_on_subnet_path( format: 'json' ) %></div>
+    <div id="dataTables_swf">copy_cvs_xls_pdf.swf</div>
+    <div id="search">name=<%= @subnet.name %></div>
+  </div>
+
+</div>
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  # intiate any datatables we have
+  oTable = $('.dataTable').dataTable
+
+    sAjaxSource:  $('#data_href').text() + "?" + $('#search').text()
+    sAjaxDataProp: "",
+    bDeferRender: true,
+    sProcessing: "doing something",
+
+    "aoColumns": [
+      mDataProp: "hostname"
+      sTitle: "Hostname"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "ip_address"
+      sTitle: "IP"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "mac_address"
+      sTitle: "Mac Address"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "status"
+      sTitle: "Status"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "vlans"
+      sTitle: "VLAN(s)"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "speed_duplex"
+      sTitle: "Speed/Duplex"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "autoneg"
+      sTitle: "Autoneg"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "device"
+      sTitle: "Switch"
+      sDefaultContent: "-"
+    ,
+      mDataProp: "physical_port"
+      sTitle: "Port"
+      sDefaultContent: "-"
+      sType: 'physical-port'
+    ,
+      mDataProp: "alias"
+      sTitle: "Alias"
+      sDefaultContent: "-"
+      Render: (obj,type,row) ->
+        if row.alias == 'None'
+          return '-'
+        row.alias
+    ,
+      mDataProp: "updated_at"
+      sTitle: "Last Seen"
+      sDefaultContent: "-"
+      sType: 'seen'
+      mRender: (obj,type,row) ->
+        jQuery.timeago(row.updated_at)
+
+    ]
+
+    # ui
+    bProcessing: true
+    bSort: true
+    aaSorting: [ [1,"asc"] ]
+    bJqueryUI:  true
+    iDisplayLength: -1
+    bAutoWidth: true
+    # export types
+    oTableTools:
+      sSwfPath: $('.dataTables_swf').text()
+    sDom:       '<"pull-left"i><"pull-right"T><"span12"t>r<"clear">'
+    fnDrawCallback: () ->
+      # console.log 'assigning click'
+      # column two click to port graph
+      $('tbody > tr').each () ->
+        d = $(this).children( 'td:nth-child(8)' ).text()
+        p = $(this).children( 'td:nth-child(9)' )
+        p.addClass "href"
+        p.bind( 'click', () ->
+          window.location.href = "/graphs.horizon/port/" + d + "/" + p.text().replace(/\//g,'.')
+        )
+    fnInitComplete: () ->
+      createFacet()
+    fnRowCallback: ( nRow, aData, iDisplayIndex, iDisplayIndexFull ) ->
+      mapping = {
+          'vlans': 4,
+      }
+      for k,v of aData
+        if typeIsArray v
+          n = mapping[k]
+          $('td:eq('+n+')', nRow).html( aData[k].join(', ') )
+
+  createFacet = ->
+    oTable.facets()
+
+  $('input[type="text"]').keyup( () ->
+    item = $(this).val()
+    delay( ()->
+      oTable.fnFilter( item )
+      oTable.fnUpdateFacets()
+    , 300 )
+  )
+
+  # $('.facet').resizable(
+  #     minHeight: 125,
+  #     minWidth: 175,
+  #     alsoResize: '.facet .facet-frame',
+  #     # resize: (e,ui) ->
+  #     #   ui.size.width = ui.originalSize.width
+  # )
+  return
+
+
+<% end %>

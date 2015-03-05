@@ -43,9 +43,9 @@ class HostsController < ApplicationController
 
 
   def on_subnet
-    @subnet = subnet( subnet_pararms )
+    @subnet = subnet( subnet_params ).first
     s = @subnet['prefix'] + '/' + netmask_to_prefix_len( @subnet['netmask'] ).to_s
-    @arps = Arp.where( 'ip_address << ?', s )
+    @hosts = CachedHost.where( "ip_address::inet << ?", s )
   end
 
   # provide query frontends about where hosts are on the network
@@ -93,7 +93,7 @@ class HostsController < ApplicationController
       params.permit(:query,:format)
     end
   
-    def subnet_pararms
+    def subnet_params
       params.permit(:name,:format)
     end
 end

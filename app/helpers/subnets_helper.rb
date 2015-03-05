@@ -3,8 +3,7 @@ require 'ipaddr'
 module SubnetsHelper
 
   def subnet_from_name( name )
-    @s = Subnet.where( 'name = ?', name )
-    @s.shift
+    Subnet.where( 'name = ?', name )
   end
   
   def subnet_from_prefix( prefix, netmask )
@@ -21,6 +20,8 @@ module SubnetsHelper
   end
   
   def netmask_to_prefix_len( mask )
-    IPAddr.new( mask ).to_i.to_s(2).count("1")
+    this = IPAddr.new( mask ).to_i.to_s(2).count("1")
+    logger.error("THIS: %s" % [this])
+    this
   end
 end
