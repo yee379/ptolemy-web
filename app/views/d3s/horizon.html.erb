@@ -46,7 +46,7 @@ get_group = ( metric ) ->
       metric = bits[0] + '/' + bits[1] + '/' + bits.slice(2,bits.length+1).join('.')
     
     return {
-      delay: 60,
+      delay: 60, # deactivate updates
       step: 60,
       metrics: [
         {
@@ -64,7 +64,7 @@ get_group = ( metric ) ->
           # scale: d3.scale.linear().domain( [0,100] ).range( [0,1] )
           # extent: calc_bits_extents
           height: 100
-          # klass: 'down'
+          klass: 'down'
         },
         {
           alias: 'unicastpkts-out'

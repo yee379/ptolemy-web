@@ -58,20 +58,25 @@ cubism.context = function() {
     // If we're too late for the first prepare event, skip it.
     if (delay < clientDelay) delay += step;
 
-    timeout = setTimeout(function prepare() {
-      stop1 = new Date(Math.floor((Date.now() - serverDelay) / step) * step);
-      start1 = new Date(stop1 - size * step);
-      event.prepare.call(context, start1, stop1);
+    // console.log("delay: %s, client: %s", delay, clientDelay);
+    if ( clientDelay > 0 ) {
 
-      setTimeout(function() {
-        scale.domain([start0 = start1, stop0 = stop1]);
-        event.beforechange.call(context, start1, stop1);
-        event.change.call(context, start1, stop1);
-        event.focus.call(context, focus);
-      }, clientDelay);
+      timeout = setTimeout(function prepare() {
+        stop1 = new Date(Math.floor((Date.now() - serverDelay) / step) * step);
+        start1 = new Date(stop1 - size * step);
+        event.prepare.call(context, start1, stop1);
 
-      timeout = setTimeout(prepare, step);
-    }, delay);
+        setTimeout(function() {
+          scale.domain([start0 = start1, stop0 = stop1]);
+          event.beforechange.call(context, start1, stop1);
+          event.change.call(context, start1, stop1);
+          event.focus.call(context, focus);
+        }, clientDelay);
+
+        timeout = setTimeout(prepare, step);
+      }, delay);
+
+    }
     return context;
   };
 
