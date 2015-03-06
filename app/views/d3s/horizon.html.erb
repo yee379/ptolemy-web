@@ -3,6 +3,9 @@
     <h1><span id="metric"></span></h1>
   </div>
   <div class="pull-right">
+    <div id="autoupdate" class="btn-group">
+      <button type="button" class="btn btn-default">Auto Update</button>
+    </div>
     <div id="step" class="btn-group">
       <button type="button" class="btn btn-default" id='60'>1min</button>
       <button type="button" class="btn btn-default" id='300'>5min</button>
@@ -46,7 +49,7 @@ get_group = ( metric ) ->
       metric = bits[0] + '/' + bits[1] + '/' + bits.slice(2,bits.length+1).join('.')
     
     return {
-      delay: 60, # deactivate updates
+      delay: 60,
       step: 60,
       metrics: [
         {
@@ -287,6 +290,11 @@ create_horizon = ( metrics, step, delay ) ->
 
 jQuery ->
 
+  get_delay = ( delay ) ->
+    if $('#autoupdate button').hasClass( 'btn-primary' )
+      return delay
+    return 0
+
   metric = $(location).attr('href').replace( /^.+\/graphs(\.\w+)?\//, '' )
   $('span#metric').text( metric )
 
@@ -298,7 +306,7 @@ jQuery ->
   $('#step button#'+step).addClass( 'btn-primary' )
 
   # initial
-  view = create_horizon( meta['metrics'], step, meta['delay']  )
+  view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )
 
   # change
   $('#step button').on( 'click', (e) ->
@@ -307,10 +315,18 @@ jQuery ->
     $('#step button').removeClass( 'btn-primary' )
     $(this).addClass( 'btn-primary' )
     view.destroy()
-    view = create_horizon( meta['metrics'], step, meta['delay'] )
+    view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )
   ) 
 
-
+  # auto update
+  $('#autoupdate button').on( 'click', (e) ->
+    if $(this).hasClass( 'btn-primary' )
+      $(this).removeClass( 'btn-primary' )
+    else
+      $(this).addClass( 'btn-primary' )
+    view.destroy()
+    view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )    
+  )  
 
 
 
