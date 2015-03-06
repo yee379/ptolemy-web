@@ -1,0 +1,24 @@
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="100" height="100" id="svg2" version="1.1" inkscape:version="0.48.1 " style="display:inline" sodipodi:docname="Ethernet.svg">
+  <defs id="defs4"/>
+  <sodipodi:namedview id="base" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:zoom="5.17" inkscape:cx="50" inkscape:cy="50" inkscape:document-units="px" inkscape:current-layer="layer2" showgrid="false" fit-margin-top="0" fit-margin-left="0" fit-margin-right="0" fit-margin-bottom="0" inkscape:window-width="1366" inkscape:window-height="706" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1">
+    <inkscape:grid type="xygrid" id="grid2996" empspacing="5" visible="true" enabled="true" snapvisiblegridlinesonly="true"/>
+  </sodipodi:namedview>
+  <metadata id="metadata7">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <dc:title/>
+        <cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/>
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/>
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/>
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g inkscape:groupmode="layer" id="layer2" inkscape:label="Layer" transform="translate(-11.494103,36.578024)">
+    <path style="fill:#000000;stroke:none" d="m 45.046737,-27.597761 0,29.2763161 12.894736,0 0,7.9605259 -41.447368,0 0,7.5 12.960526,0 0,8.026316 -12.828947,0 0,29.276316 32.894737,0 0,-29.276316 -12.894737,0 0,-8.026316 49.605263,0 0,7.828948 -12.828947,0 0,29.276316 32.89473,0 0,-29.276316 -12.894731,0 0,-7.828948 13.092101,0 0,-7.5 c -13.962253,-0.097427 -28.628019,0.00415 -41.381575,0 l 0,-7.9605259 12.828947,0 0,-29.2763161 z m 4.93421,5.526316 23.026315,0 0,18.2894738 -23.026315,0 z m 28.355262,52.5 23.026321,0 0,18.289474 -23.026321,0 z m -56.776316,0.197369 23.026317,0 0,18.289473 -23.026317,0 z" id="rect2990" inkscape:connector-curvature="0" sodipodi:nodetypes="cccccccccccccccccccccccccccccccccccccccccccc"/>
+  </g>
+</svg>
