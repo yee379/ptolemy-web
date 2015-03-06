@@ -28,25 +28,31 @@ device = $('span#device').text()
 metrics = [
   {
     metric: 'loss'
+    alias: 'loss (%)'
     extent: [0,100]
     colours: ["#000000","#000000","#000000","#bae4b3","#ed9743","#ed4035"]
   },{
     metric: 'ping'
+    alias: 'ping (ms)'
     extent: [0,20]
   },{
     metric: 'cpu'
+    alias: 'cpu (%)'
     # extent: [0,100]
   },{
     metric: 'temperature'
+    alias: 'temperature (°C)'
     # extent: [10,50]
   },{
     metric: 'module'
+    alias: 'module (#ok)'
     # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
     # extent: [0,2]
     # colours: ["#000000","#000000","orange","#ed4035"]
   },
   {
     metric: 'psu'
+    alias: 'psu (#ok)'
     # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
     # extent: [0,2]
     # colours: ["#000000","#000000","orange","#ed4035"]
