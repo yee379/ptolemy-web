@@ -29,6 +29,12 @@ class DevicesController < ApplicationController
     list_params.each do |k,v|
       if [ 'groups', 'categories' ].include? k
         q << "'%s' = ANY (devices.%s::text[])" % [v.downcase,k]
+      elsif v.kind_of?(Array)
+        a = []
+        v.each do |w|
+          a << "devices.%s='%s'" % [k,w.downcase]
+        end
+        q << '( %s )' % [a.join( ' OR ' )]
       else
         q << "devices.%s~'%s'" % [k,v.downcase] unless k == 'format'
       end
@@ -102,6 +108,6 @@ class DevicesController < ApplicationController
     end
     
     def list_params
-      params.permit(:device,:format,:device_type,:groups,:categories)
+      params.permit(:device,:format,:groups,:categories,{:device_type => []})
     end
 end

@@ -26,7 +26,7 @@
   });
   $('#ap_autocomplete').typeahead({
     source: function( q, process ){
-      $.get( "<%= device_list_path %>", { device: q, device_type: 'wireless' }, function(d){
+      $.get( "<%= device_list_path %>", { device: q, device_type: ['wireless'] }, function(d){
         return process( d )
       })
     }

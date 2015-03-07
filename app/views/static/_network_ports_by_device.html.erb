@@ -19,7 +19,7 @@
 <script>
   $('#network_ports_by_device_autocomplete').typeahead({
     source: function( q, process ){
-      $.get( "<%= autocomplete_device_list_path %>", { query: q }, function(d){
+      $.get( "<%= device_list_path %>", { device: q, device_type: ['switch','router','load_balancer','firewall'] }, function(d){
         return process( d )
       })
     }
