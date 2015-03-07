@@ -3,6 +3,9 @@
     <h1>Port Graphs for <span id="device"><%= params[:device] %></span></h1> ordered by percent utilisation
   </div>
   <div class="pull-right">
+    <div id="autoupdate" class="btn-group">
+      <button type="button" class="btn btn-default">Auto Update</button>
+    </div>
     <div id="step" class="btn-group">
       <button type="button" class="btn btn-default" id='60'>1min</button>
       <button type="button" class="btn btn-default" id='300'>5min</button>
@@ -19,7 +22,10 @@
 <%= coffee_script_tag do %>
 
 create_horizon = ( metrics, step, delay ) ->
-  view = new HorizonView( '#horizon', delay=delay*1000, step=step*1000 )
+  d = delay
+  if not $(this).hasClass( 'btn-primary' )
+    d = 0
+  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000 )
   view.add metrics
   return view
 
@@ -50,23 +56,24 @@ jQuery ->
             unless i.physical_port of seen
               seen[i.physical_port] = true
               # add
-              d = [
-                {
+              count = 0
+              m = i.device + '/' + i.physical_port.replace(/\//g,'.')
+              data.push {
                   alias: i.physical_port
-                  metric: 'port.util.out/' + i.device + '/' + i.physical_port.replace(/\//g,'.')
-                  height: 30
+                  metric: 'port.util.out/' + m
+                  height: 28
+                  extent_max_ref: count + 1
                   klass: 'up'
-                }
-                {
+              }
+              data.push {
                   alias: ' '
-                  metric: 'port.util.in/' + i.device + '/' + i.physical_port.replace(/\//g,'.')
-                  height: 30
+                  metric: 'port.util.in/' + m
+                  height: 28
+                  extent_max_ref: count
                   multiply: -1
                   klass: 'down'
-                },
-              ]
-              data.push d[0]
-              data.push d[1]
+              }
+              count = count + 2
     
     
           # initial
@@ -84,10 +91,18 @@ jQuery ->
     $('#step button').removeClass( 'btn-primary' )
     $(this).addClass( 'btn-primary' )
     view.destroy()
-    view = create_horizon( data, step, 0 )
+    view = create_horizon( data, step, step )
   ) 
 
-
+  # auto update
+  $('#autoupdate button').on( 'click', (e) ->
+    if $(this).hasClass( 'btn-primary' )
+      $(this).removeClass( 'btn-primary' )
+    else
+      $(this).addClass( 'btn-primary' )
+    view.destroy()
+    view = create_horizon( data, step, step )
+  )  
 
   
 <% end %>
