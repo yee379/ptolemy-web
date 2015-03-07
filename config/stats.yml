@@ -191,12 +191,15 @@ statistics:
             metric: ptolemy.%s.psu.stats.*.status
             keys:
                - device
+            functions:
+                - sum: null
     module:
         -
             metric: ptolemy.%s.module.stats.*.status
             keys:
                - device
-
+            functions:
+                - sum: null
     temperature:
         -
             metric: ptolemy.%s.temperature.stats.*.value
@@ -207,7 +210,8 @@ statistics:
             metric: ptolemy.%s.stack.stats.*.status
             keys:
                - device
-
+            functions:
+                - sum: null
     cpu:
         - 
             metric: ptolemy.%s.cpu.stats.*.load_1min
