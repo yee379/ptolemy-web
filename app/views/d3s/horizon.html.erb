@@ -21,22 +21,6 @@
 
 <%= coffee_script_tag do %>
 
-# value_bits = [Infinity,-Infinity]
-
-min = Infinity
-max = -Infinity
-calc_bits_extents = () ->
-  i = 0
-  n = this.context.size()
-  value
-  while (++i < n)
-    value = this.valueAt(i);
-    if (value < min) 
-      min = value;
-    if (value > max) 
-      max = value;
-  return [min, max];
-
 get_group = ( metric ) ->
   # let's try to group the metrics to provide more meaningful data
   bits = metric.split('/')
@@ -48,98 +32,113 @@ get_group = ( metric ) ->
     if bits.length > 3
       metric = bits[0] + '/' + bits[1] + '/' + bits.slice(2,bits.length+1).join('.')
     
+    colours = ["#3182bd","#31a354"]
+    colours_discards = ["#e5791e","#e5791e"]
+    colours_errors = ["#ff4701","#ff4701"]
+    
     return {
       delay: 60,
       step: 60,
       metrics: [
         {
-          alias: 'bits-out'
+          alias: 'out (bits)'
           metric: metric.replace('port','port.util.out')
-          # scale: d3.scale.linear().domain( [0,100] ).range( [0,1] )
-          # extent: calc_bits_extents
+          extent_max_ref:  '1'
+          colours: colours
           height: 100
           klass: 'up'
         },
         {
-          alias: 'bits-in'
+          alias: 'in (bits)'
           metric: metric.replace('port','port.util.in')
           multiply: -1
-          # scale: d3.scale.linear().domain( [0,100] ).range( [0,1] )
-          # extent: calc_bits_extents
+          extent_max_ref:  '0'
+          colours: colours
           height: 100
           klass: 'down'
         },
         {
-          alias: 'unicastpkts-out'
+          alias: 'unicast-out (pkts)'
           metric: metric.replace('port','port.unicastpkts.out')
+          colours: colours
           height: 30
           klass: 'up'
         },
         {
-          alias: 'unicastpkts-in'
+          alias: 'unicast-in (pkts)'
           metric: metric.replace('port','port.unicastpkts.in')
           multiply: -1
+          colours: colours
           height: 30
           klass: 'down'
         },
         {
-          alias: 'broadcast-pkts-out'
+          alias: 'broadcast-out (pkts)'
           metric: metric.replace('port','port.broadcastpkts.out')
+          colours: colours
           height: 30
           klass: 'up'
         },
         {
-          alias: 'broadcast-pkts-in'
+          alias: 'broadcast-in (pkts)'
           metric: metric.replace('port','port.broadcastpkts.in')
+          colours: colours
           multiply: -1
           height: 30
           klass: 'down'
         },
         {
-          alias: 'multicast-pkts-out'
+          alias: 'multicast-out (pkts)'
           metric: metric.replace('port','port.multicastpkts.out')
+          colours: colours
           multiply: 1
           height: 30
           klass: 'up'
         },
         {
-          alias: 'multicast-pkts-in'
+          alias: 'multicast-in (pkts)'
           metric: metric.replace('port','port.multicastpkts.in')
+          colours: colours
           multiply: -1
           height: 30
           klass: 'down'
         },
 
         {
-          alias: 'crc-err'
+          alias: 'crc-err (pkts)'
           metric: metric.replace('port','port.err.in')
+          colours: colours_errors
           height: 30
         },
 
         {
-          alias: 'discards-out'
+          alias: 'discards-out (pkts)'
           metric: metric.replace('port','port.discards.out')
+          colours: colours_discards
           height: 30
           klass: 'up'
         },
         {
-          alias: 'discards-in'
+          alias: 'discards-in (pkts)'
           metric: metric.replace('port','port.discards.in')
           multiply: -1
+          colours: colours_discards
           height: 30
           klass: 'down'
         },
 
         {
-          alias: 'error-out'
+          alias: 'error-out (pkts)'
           metric: metric.replace('port','port.error.out')
+          colours: colours_errors
           height: 30
           klass: 'up'
         },
         {
-          alias: 'error-in'
+          alias: 'error-in (pkts)'
           metric: metric.replace('port','port.error.in')
           multiply: -1
+          colours: colours_errors
           height: 30
           klass: 'down'
         },

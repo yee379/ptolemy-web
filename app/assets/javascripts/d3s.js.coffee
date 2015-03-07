@@ -129,7 +129,7 @@ class CubismView
       group.alias = group.metric
     metric_.alias( group.alias )
 
-    for i in [ 'scale', 'height', 'width', 'colours', 'url', 'meta', 'target', 'style', 'klass', 'extent', 'cache' ]
+    for i in [ 'scale', 'height', 'width', 'colours', 'url', 'meta', 'target', 'style', 'klass', 'extent', 'cache', 'extent_max_ref' ]
       if group[i]
         metric_[i] = group[i]
       else if @[i]

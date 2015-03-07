@@ -694,14 +694,23 @@ cubism_contextPrototype.horizon = function() {
       function change(start1, stop) {
         canvas.save();
 
-        // console.log('metric_: %o',metric_)
         var height = buffer.height = metric_.height;
 
         // compute the new extent and ready flag
         var extent = typeof metric_.extent === "function" ? metric_.extent() : metric_.extent;
-        // console.log( "extent: %o %o", metric_, extent );
         ready = extent.every(isFinite);
         if (extent_ != null) extent = extent_;
+
+        // hack to get extents linked to another metric_ data set by index ref
+        if ('extent_max_ref' in metric_) {
+          var ref = metric_.extent_max_ref;
+          other_extent = selection[0][ref].__data__.extent();
+          ready = other_extent.every(isFinite);
+          if( ready ) {
+            var global_max = Math.max.apply( null, other_extent.concat( extent ).map( function(n){ return Math.abs(n) }) );
+            extent = [ -global_max,global_max ]
+          }
+        }
 
         // if this is an update (with no extent change), copy old values!
         var i0 = 0, max = Math.max(-extent[0], extent[1]);
@@ -796,8 +805,14 @@ cubism_contextPrototype.horizon = function() {
       // Note that someone still needs to listen to the metric,
       // so that it continues to update automatically.
       metric_.on("change.horizon-" + id, function(start, stop) {
-        change(start, stop), focus();
-        if (ready) metric_.on("change.horizon-" + id, cubism_identity);
+        if (ready) {
+          metric_.on("change.horizon-" + id, cubism_identity);
+          change(start, stop), focus();          
+        } else {
+          setTimeout(function(){
+            change(start,stop), focus();
+          }, 1000);
+        }
       });
     });
   }
