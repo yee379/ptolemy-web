@@ -78,6 +78,10 @@ jQuery ->
       sDefaultContent: "-"
       sType: 'ip'
     ,
+      mDataProp: "vlan"
+      sTitle: "Vlan"
+      sDefaultContent: "-"
+    ,
       mDataProp: "description"
       sTitle: "Description"
       sDefaultContent: "-"
@@ -119,7 +123,7 @@ jQuery ->
       createFacet()
     fnRowCallback: ( nRow, aData, iDisplayIndex, iDisplayIndexFull ) ->
       mapping = {
-          'routed_on': 5,
+          'routed_on': 6,
       }
       for k,v of aData
         if typeIsArray v
