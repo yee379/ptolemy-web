@@ -138,9 +138,14 @@ module StatsHelper
 
     out = []
     keys.each_with_index { |k,i| 
-      # logger.info "K=%s\tdata=%s" % [k,data[i][params['metric']]]
-      unless data[i][params['metric']].nil?
-        out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][params['metric']]]
+      metric = params['metric']
+      if params['metric'].include? '.'
+        metric = params['metric'].split('.').last
+      end
+      logger.debug "cache key=%s\tmetric=%s->%s\tdata=%s" % [k,params['metric'],metric,data[i]]
+      unless data[i][metric].nil?
+        # TODO not always has device param
+        out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][metric]]
       end
     }
     # logger.info("OUT: %s" % [out])
