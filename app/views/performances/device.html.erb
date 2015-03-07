@@ -7,6 +7,9 @@
     <h1>Performance of <span id="device"><%= @device %></span><h1>
   </div>
   <div class="pull-right">
+    <div id="autoupdate" class="btn-group">
+      <button type="button" class="btn btn-default">Auto Update</button>
+    </div>
     <div id="step" class="btn-group">
       <button type="button" class="btn btn-default" id='60'>1min</button>
       <button type="button" class="btn btn-default" id='300'>5min</button>
@@ -46,16 +49,12 @@ metrics = [
   },{
     metric: 'module'
     alias: 'module (#ok)'
-    # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
-    # extent: [0,2]
     # colours: ["#000000","#000000","orange","#ed4035"]
   },
   {
     metric: 'psu'
     alias: 'psu (#ok)'
-    # scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
-    # extent: [0,2]
-    # colours: ["#000000","#000000","orange","#ed4035"]
+    # colours: ["#000000","#000000","#000000","red","orange","#ed4035"]
   }
 ]
 
@@ -64,7 +63,10 @@ metrics = [
 
 
 create_horizon = ( metrics, step, delay ) ->
-  view = new HorizonView( '#cubism', delay=delay*1000, step=step*1000, extent=[0,1] )
+  d = delay
+  if not $('#autoupdate button').hasClass( 'btn-primary' )
+    d = 0
+  view = new HorizonView( '#cubism', delay=d*1000, step=step*1000 )
   view.add metrics, device
   return view
 
@@ -83,10 +85,18 @@ $('#step button').on( 'click', (e) ->
   $('#step button').removeClass( 'btn-primary' )
   $(this).addClass( 'btn-primary' )
   view.destroy()
-  view = create_horizon( metrics, step, delay, extent=[0,1] )
+  view = create_horizon( metrics, step, delay )
 ) 
 
-
+# auto update
+$('#autoupdate button').on( 'click', (e) ->
+  if $(this).hasClass( 'btn-primary' )
+    $(this).removeClass( 'btn-primary' )
+  else
+    $(this).addClass( 'btn-primary' )
+  view.destroy()
+  view = create_horizon( metrics, step, delay )
+)
 
 <% end %>
   
