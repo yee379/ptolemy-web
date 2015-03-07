@@ -135,15 +135,15 @@ module StatsHelper
       keys += targets.collect { |x| "pt:store:%s" % [x.split(".")[0...-1].join('.')] }
       keys.collect {  |k| $redis.hgetall( k ) }
     end
-    # logger.info( "REDIS DATA %s\t%s" % [keys,data] )
 
     out = []
     keys.each_with_index { |k,i| 
-      # if data[i][params['metric']]
-      out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][params['metric']]]
-        # logger.info(" k=%s\ti=%s\t%s" % [k,i,s])
-      # end
+      # logger.info "K=%s\tdata=%s" % [k,data[i][params['metric']]]
+      unless data[i][params['metric']].nil?
+        out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][params['metric']]]
+      end
     }
+    # logger.info("OUT: %s" % [out])
     out
   end
   

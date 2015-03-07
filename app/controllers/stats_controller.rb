@@ -8,7 +8,6 @@ class StatsController < ApplicationController
   
   def get
     p = stats_params
-    # logger.info("PARAMS: %s" % [p])
     metrics = lookup p
 
     found = false
