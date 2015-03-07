@@ -57,15 +57,15 @@ PtolemyWeb::Application.routes.draw do
   get 'stats(.:format)/:metric' => 'stats#get',
     :constraints => { :metric => @pcre },
     :as => 'stats'
-  get 'stats(.:format)/:metric/:device' => 'stats#get',
-    :constraints => { :metric => @pcre, :device => @pcre },
-    :as => 'device_stats'
-  get 'stats(.:format)/:metric/:name' => 'stats#get',
-    :constraints  => { :metric => /subnet\..*/ },
-    :as => 'subnet_stats_by_name'
   get 'stats(.:format)/:metric/:prefix/:len' => 'stats#get',
     :constraints  => { :metric => /subnet\..*/, :prefix => @ip, :len => /\d+/ },
     :as => 'subnet_stats'
+  get 'stats(.:format)/:metric/:name' => 'stats#get',
+    :constraints  => { :metric => /subnet\..*/ },
+    :as => 'subnet_stats_by_name'
+  get 'stats(.:format)/:metric/:device' => 'stats#get',
+    :constraints => { :metric => @pcre, :device => @pcre },
+    :as => 'device_stats'
   get 'stats(.:format)/:metric/:source/:target' => 'stats#get',
     :constraints  => { :metric => /(owamp|bwctl)\.?.*/, :source => @pcre, :target => @pcre }
   get 'stats(.:format)/:metric/:device/:physical_port' => 'stats#get',

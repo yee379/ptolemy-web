@@ -27,17 +27,20 @@ jQuery ->
   # fetch and display
   $.getJSON(
 
-    '/api/subnets.json', (json) ->
+    '<%= subnets_path %>', (json) ->
 
       # create metrics
       for s in json
         n = s.name
         p = s.prefix
         k = prefix_len[s.netmask]
-        if p and k and /public/i.test(n) or /kavli/i.test(n)
-        # if p and k and not /SPARE/i.test(n)
+        
+        if not k?
+          console.log 'skipping ' + n + ': ' + p + '/' + k
+        else
+          # if p and k and /public/i.test(n) or /kavli/i.test(n)
+          # if p and k and not /SPARE/i.test(n)
           u = "subnet.loss/"+p+"/"+k
-          # console.log u
           m = 
             metric: u
             alias: s.name

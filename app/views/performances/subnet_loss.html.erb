@@ -19,7 +19,7 @@ prefix_len =
 view = new CubismView( '#cubism', delay=300000, step=300000, extent=[-1,1] )
 
 # add stats
-$.get( '/api/subnets.json', (d) ->
+$.get( <%= subnets_path %>, (d) ->
   for i in d
     if /ERP/i.test(i.name)
       view.add "subnet.jitter/" + i.prefix + "/" + prefix_len[i.netmask], i.name
