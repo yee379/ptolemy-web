@@ -60,6 +60,7 @@ get_group = ( metric ) ->
         {
           alias: 'unicast-out (pkts)'
           metric: metric.replace('port','port.unicastpkts.out')
+          extent_max_ref:  '3'
           colours: colours
           height: 30
           klass: 'up'
@@ -68,6 +69,7 @@ get_group = ( metric ) ->
           alias: 'unicast-in (pkts)'
           metric: metric.replace('port','port.unicastpkts.in')
           multiply: -1
+          extent_max_ref:  '2'
           colours: colours
           height: 30
           klass: 'down'
@@ -76,6 +78,7 @@ get_group = ( metric ) ->
           alias: 'broadcast-out (pkts)'
           metric: metric.replace('port','port.broadcastpkts.out')
           colours: colours
+          extent_max_ref:  '5'
           height: 30
           klass: 'up'
         },
@@ -83,6 +86,7 @@ get_group = ( metric ) ->
           alias: 'broadcast-in (pkts)'
           metric: metric.replace('port','port.broadcastpkts.in')
           colours: colours
+          extent_max_ref:  '4'
           multiply: -1
           height: 30
           klass: 'down'
@@ -91,6 +95,7 @@ get_group = ( metric ) ->
           alias: 'multicast-out (pkts)'
           metric: metric.replace('port','port.multicastpkts.out')
           colours: colours
+          extent_max_ref:  '7'
           multiply: 1
           height: 30
           klass: 'up'
@@ -99,6 +104,7 @@ get_group = ( metric ) ->
           alias: 'multicast-in (pkts)'
           metric: metric.replace('port','port.multicastpkts.in')
           colours: colours
+          extent_max_ref:  '6'
           multiply: -1
           height: 30
           klass: 'down'
@@ -115,12 +121,14 @@ get_group = ( metric ) ->
           alias: 'discards-out (pkts)'
           metric: metric.replace('port','port.discards.out')
           colours: colours_discards
+          extent_max_ref:  '10'
           height: 30
           klass: 'up'
         },
         {
           alias: 'discards-in (pkts)'
           metric: metric.replace('port','port.discards.in')
+          extent_max_ref:  '9'
           multiply: -1
           colours: colours_discards
           height: 30
@@ -131,6 +139,7 @@ get_group = ( metric ) ->
           alias: 'error-out (pkts)'
           metric: metric.replace('port','port.error.out')
           colours: colours_errors
+          extent_max_ref:  '12'
           height: 30
           klass: 'up'
         },
@@ -138,6 +147,7 @@ get_group = ( metric ) ->
           alias: 'error-in (pkts)'
           metric: metric.replace('port','port.error.in')
           multiply: -1
+          extent_max_ref:  '11'
           colours: colours_errors
           height: 30
           klass: 'down'
@@ -283,16 +293,14 @@ get_group = ( metric ) ->
   }
 
 create_horizon = ( metrics, step, delay ) ->
-  view = new HorizonView( '#horizon', delay=delay*1000, step=step*1000 )
+  d = delay
+  if not $('#autoupdate button').hasClass( 'btn-primary' )
+    d = 0
+  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000 )
   view.add metrics
   return view
 
 jQuery ->
-
-  get_delay = ( delay ) ->
-    if $('#autoupdate button').hasClass( 'btn-primary' )
-      return delay
-    return 0
 
   metric = $(location).attr('href').replace( /^.+\/graphs(\.\w+)?\//, '' )
   $('span#metric').text( metric )
@@ -305,7 +313,7 @@ jQuery ->
   $('#step button#'+step).addClass( 'btn-primary' )
 
   # initial
-  view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )
+  view = create_horizon( meta['metrics'], step, meta['delay'] )
 
   # change
   $('#step button').on( 'click', (e) ->
@@ -314,7 +322,7 @@ jQuery ->
     $('#step button').removeClass( 'btn-primary' )
     $(this).addClass( 'btn-primary' )
     view.destroy()
-    view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )
+    view = create_horizon( meta['metrics'], step, meta['delay'] )
   ) 
 
   # auto update
@@ -324,7 +332,7 @@ jQuery ->
     else
       $(this).addClass( 'btn-primary' )
     view.destroy()
-    view = create_horizon( meta['metrics'], step, get_delay( meta['delay'] ) )    
+    view = create_horizon( meta['metrics'], step, meta['delay'] )
   )  
 
 
