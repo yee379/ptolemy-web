@@ -161,23 +161,24 @@ get_group = ( metric ) ->
       step: 300,
       metrics: [
         {
-          alias: 'loss'
+          alias: 'hosts (#)'
+          colours: ["#3182bd","#31a354"]
+          metric: metric.replace('subnet','subnet.count')
+          height: 75
+        },
+        {
+          alias: 'loss (%)'
           metric: metric.replace('subnet','subnet.loss')
           multiply: -1
           height: 50
         },
         {
-          alias: 'hosts'
-          metric: metric.replace('subnet','subnet.count')
-          height: 50
-        },
-        {
-          alias: 'min_rtt'
+          alias: 'min_rtt (ms)'
           metric: metric.replace('subnet','subnet.rtt')
           height: 50
         },
         {
-          alias: 'jitter'
+          alias: 'jitter (ms)'
           metric: metric.replace('subnet','subnet.jitter')
           height: 50
         },
