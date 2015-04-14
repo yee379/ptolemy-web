@@ -28,7 +28,7 @@ module PortsHelper
   
   def get_port_range( beg, final )
 
-    logger.warn "range %s -> %s" % [beg,final]
+    # logger.warn "range %s -> %s" % [beg,final]
     common = ''
     beg.split('').each_with_index do |one,i|
       if final[i] == one
@@ -38,7 +38,7 @@ module PortsHelper
     
     b = beg.gsub(common,'').to_i
     e = final.gsub(common,'').to_i
-    logger.warn(" COMON: %s (%s %s)" % [common, b, e ])
+    # logger.warn(" COMON: %s (%s %s)" % [common, b, e ])
     c = b
     n = []
     while c <= e

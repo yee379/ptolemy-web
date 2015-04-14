@@ -49,11 +49,11 @@ module DelegatesHelper
   
     # prime the response queue before publishing
     _, _, _ = q.pop
-    logger.debug( "SENDING REQUEST: %s" % msg )
+    # logger.debug( "SENDING REQUEST: %s" % msg )
     p.publish(msg.to_json)
 
     q.subscribe( :block=>true, :ack=>true ) do |info,props,payload|
-      logger.warn "#{payload}"
+      # logger.warn "#{payload}"
       begin
         d = JSON.parse(payload)
         yield d['level'], d['data'] if d['type'] == 'log'

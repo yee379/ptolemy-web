@@ -54,7 +54,7 @@ class DevicesController < ApplicationController
     end
     # logger.error("N: %s" % (@neighbours.inspect))
     # strip off fqdn if requested
-    logger.error("FQDN: %s" % (p['fqdn']))
+    # logger.error("FQDN: %s" % (p['fqdn']))
     unless p['fqdn'] == true or p['fqdn'] == 'true'
       @neighbours.each do |n|
         [ 'device', 'peer_device' ].each do |d|

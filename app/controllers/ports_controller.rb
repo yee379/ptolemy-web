@@ -76,7 +76,7 @@ class PortsController < ApplicationController
 
   def normalise_port_request( data )
     # convert a request from json to something the backend can understand
-    logger.error("INCOMING REQUEST: %s" % data)
+    # logger.error("INCOMING REQUEST: %s" % data)
     
     # remap state
     port_settings = {}
@@ -119,7 +119,7 @@ class PortsController < ApplicationController
       end
     end
     
-    logger.error("NORMALISED REQUEST: %s" % port_settings)
+    # logger.error("NORMALISED REQUEST: %s" % port_settings)
     port_settings
   end
 
@@ -127,7 +127,7 @@ class PortsController < ApplicationController
     # convert port info from backend that frontend can understand
     # remap visitor stuff
     begin
-      logger.error("RENORMALISE: %s" % data[0]['vlan_name'].class )
+      # logger.error("RENORMALISE: %s" % data[0]['vlan_name'].class )
       # hide visitor private vlan stuff
       if data[0]['vlan_name'][0] == "VISITOR-PV-PRIMARY"
         data[0]['vlan_name'] = 'VISITOR'
@@ -225,7 +225,7 @@ class PortsController < ApplicationController
     p.publish(msg.to_json)
 
     q.subscribe( :block=>true, :ack=>true ) do |info,props,payload|
-      logger.warn "#{payload}"
+      # logger.warn "#{payload}"
       begin
         d = JSON.parse(payload)
         yield d['level'], d['data'] if d['type'] == 'log'

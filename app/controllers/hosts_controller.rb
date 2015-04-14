@@ -76,7 +76,7 @@ class HostsController < ApplicationController
         end
       end
 
-      @hosts = CachedHost.where( method.to_s + ' ~ ?', index_params[method].to_s )
+      @hosts = CachedHost.where( method.to_s + ' ~* ?', index_params[method].to_s )
     end
     @hosts
   end

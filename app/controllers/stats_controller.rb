@@ -38,7 +38,7 @@ class StatsController < ApplicationController
     params['format'] = 'raw'
     server = STATS_CONFIG['defaults']['server']
     req = Net::HTTP::Get.new( request.fullpath )
-    logger.debug 'graphite: http://' + server + request.fullpath
+    # logger.debug 'graphite: http://' + server + request.fullpath
     s = Net::HTTP.new( server )
     d = s.request( req )
     send_data d.body, :type => d.content_type, :disposition => 'inline'

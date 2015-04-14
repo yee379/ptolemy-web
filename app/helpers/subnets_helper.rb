@@ -21,7 +21,7 @@ module SubnetsHelper
   
   def netmask_to_prefix_len( mask )
     this = IPAddr.new( mask ).to_i.to_s(2).count("1")
-    logger.error("THIS: %s" % [this])
+    # logger.error("THIS: %s" % [this])
     this
   end
 end

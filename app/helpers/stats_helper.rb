@@ -122,7 +122,7 @@ module StatsHelper
     unless as.nil? then as = as.join("/") end
       
     u = "/%s?format=%s%s&from=%s&until=%s" % [ 'render', f, _graphite_build(targets,as,summarize), s, e ]
-    logger.debug 'graphite: http://' + server + u
+    # logger.debug 'graphite: http://' + server + u
     req = Net::HTTP::Get.new( u )
     s = Net::HTTP.new( server )
     s.request( req )
@@ -142,7 +142,7 @@ module StatsHelper
       if params['metric'].include? '.'
         metric = params['metric'].split('.').last
       end
-      logger.debug "cache key=%s\tmetric=%s->%s\tdata=%s" % [k,params['metric'],metric,data[i]]
+      # logger.debug "cache key=%s\tmetric=%s->%s\tdata=%s" % [k,params['metric'],metric,data[i]]
       unless data[i][metric].nil?
         # TODO not always has device param
         out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][metric]]

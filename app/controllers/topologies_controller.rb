@@ -42,7 +42,7 @@ class TopologiesController < ApplicationController
           links << { 'source' => t, 'target' => s, 'source_port' => i['peer_physical_port'], 
             'target_port' => i['physical_port'], 'speed' => i['speed'].to_i }
         elsif type == 'host'
-          logger.debug i
+          # logger.debug i
           s = _do( i['hostname'].downcase )
           t = _do( i['device'].downcase )
           links << { 'source' => s, 'target' => t, 'source_port' => 'nic', 

@@ -48,7 +48,7 @@ class SubnetsController < ApplicationController
     @ips = IPAddr.new(@subnet).to_range
     # get arps
     @arps = {}
-    logger.info("SUBNET: %s" % (@subnet))
+    # logger.info("SUBNET: %s" % (@subnet))
     Arp.where( 'ip_address << :subnet', { subnet: @subnet }).each do |a|
       ip = a.ip_address.to_s()
       unless @arps[ip]
@@ -68,7 +68,7 @@ class SubnetsController < ApplicationController
       next if i.name.nil? or [ "SPARE", "SPARE-IFZ", "SPARE-IFZLITE", "RESERVED FARM" ].include? i.name.upcase or i.name =~ /SPARE/
       
       pos = root # always start from root
-      logger.debug ">> #{i.name} #{i.types}"
+      # logger.debug ">> #{i.name} #{i.types}"
 
       if i.types.any?
         i.types.each do |x|
@@ -80,14 +80,14 @@ class SubnetsController < ApplicationController
           pos.children do |c|
             # puts "    comparing #{t} to #{c.name}"
             if t == c.name
-              logger.debug "    child #{t} already exists"
+              # logger.debug "    child #{t} already exists"
               has_already = true 
               n = c
             end
           end
           
           unless has_already
-            logger.debug "    creating new child #{n.name} with parent #{pos.name}"
+            # logger.debug "    creating new child #{n.name} with parent #{pos.name}"
             pos << n 
           end
 
@@ -99,11 +99,11 @@ class SubnetsController < ApplicationController
       # add leaf of subnet name
       unless pos.name == "root"
         d = "#{i.prefix}/#{i.prefix_len}"
-        logger.debug "    adding leaf #{i.name.downcase} to #{pos.name}"
+        # logger.debug "    adding leaf #{i.name.downcase} to #{pos.name}"
         begin
           pos << Tree::TreeNode.new( i.name.downcase, d )
         rescue
-          logger.debug("error")
+          # logger.debug("error")
         end
       end
       

@@ -48,7 +48,7 @@ class CfmsController < ApplicationController
     p.publish(msg.to_json)
 
     q.subscribe( :block=>true, :ack=>true ) do |info,props,payload|
-      logger.warn "#{payload}"
+      # logger.warn "#{payload}"
       begin
         d = JSON.parse(payload)
         yield d['level'], d['data'] if d['type'] == 'log'
