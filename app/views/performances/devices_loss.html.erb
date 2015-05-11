@@ -1,20 +1,46 @@
-<div class="row span12">
-  <h1>Network Device Ping Statistics<h1>
-</div>
+<div class="row row-fluid">
+  <div class="row span12">
+    <div class="pull-left">
+      <h1>Network Devices Ping Status</h1>
+    </div>
+  </div>
 
-<div id="cubism" class="row span12">
+  <div id='cubism' class="row span12"></div>
 </div>
 
 
 <%= coffee_script_tag do %>
 
-view = new CubismView( '#cubism', delay=300000, step=300000, extent=[0,1])
+metrics = []
 
-$.get( '/api/devices/list', (d) ->
-  metrics = []
-  for i in d
-    n = i['i'].split('.').reverse().join('.')
-    view.add "ptolemy." + n + ".reachability.ping.Ping.min_rtt", n 
+$.getJSON( '/devices.json', (json) ->
+
+  seen = {}
+  for d in json
+    n = d.device
+    unless n of seen
+      if n and not ( /^ap/i.test(n) or /ssrl/i.test(n) )
+        seen[n] = true
+
+  for n in _.keys(seen).sort()
+    console.log n
+    m = 
+      metric: 'loss/'+n
+      alias: n
+      height: 25
+      url: '/performance/device/'+n
+      colours: ["#000000","#000000","#ed9743","#ed4035"]
+    metrics.push m
+      
+)
+
+.success( () ->
+
+  view = new HorizonView( '#cubism', delay=60000, step=60000 )
+  view.add metrics
+  
+  window.view = view
+  
 )
   
 <% end %>
