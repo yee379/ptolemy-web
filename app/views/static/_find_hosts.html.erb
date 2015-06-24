@@ -33,6 +33,7 @@
         
         var type = 'hostname';
         
+        console.log( "q: %s", q );
         // 1) if it starts with a number, then it could be ip or mac
         if( /^\d+/.test(q) ) {
           // 1a) if it has letters, then it must be mac
@@ -56,7 +57,7 @@
           
         }
 
-        // console.log("%s is a %s", q, type );
+        console.log("%s is a %s", q, type );
         $.get( lookup_urls[type], { query: q }, function(d){
           return process( d )
         })

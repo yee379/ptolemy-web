@@ -5,14 +5,14 @@ module HostsHelper
     IPAddr.new(param)
   end
   
-  def validate_as_mac_address( param )
+  def validate_as_mac_address( q )
     is_mac = false
-    if param =~ %r/[^:\-](?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F][^:\-]/io
+    if q =~ %r/[^:\-](?:[0-9A-F][0-9A-F][:\-]){5}[0-9A-F][0-9A-F][^:\-]/io
       is_mac = true
-    elsif param =~ %r/^[0-9A-F]{4}\.[0-9A-F]{4}\.[0-9A-F]{4}$/io
+    elsif q =~ %r/^[0-9A-F]{4}\.[0-9A-F]{4}\.[0-9A-F]{4}$/io
       is_mac = true
-    elsif param =~ %r/^([0-9A-F][0-9A-F][:]){5}[0-9A-F][0-9A-F]$/io
-        is_mac = true
+    elsif q =~ %r/^([0-9A-F][0-9A-F][:]){5}[0-9A-F][0-9A-F]$/io
+      is_mac = true
     end
     
     unless is_mac
@@ -20,13 +20,13 @@ module HostsHelper
     end
     
     # return consistent mac address format
-    param.downcase.gsub( /[\:\.]/, '' ).scan( /.{4}|.+/ ).join('.')
+    q.downcase.gsub( /[\:\.]/, '' ).scan( /.{4}|.+/ ).join('.')
 
   end
   
   def parse_param( q )
     p = {}
-    logger.debug(q)
+    # logger.debug(q)
     begin
       p['ip_address'] = validate_as_ip_address q
     rescue

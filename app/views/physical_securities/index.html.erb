@@ -39,7 +39,7 @@
           <td><%= physical_security.environment %></td>
           <td><%= physical_security.cabinet %></td>
           <!-- <td><%= physical_security.security_level() %></td> -->
-          <td><span class="edit href">edit</span></td>
+          <td><span class="editable href">edit</span></td>
           <!-- <td><%= link_to 'Destroy', physical_security, method: :delete, data: { confirm: 'Are you sure?' } %></td> -->
         </tr>
         <% end %>
@@ -96,7 +96,7 @@ jQuery ->
     bSort: true
     aaSorting: [ [1,"asc"] ]
     bJqueryUI:  true
-    iDisplayLength: 25
+    iDisplayLength: -1
     bAutoWidth: false
     sPaginationType: 'full_numbers'
     sDom:       '<"pull-left"i><"pull-right"p><"pull-right"T><"span12"t>r<"clear"><"pull-right"p>'
