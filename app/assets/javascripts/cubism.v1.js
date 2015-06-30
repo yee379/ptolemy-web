@@ -936,7 +936,7 @@ cubism_contextPrototype.tile = function() {
 
       function change(start1, stop) {
 
-        d3.select(that).select('a')
+        var item = d3.select(that).select('a')
           .attr('href',metric_.url)
           .attr( 'title', title );
                 
@@ -963,6 +963,8 @@ cubism_contextPrototype.tile = function() {
         }
         
         canvas.fillStyle = color;
+        item.attr( 'color', color );
+
         // draw new one
         canvas.fillRect(x0, y0, metric_.width - x0, metric_.height - y0);
         canvas.restore();

@@ -4,6 +4,9 @@
       <h1>Network Devices Status</h1>
     </div>
     <div class="pull-right">
+      <div id="hide_good" class="btn-group">
+        <button type="button" class="btn btn-default">Hide Good</button>
+      </div>
       <select id="category">
       </select>
     </div>
@@ -86,6 +89,26 @@ jQuery ->
     
     console.log 'could not load list of devices'
     
+  )
+  
+  
+  update = () ->
+    hide = $('#hide_good button').hasClass( 'btn-primary' );
+    items = $('.tile > a[color="#c4df9b"]').parent()
+    if hide
+      items.css('display', "none").css('visibility', "hidden");
+    else
+      items.css('display', "inline").css('visibility', "visible");
+      
+  setInterval( update, 5000 )
+  
+  # button to hide good 
+  $('#hide_good button').on( 'click', (e) ->
+    if $(this).hasClass( 'btn-primary' )
+      $(this).removeClass( 'btn-primary' )
+    else
+      $(this).addClass( 'btn-primary' )
+    update()
   )
 
 <% end %>
