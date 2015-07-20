@@ -83,9 +83,9 @@
             <table id="user">
               <tr>
                 <td>
-                <% if @current_user.user.nil? %>
+                <% if not @current_user.user %>
                   <a href="<%= 'https://' + request.host_with_port + request.fullpath %>">Login</a>
-                <% else %>
+                <% else  %>
                   <%= @current_user.user %>
                 <% end %>
                 </td>

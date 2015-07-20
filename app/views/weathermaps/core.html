@@ -414,44 +414,44 @@
     <path
        style="fill:#8aa0b3;fill-opacity:0.12106066;stroke:#c2c2c2;stroke-width:8.7130537px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        d="m 90.239041,120.21488 c 0,56.93798 0,56.93798 0,56.93798 l 0,0 0,0 0,0"
-       id="rtr-border1_esnet_out"
+       id="port_rtr-border1__slac__stanford__edu_Te1__1_out"
        inkscape:connector-curvature="0" />
     <path
        inkscape:label="#rtr-border1_esnet_in"
        style="fill:#8aa0b3;fill-opacity:0.12106066;stroke:#c2c2c2;stroke-width:8.7130537px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        d="m 90.239041,111.10481 c 0,-56.937983 0,-56.937983 0,-56.937983 l 0,0 0,0 0,0"
-       id="rtr-border1_esnet_in"
+       id="port_rtr-border1__slac__stanford__edu_Te1__1_in"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
-       id="rtr-border2_internet2_out"
+       id="port_rtr-border2__slac__stanford__edu_TenGigE0__1__0__4_out"
        d="m 347.68585,119.68297 c 0,56.93798 0,56.93798 0,56.93798 l 0,0 0,0 0,0"
        style="fill:#8aa0b3;fill-opacity:0.12106066;stroke:#c2c2c2;stroke-width:8.7130537px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)" />
     <path
        inkscape:connector-curvature="0"
-       id="rtr-border2_internet2_in"
+       id="port_rtr-border2__slac__stanford__edu_TenGigE0__1__0__4_in"
        d="m 347.68585,110.5729 c 0,-56.937988 0,-56.937988 0,-56.937988 l 0,0 0,0 0,0"
        style="fill:#8aa0b3;fill-opacity:0.12106066;stroke:#c2c2c2;stroke-width:8.7130537px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        inkscape:label="#rtr-border2_internet2_in" />
     <path
        style="fill:#000000;fill-opacity:0;stroke:#c2c2c2;stroke-width:10.98647785px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        d="m 211.67676,112.1205 c -80.36846,63.35999 -80.36846,63.35999 -80.36846,63.35999 l 0,0 0,0 0,0"
-       id="rtr-border1_internet2_out"
+       id="port_rtr-border1__slac__stanford__edu_Te2__1_out"
        inkscape:connector-curvature="0" />
     <path
        style="fill:#000000;fill-opacity:0;stroke:#c2c2c2;stroke-width:10.98647785px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        d="m 222.39256,103.6725 c 80.36846,-63.359991 80.36846,-63.359991 80.36846,-63.359991 l 0,0 0,0 0,0"
-       id="rtr-border1_internet2_in"
+       id="port_rtr-border1__slac__stanford__edu_Te2__1_in"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
-       id="rtr-border2_esnet_in"
+       id="port_rtr-border2__slac__stanford__edu_HundredGigE0__0__0__0_in"
        d="M 209.32912,102.33737 C 128.96066,38.977377 128.96066,38.977377 128.96066,38.977377 l 0,0 0,0 0,0"
        style="fill:#000000;fill-opacity:0;stroke:#c2c2c2;stroke-width:10.98647785px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)"
        inkscape:label="#rtr-border2_esnet_in" />
     <path
        inkscape:connector-curvature="0"
-       id="rtr-border2_esnet_out"
+       id="port_rtr-border2__slac__stanford__edu_HundredGigE0__0__0__0_out"
        d="m 224.0861,114.6085 c 80.36846,63.35998 80.36846,63.35998 80.36846,63.35998 l 0,0 0,0 0,0"
        style="fill:#000000;fill-opacity:0;stroke:#c2c2c2;stroke-width:10.98647785px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInS)" />
     <text
@@ -504,23 +504,39 @@ colour_scale = (num) ->
 
 # work out what the links are
 $('svg').find('path').each( (i,p) ->
-    a = p.id.split('_')
-    # determine the port to query by asking http://network.slac.stanford.edu/api/devices/neighbours.json?device=swh-li00-nw01
-    url = '/api/devices/neighbours.json?device=' + a[0] + '&neighbour=' + a[1] + '&fqdn=true'
-    console.log url
-    $.ajax 
-        url:    url
-        # async: false
-    .done (msg) ->
-        for m in msg
-            m = 'port.util.pc.' + a[2] + '/' + m['device'] + '/' + m['physical_port'].replace(/\//g,'.')
-            console.log m
-            c = 
-                target: '#' + p.id
-                scale:  colour_scale
-                metric: m
-                style: 'stroke'
-            colourisor.add c
+    a = p.id.replace(/__/g,'.',).split('_')
+    console.log a
+    if a.length == 3
+        # determine the port to query by asking http://network.slac.stanford.edu/api/devices/neighbours.json?device=swh-li00-nw01
+        url = '/api/devices/neighbours.json?device=' + a[0] + '&neighbour=' + a[1] + '&fqdn=true'
+        # console.log url
+        $.ajax 
+            url:    url
+            # async: false
+        .done (msg) ->
+            for m in msg
+                m = 'port.util.pc.' + a[2] + '/' + m['device'] + '/' + m['physical_port'].replace(/\//g,'.')
+                # console.log 'neighbour: ' + m
+                c = 
+                    target: '#' + p.id
+                    scale:  colour_scale
+                    metric: m
+                    style: 'stroke'
+                colourisor.add c
+    else if p.id.startsWith('port_') and a.length == 4
+        # assume port_<router>_<port>_<direction>
+        # substitute '__' with 'dot
+        m = 'port.util.pc.' + a[3] + '/' + a[1].replace(/__/g,'.') + '/' + a[2].replace(/__/g,'.')
+        console.log m
+        c = 
+            target: '#' + p.id
+            scale:  colour_scale
+            metric: m
+            style: 'stroke'
+        colourisor.add c
+    else
+        console.log 'MISSED ' + p.id
+
 	
 )
 

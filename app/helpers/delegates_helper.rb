@@ -31,7 +31,9 @@ module DelegatesHelper
       'data' => data
     }
     
-    # block until finished
+    # logger.info 'delegated user: %s' % [ msg['_meta']['user'] ]
+    
+    # block until finished 
     return msg
   end
   

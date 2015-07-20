@@ -41,7 +41,8 @@ module PtolemyWeb
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # webauth
+    # webauth - seems to cache last user, logging in people as last https user if current user uses http, so force all ssl
+    # config.force_ssl = true
     config.middleware.use Rack::Webauth
 
   end
