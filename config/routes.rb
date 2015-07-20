@@ -259,9 +259,9 @@ PtolemyWeb::Application.routes.draw do
   resources :helpdesks
   resources :techcoords
   
-  get 'weathermaps/:map' => 'weathermaps#map',
+  get 'weathermaps/:map' => 'weathermaps#show',
     :as => 'weathermap_for'
-  resources :weathermaps
+  # resources :weathermaps
 
 
 
