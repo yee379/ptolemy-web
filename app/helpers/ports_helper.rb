@@ -6,7 +6,7 @@ module PortsHelper
     "Eth" => [ /Ethernet/ ],
     "Te"  => [ /TenGigabitEthernet/ ],
     "TenGigE"  => [ /TenGigE/ ],
-    "TeHundredGigE"  => [ /HundredGigE/ ]
+    "HundredGigE"  => [ /HundredGigE/ ]
   }
 
   # normalise port name
