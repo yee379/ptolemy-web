@@ -21,6 +21,10 @@ class SubnetsController < ApplicationController
     end
   end
   
+  def search
+    @subnets = Subnet.where( 'vlan=?', vlan_params['vlan'] )
+    render :template => 'subnets/index'
+  end
   
   def api_subnet_name_list
     @subnets = Subnet.where autocomplete_params
@@ -123,5 +127,8 @@ class SubnetsController < ApplicationController
       params.permit(:name,:prefix,:netmask,:prefix_len)
     end
 
+    def vlan_params
+      params.permit(:vlan)
+    end
 
 end

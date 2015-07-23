@@ -159,6 +159,7 @@ PtolemyWeb::Application.routes.draw do
   # resources :subnets
   get '/api/subnets/list', to: 'subnets#api_subnet_name_list', :as => 'autocomplete_subnet_name_list'
   get '/api/subnet_graph', to: 'subnets#subnet_graph', :as => 'api_subnet_graph'
+  get '/api/subnets', to: 'subnets#search', :as => 'api_subnets'
   get '/subnets/ips', to: 'subnets#ips', :as => 'subnet_ips'
   get '/subnets', to: 'subnets#index', :as => 'subnets'
 
