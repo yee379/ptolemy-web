@@ -29,6 +29,8 @@ class PortsController < ApplicationController
   def api_port_alias
     p = port_params
     @ports = Port.where( 'device ~ ? AND (%s)' % [ p['physical_port'].join(" OR ") ], p['device'] )
+    @vlan_names = {}
+    render :template => 'ports/api_index'
   end
   
   def api_port_location
