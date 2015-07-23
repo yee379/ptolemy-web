@@ -192,6 +192,8 @@ PtolemyWeb::Application.routes.draw do
     :constraints => { :id => @id }
 
   # resources :topologies
+  get 'topology' => 'topologies#index',
+    :as => 'topology'
   get 'topologies/devices(.:format)' => 'topologies#devices',
     :as => 'topologies_devices'
   get 'topologies/hosts(.:format)' => 'topologies#hosts',

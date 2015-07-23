@@ -1,7 +1,8 @@
 class TopologiesController < ApplicationController
 
   def index
-    @topologies = Topology.all
+    # @topologies = Topology.all
+    render :template => 'topologies/index'
   end
 
 

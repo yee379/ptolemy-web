@@ -282,6 +282,7 @@ class GaugeView extends CubismView
 class ColourisorView extends CubismView
   setup: ( selector ) ->
     @type = 'colourisor'
+    @ctx.options( { 'cache': true } )
   view: () ->
     @ctx.colourisor()
     # .delta(@delta)
