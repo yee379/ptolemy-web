@@ -8,7 +8,6 @@
       <td>Wide Area</td>
       <td>Local Area</td>
       <td>Visitor</td>
-      <td>SLAC Wireless</td>
     </tr>
     <tr>
       <td>Services</td>
@@ -20,9 +19,6 @@
       </td>
       <td>
         <div id="vis-services"></div>
-      </td>
-      <td>
-        <div id="slac-wireless-services"></div>
       </td>
     </tr>
     
@@ -52,9 +48,6 @@
       </td>
       <td>
         <div id="vis-cap"></div>
-      </td>
-      <td>
-        <div id="slac-wireless-cap"></div>
       </td>
 
     </tr>
@@ -110,7 +103,7 @@ jQuery ->
       alias: 'wan-capacity'
       width: size
       height: size
-      metric: [ 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te2.1' ]
+      metric: [ 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.pc.out/rtr-border2.slac.stanford.edu/HundredGigE0.0.0.0', 'port.util.pc.in/rtr-border2.slac.stanford.edu/HundredGigE0.0.0.0', 'port.util.pc.out/rtr-border2.slac.stanford.edu/TenGigE0.1.0.4', 'port.util.pc.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.4' ]
       collate: 'max'
       scale: colour_scale
       url: '/performance/wan'
@@ -137,7 +130,7 @@ jQuery ->
   lan_cap = new TileView( '#lan-cap', delay=300000, step=300000 )
   lan_cap.add
       alias: 'lan-capacity'
-      metric: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-border2.slac.stanford.edu/Te1.3', 'port.util.pc.in/rtr-border2.slac.stanford.edu/Te1.3' ]
+      metric: [ 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te2.4', 'port.util.pc.out/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-core2.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te2.3', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.in/rtr-border1.slac.stanford.edu/Te1.4', 'port.util.pc.out/rtr-border2.slac.stanford.edu/TenGigE0.1.0.3', 'port.util.pc.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.3', 'port.util.pc.out/rtr-border2.slac.stanford.edu/TenGigE0.1.0.2', 'port.util.pc.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.2' ]
       collate: 'max'
       width: size
       height: size
@@ -157,10 +150,12 @@ jQuery ->
       scale: state_colour_scale
       url: '/performance/visitor'
       
+
+            
   vis_cap = new TileView( '#vis-cap', delay=300000, step=300000 )
   vis_cap.add
       alias: 'visitor-capacity'
-      metric: [ 'port.util.pc.out/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.pc.in/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.pc.out/swh-visitor2.slac.stanford.edu/Gi1.0.25', 'port.util.pc.in/swh-visitor2.slac.stanford.edu/Gi1.0.25' ]
+      metric: [ 'port.util.pc.out/rtr-border1.slac.stanford.edu/Gi5.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.6', 'port.util.pc.out/rtr-border1.slac.stanford.edu/Gi5.1', 'port.util.pc.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.6' ]
       collate: 'max'
       width: size
       height: size
@@ -168,22 +163,6 @@ jQuery ->
       url: '/performance/visitor'
 
 
-  slac_wireless_cap = new TileView( '#slac-wireless-cap', delay=300000, step=300000 )
-  slac_wireless_cap.add
-      alias: 'visitor-capacity'
-      metric: [ 'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.35',
-         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.36',
-         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.37',
-         'port.util.out/rtr-bldgcore1.slac.stanford.edu/Gi7.38',
-         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.35',
-         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.36',
-         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.37',
-         'port.util.out/rtr-bldgcore2.slac.stanford.edu/Gi7.38']
-      collate: 'max'
-      width: size
-      height: size
-      scale: percent_colour_scale
-      url: '/performance/visitor'
 
 
 <% end %>

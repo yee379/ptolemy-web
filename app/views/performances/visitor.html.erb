@@ -38,6 +38,8 @@ jQuery ->
 
   size = 75
 
+  colours = ["#3182bd","#31a354"]
+
   dns = new TileView( '#dns', delay=300000, step=300000 )
   dns.add
     metric: [ 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.101.state', 'ptolemy.edu.stanford.slac.rtr-visitor1.ip_sla.stats.102.state' ]
@@ -66,19 +68,23 @@ jQuery ->
   uplinks = new HorizonView( '#uplinks', delay=60000, step=60000 )
   uplinks.add [
     {
-      metric: [ 'port.util.out/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.out/swh-visitor2.slac.stanford.edu/Gi1.0.25' ]
+      metric: [ 'port.util.out/rtr-border1.slac.stanford.edu/Gi5.1', 'port.util.out/rtr-border2.slac.stanford.edu/TenGigE0.1.0.6' ]
       alias: 'out'
       scale: state_colour_scale
       klass: 'up'
       height: 90
+      extent_max_ref:  '1'
+      colours: colours
     },
     {
-      metric: [ 'port.util.in/swh-visitor1.slac.stanford.edu/Gi1.0.25', 'port.util.in/swh-visitor2.slac.stanford.edu/Gi1.0.25' ]
+      metric: [ 'port.util.in/rtr-border1.slac.stanford.edu/Gi5.1', 'port.util.in/rtr-border2.slac.stanford.edu/TenGigE0.1.0.6' ]
       multiply: -1
       alias: 'in'
       scale: state_colour_scale
       klass: 'down'
       height: 90
+      extent_max_ref:  '0'
+      colours: colours
     }
   ]
     
