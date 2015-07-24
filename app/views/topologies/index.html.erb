@@ -28,7 +28,7 @@
   </div>
 
   <div class="row-fluid span12">
-      <div class="weathermap" id="d3_viz"></div>
+      <div class="TOPOLOGY" id="d3_viz"></div>
   </div>
 </div>
 
@@ -36,7 +36,7 @@
 _repulse = true
 
 fill_window "#d3_viz"
-WEATHERMAP = new WeatherMapPane( "#d3_viz" )
+TOPOLOGY = new TopologyPane( "#d3_viz" )
 
 # autocomplete
 $('#autocomplete').typeahead(
@@ -51,22 +51,22 @@ $('#find').submit () ->
   uri = '/topologies/' + $('#type').find(':selected').attr('url') + '?' + $('#type').val() + '=' + encodeURIComponent($('.input-wrapper').val())
 
   console.log uri
-  WEATHERMAP.fetch( uri )
+  TOPOLOGY.fetch( uri )
   return false
 
 
 $('#link_distance').bind( "propertychange keyup input paste", (ev) ->
-  WEATHERMAP.link_distance( $(this).val() )
+  TOPOLOGY.link_distance( $(this).val() )
 )
 
 $('#clear_button').on( "click", () ->
   console.log('clearing all')
-  n = WEATHERMAP.num_nodes()
+  n = TOPOLOGY.num_nodes()
   t = n/10000
   i = 0
   while i < n
     setTimeout( () ->
-        WEATHERMAP.delete_node WEATHERMAP.NODES[0]
+        TOPOLOGY.delete_node TOPOLOGY.NODES[0]
     , t*i
     )
     i++
@@ -75,11 +75,11 @@ $('#clear_button').on( "click", () ->
 $('#repulsion').on("click", () ->
   if this.value == 'repulse'
     this.value = 'static'
-    WEATHERMAP.stop()
+    TOPOLOGY.stop()
     _repulse = false
   else
     this.value = 'repulse'
-    WEATHERMAP.start
+    TOPOLOGY.start
     _repulse = true
 )
 
@@ -87,7 +87,7 @@ $('#repulsion').on("click", () ->
 $('#update').on("click", () ->
   i = 0
   while i<LINKS.length
-    WEATHERMAP.get_link( LINKS[i])
+    TOPOLOGY.get_link( LINKS[i])
     i++
 )
 
