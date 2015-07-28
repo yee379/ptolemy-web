@@ -502,10 +502,12 @@ tricolour = d3.scale.linear().domain( [0,0.40,0.60,1] ).range( [ green, orange, 
 colour_scale = (num) -> 
 	if isNaN(num) then grey else if num > 1 then return 'black' else tricolour(num)
 
+
+LOOKUP = {}
+
 # work out what the links are
-$('svg').find('path').each( (i,p) ->
+$('svg').find('path').each (i,p) ->
     a = p.id.replace(/__/g,'.',).split('_')
-    console.log a
     if a.length == 3
         # determine the port to query by asking http://network.slac.stanford.edu/api/devices/neighbours.json?device=swh-li00-nw01
         url = '/api/devices/neighbours.json?device=' + a[0] + '&neighbour=' + a[1] + '&fqdn=true'
@@ -515,30 +517,60 @@ $('svg').find('path').each( (i,p) ->
             # async: false
         .done (msg) ->
             for m in msg
-                m = 'port.util.pc.' + a[2] + '/' + m['device'] + '/' + m['physical_port'].replace(/\//g,'.')
+                mtr = 'port.util.pc.' + a[2] + '/' + m['device'] + '/' + m['physical_port'].replace(/\//g,'.')
                 # console.log 'neighbour: ' + m
                 c = 
                     target: '#' + p.id
                     scale:  colour_scale
-                    metric: m
+                    metric: mtr
                     style: 'stroke'
                 colourisor.add c
+            
+            LOOKUP[p.id] = 
+                'device': m['device'],
+                'physical_port': m['physical_port'].replace(/\//g,'.')
+            
     else if p.id.startsWith('port_') and a.length == 4
         # assume port_<router>_<port>_<direction>
         # substitute '__' with 'dot
-        m = 'port.util.pc.' + a[3] + '/' + a[1].replace(/__/g,'.') + '/' + a[2].replace(/__/g,'.')
-        console.log m
+        mtr = 'port.util.pc.' + a[3] + '/' + a[1].replace(/__/g,'.') + '/' + a[2].replace(/__/g,'.')
+        console.log mtr
         c = 
             target: '#' + p.id
             scale:  colour_scale
-            metric: m
+            metric: mtr
             style: 'stroke'
         colourisor.add c
+        
+        LOOKUP[p.id] = 
+            'device': a[1].replace(/__/g,'.'),
+            'physical_port': a[2].replace(/__/g,'.')
+        
     else
         console.log 'MISSED ' + p.id
 
-	
-)
+get_device_and_port_from_id = (id) ->
+    parts = id.replace(/__/g,'.').split('_')
+    return [ parts[1], parts[2] ]
+
+$('body').popover
+    'selector': 'path'
+    'container': 'body'
+    'html': true
+    'width': '300px'
+    'title': () ->
+        item = LOOKUP[this.id]
+        # console.log "%s -> %o", this.id, item
+        '<a href="' + '/graphs.horizon/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>'
+    'content': () ->
+        this.id
+        item = LOOKUP[this.id]
+        # console.log "%s -> %o", this.id, item
+        url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked'
+        '<iframe src="'+url+'" frameBorder="0" width="300px" height="166px"></iframe>'
+    'trigger': 'click'
+    'placement': 'right'
+
 
 
 <% end %>
