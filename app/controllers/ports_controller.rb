@@ -30,16 +30,54 @@ class PortsController < ApplicationController
     p = port_params
     @ports = Port.where( 'device ~ ? AND (%s)' % [ p['physical_port'].join(" OR ") ], p['device'] )
     @vlan_names = {}
+    Vlan.where( :device => p['device'] ).each do |v|
+      @vlan_names[v.vlan] = v.name
+    end
     render :template => 'ports/api_index'
   end
   
-  def api_port_location
-    p = location_params
-    devices = Location.where( 'location ~ ?', p['building'] )
-    # @ports = Port.where( 'device IN (?) and alias ~ ?', devices, p['room'] )
-    @ports = Port.where( 'device in (?)', devices.map{ |i| i['device'] } )
-  end
+  def location
+    @params = location_params
 
+    if not @params.include?('format') or @params['format'] == 'html'
+      
+      @data_href = port_location_path :building => @params['building'], :tap => @params['tap'], :format => 'json'
+      render :template => 'ports/index'
+    
+    else
+      
+      @vlan_names = {}
+      
+      # has building
+      if @params.has_key? :building and ! @params[:building].nil?
+        
+        devices = Location.where( 'location ~ ?', @params['building'] ).map{ |i| i['device'] }
+        Vlan.where( :device => devices ).each do |v|
+          @vlan_names[v.vlan] = v.name
+        end
+
+        # has tap or not?
+        if @params.has_key? :tap
+          @ports = Port.where( 'device in (?) and alias ~ ?', devices, @params['tap'] )
+        else
+          @ports = Port.where( 'device in (?)', devices )
+        end
+      
+      # no building
+      elsif
+        
+        @ports = Port.where( 'alias ~ ?', @params['tap'] )
+        devices = @ports.map{ |p| p['device'] }
+        Vlan.where( :device => devices ).each do |v|
+          @vlan_names[v.vlan] = v.name
+        end
+
+      end
+
+      render :template => 'ports/api_index'
+    end
+    
+  end
 
   def api_port_type
     # lookup entity group and find the group, then search for all ports from that device that match the type
@@ -51,9 +89,10 @@ class PortsController < ApplicationController
   # GET /ports
   # GET /ports.json
   def index
+    @params = device_params
+    @data_href = api_port_path :device => @params['device'], :format => 'json'
+    render :template => 'ports/index'
   end
-
-
 
   def update
     delegate_port( params['device'], params['physical_port'], params ) do |type,data|
@@ -301,7 +340,7 @@ class PortsController < ApplicationController
     end
       
     def location_params
-      params.permit(:device,:building,:room)
+      params.permit(:building,:tap,:format)
     end
 
     def delegate_params

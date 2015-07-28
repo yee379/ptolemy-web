@@ -27,12 +27,12 @@ PtolemyWeb::Application.routes.draw do
   get '/ports/by_uplinks', to: 'ports#port_graphs_by_uplinks', :constraints => { :device => @pcre }, :as => 'port_graphs_by_uplinks'
 
 
+  get '/ports/location', to: 'ports#location', :as => 'port_location'
   get '/ports/:device', to: 'ports#index', :constraints => { :device => @pcre }
   get '/ports', to: 'ports#index', as: 'ports', :constraints => { :device => @pcre }, :as => 'network_ports'
 
   get '/api/ports/neighbours', to: 'ports#api_port_neighbours', :as => 'api_port_neighbours'
   get '/api/ports/alias', to: 'ports#api_port_alias', :as => 'api_port_aliases'
-  get '/api/ports/location', to: 'ports#api_port_location', :as => 'api_port_locations'
   get '/api/ports/type', to: 'ports#api_port_type', :as => 'api_port_type'
   get '/api/ports/utilisations', to: 'ports#api_port_utilisations', :as => 'api_port_utilisations'
 

@@ -14,7 +14,7 @@
     <ul class="thumbnails">
       <%= render :partial => 'find_hosts' %>
       <%= render :partial => 'find_hosts_on_subnet' %>
-
+      <%= render :partial => 'subnets' %>
     </ul>
   </div>
 
@@ -31,7 +31,9 @@
     <ul class="thumbnails">
       <%= render :partial => 'network_devices' %>
       <%= render :partial => 'network_ports_by_device' %>
-      <%= render :partial => 'subnets' %>
+      <%= render :partial => 'network_ports_by_location' %>
+
+
       <!-- <li class="span4">
         <h3>
           <a href="/assets">Network Assets</a>

@@ -4,7 +4,7 @@
     <%= image_tag "noun_88992_cc.svg", :width=>63 %>
   </div>
   <div class="span11">
-    <h1>Network Ports for <%= params[:device] %></h1>
+    <h1>Network Ports for <% if @params.has_key? :device %>Device <%= @params[:device] %><% else %>Location <% end %></h1>
   </div>
 </div>
 
@@ -37,9 +37,8 @@
 </div>
 
 <div style="visibility: hidden">
-  <div id="data_href">/api/ports.json?device=</div>
+  <div id="data_href"><%= @data_href %></div>
   <div id="dataTables_swf"><%= asset_path('copy_csv_xls_pdf.swf') %></div>
-  <div id="search_device"><%= params[:device] %></div>
 </div>
 
 
@@ -200,7 +199,7 @@ jQuery ->
   # intiate any datatables we have
   oTable = $('.dataTable').dataTable
 
-    sAjaxSource:  $('#data_href').text() + $('#search_device').text()
+    sAjaxSource:  $('#data_href').text()
     sAjaxDataProp: "",
     bDeferRender: true,
     
