@@ -219,6 +219,11 @@ class TileView extends CubismView
 
 
 class HorizonView extends CubismView
+
+  constructor: ( selector, @delay=60000, @step=300000, @delta=2, @axis_on=["top","bottom"] ) ->
+    super( selector, step=@delay, step=@step, delta=@delay )
+    console.log "AXIS: %o", @axis_on
+    
   setup: ( selector ) ->
     @type = 'horizon'
     ctx = @ctx
@@ -246,9 +251,10 @@ class HorizonView extends CubismView
     # add time axis
     ctx = @ctx
     # set number of ticks for axis dependant on the display width
-    ticks = parseInt( @id[0][0].clientWidth / 75 )
+    w = if @id[0][0]? then @id[0][0].clientWidth else 100
+    ticks = parseInt( w / 75 )
     @axis = @id.selectAll(".axis")
-        .data(["top", "bottom"])
+        .data( @axis_on )
       .enter()
         .append("div")
         .attr("class", (d) -> 
