@@ -24,7 +24,7 @@ module StatsHelper
                   d = params['device']
                   p = params['physical_port'].gsub('.','/')
                   mod, field = v.gsub('$','').split("__")
-                  # logger.info "looking up MOD %s FIELD %s" % [mod,field]
+                  # logger.info "looking up MOD %s FIELD %s ( d=%s, p=%s )" % [mod,field, d, p]
                   i = mod.constantize.find_by_device_and_physical_port( d, p ).data[field]
                   v = "%.12f" % [ 1 / (i.to_f * 1000000 ) ]
                   # logger.debug "      LOOKUP on %s, field %s (%s %s) = %s" % [ mod,field,d,p,v ]
