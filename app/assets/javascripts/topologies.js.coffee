@@ -25,10 +25,10 @@ class @TopologyPane
         .attr("width", w)
         .attr("height", h)
         .attr("pointer-events", "all")
-      .append("svg:g")
-        .attr("id", "d3_zoom")
-        .call( d3.behavior.zoom().on( "zoom", that.zoom_and_pan ) )
-        .on("dblclick.zoom", null) # disable double click to zoom
+      # .append("svg:g")
+      #   .attr("id", "d3_zoom")
+      #   .call( d3.behavior.zoom().on( "zoom", that.zoom_and_pan ) )
+      #   .on("dblclick.zoom", null) # disable double click to zoom
       .append("svg:g")
 
     @VIS.append('svg:rect')
@@ -229,7 +229,7 @@ class @TopologyPane
       .call d3.behavior.drag()
         .on("dragstart", 
           (d, i) -> 
-            # console.log "pinning node " + d.id
+            console.log "dragstart " + d.id
             d.fixed = true
             that.start() # if _repulse
             that.drag_node = true
@@ -242,6 +242,7 @@ class @TopologyPane
           that.tick()
         )
         .on("dragend", (d, i) -> 
+          console.log "dragend " + d.id
           that.tick() 
           that.drag_node = false
         )
