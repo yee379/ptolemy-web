@@ -200,8 +200,10 @@ PtolemyWeb::Application.routes.draw do
     :as => 'topologies_hosts'
   get 'topologies/vlans(.:format)' => 'topologies#vlans',
     :as => 'topologies_vlans'
-  get 'topologies/paths(.:format)' => 'topologies#paths',
-    :as => 'topologies_paths'
+    get 'topologies/subnets(.:format)' => 'topologies#subnets',
+      :as => 'topologies_subnets'
+  # get 'topologies/paths(.:format)' => 'topologies#paths',
+  #   :as => 'topologies_paths'
 
   # resources :netengs
   get 'neteng/transceivers(.:format)' => 'netengs#transceivers',
