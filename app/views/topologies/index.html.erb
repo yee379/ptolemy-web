@@ -10,8 +10,14 @@
           <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a data="devices.json" placeholder="switch or router name">device</a></li>
+            <li class="divider"></li>
+            <li><a data="hosts.json" placeholder="hostname of computer">hostname</a></li>
             <li><a data="hosts.json" placeholder="mac address of host">mac_address</a></li>
             <li><a data="hosts.json" placeholder="ip address of host">ip_address</a></li>
+            <li class="divider"></li>
+            <li><a data="subnets.json" placeholder="subnet cidr">cidr</a></li>
+            <li><a data="subnets.json" placeholder="subnet name">subnet</a></li>
+            <li class="divider"></li>
             <li><a data="vlans.json" placeholder="vlan number">vlan</a></li>
             <li><a data="vlans.json" placeholder="vlan/subnet name">vlan_name</a></li>
           </ul>
@@ -64,8 +70,7 @@ $('#find').submit () ->
   uri = '/topologies/' + LINK + '?' + TYPE + '=' + encodeURIComponent($('.input-wrapper').val())
   console.log uri
   TOPOLOGY.fetch( uri )
-  return true
-
+  return false
 
 $('#link_distance').bind( "propertychange keyup input paste", (ev) ->
   TOPOLOGY.link_distance( $(this).val() )
