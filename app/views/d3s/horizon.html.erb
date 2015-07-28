@@ -1,4 +1,5 @@
 <div class="row row-fluid">
+<% unless @layout == 'naked' %>
   <div class="row span12">
     <h1><span id="metric"></span></h1>
   </div>
@@ -15,6 +16,7 @@
       <button type="button" class="btn btn-default" id='21600'>6hour</button>
     </div>
   </div>
+<% end %>
 
   <div id="horizon" class="row span12"></div>
 </div>
@@ -150,6 +152,38 @@ get_group = ( metric ) ->
           extent_max_ref:  '11'
           colours: colours_errors
           height: 30
+          klass: 'down'
+        },
+      ]
+    }
+     
+  if bits[0] == 'utilisation'
+    
+    # do some wrangling to remove ports with '/'
+    if bits.length > 3
+      metric = bits[0] + '/' + bits[1] + '/' + bits.slice(2,bits.length+1).join('.')
+    
+    colours = ["#3182bd","#31a354"]
+    
+    return {
+      delay: 60,
+      step: 60,
+      metrics: [
+        {
+          alias: 'out (bits)'
+          metric: metric.replace('utilisation','port.util.out')
+          extent_max_ref:  '1'
+          colours: colours
+          height: 50
+          klass: 'up'
+        },
+        {
+          alias: 'in (bits)'
+          metric: metric.replace('utilisation','port.util.in')
+          multiply: -1
+          extent_max_ref:  '0'
+          colours: colours
+          height: 50
           klass: 'down'
         },
       ]
@@ -297,7 +331,7 @@ create_horizon = ( metrics, step, delay ) ->
   d = delay
   if not $('#autoupdate button').hasClass( 'btn-primary' )
     d = 0
-  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000 )
+  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000<% if params.has_key? :axis_on %>, axis_on=["<%= params[:axis_on] %>"]<% end %> )
   view.add metrics
   return view
 
