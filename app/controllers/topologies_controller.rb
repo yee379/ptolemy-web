@@ -18,23 +18,49 @@ class TopologiesController < ApplicationController
     @nodes, @links = graph( neighbours, 'host' )
   end
 
+  def vlans
+    p = vlan_params
+    @nodes = []
+    @links = []
+
+    devices = Vlan.where( 'vlan = ?', p['vlan']).map{ |v| v['device'] }
+
+    # all neighbours
+    all_neighbours = L1_Neighbour.where 'device in (?)', devices
+    # remove those not in vlan tree
+    neighbours = []
+    all_neighbours.each do | n |
+      if devices.include? n['peer_device'] and devices.include? n['device']
+        neighbours << n
+      end
+    end
+
+    # TODO: actually determine the spanning tree too; ie if the link as the vlan trunked
+
+    # logger.info 'neighbours (%s): %s' % [neighbours.size, neighbours]
+    n, l = graph( neighbours, 'device' )
+    @nodes.push(*n)
+    @links.push(*l)
+    
+  end
 
   private
 
     # given an array of items, convert to a graph suitable
     def graph( items, type )
       
-      @nodes = []
+      @these_nodes = []
       links = []
 
       def _do( name )
-        unless @nodes.include? name
-          @nodes << name
+        unless @these_nodes.include? name
+          @these_nodes << name
         end
         name
       end
       
       items.each do |i|
+        
         if type == 'device'
           s = _do( i['device'].downcase )
           t = _do( i['peer_device'].downcase )
@@ -55,7 +81,7 @@ class TopologiesController < ApplicationController
         end
       end
       
-      return @nodes, links
+      return @these_nodes, links
     end
 
     def topology_params
@@ -68,5 +94,10 @@ class TopologiesController < ApplicationController
 
     def host_params
       params.permit( :hostname, :ip_address, :mac_address )
-    end    
+    end
+    
+    def vlan_params
+      params.permit( :vlan )
+    end
+    
 end
