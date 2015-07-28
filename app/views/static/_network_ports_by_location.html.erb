@@ -1,0 +1,21 @@
+<li class="span4">
+  <h3>
+    <%= image_tag "international12.svg", :width => '28' %> Ports in Location
+  </h3>
+  <p>
+    Display the network ports located in a building and or tap
+    <form class="form-search span12" method="get" action="<%= port_location_path %>">
+      <div class="input-append">
+        <div class="span3">
+          <input name="building" type="text" class="input-small search-query " placeholder="building">
+        </div>
+        <div class="span3">
+          <input name="tap" type="text" class="input-small " placeholder="tap">
+        </div>
+        <button class="btn add-on">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </form>
+  </p>
+</li>
