@@ -23,8 +23,13 @@ class TopologiesController < ApplicationController
     @nodes = []
     @links = []
 
-    devices = Vlan.where( 'vlan = ?', p['vlan']).map{ |v| v['device'] }
-
+    devices = []
+    if p.include? :vlan and ! p['vlan'].nil?
+      devices = Vlan.where( 'vlan = ?', p['vlan']).map{ |v| v['device'] }
+    elsif p.include? :vlan_name and ! p['vlan_name'].nil?
+      devices = Vlan.where( 'name ~ ?', p['vlan_name']).map{ |v| v['device'] }
+    end
+    
     # all neighbours
     all_neighbours = L1_Neighbour.where 'device in (?)', devices
     # remove those not in vlan tree
@@ -97,7 +102,7 @@ class TopologiesController < ApplicationController
     end
     
     def vlan_params
-      params.permit( :vlan )
+      params.permit( :vlan, :vlan_name )
     end
     
 end
