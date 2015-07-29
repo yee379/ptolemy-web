@@ -27,8 +27,9 @@ class PortsController < ApplicationController
   end
 
   def api_port_alias
-    p = port_params
-    @ports = Port.where( 'device ~ ? AND (%s)' % [ p['physical_port'].join(" OR ") ], p['device'] )
+    p = ports_params
+    
+    @ports = Port.where( 'device ~ ? AND physical_port IN (?)', p['device'], p['physical_port'] )
     @vlan_names = {}
     Vlan.where( :device => p['device'] ).each do |v|
       @vlan_names[v.vlan] = v.name
@@ -334,6 +335,16 @@ class PortsController < ApplicationController
       params['physical_port'] = port_search_array( params['physical_port'] )
       params
     end
+  
+    def ports_params
+      params.permit(:device,:physical_port,:format)
+      [ 'format', 'controller', 'action' ].each do |i|
+        params.delete(i)
+      end
+      params['physical_port'] = port_search_truncate( params['physical_port'] )
+      params
+    end
+      
   
     def neighbour_params
       params.permit(:device,:physical_port,:mac_address,:fqdn,:format)

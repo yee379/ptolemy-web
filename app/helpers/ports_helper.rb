@@ -80,4 +80,12 @@ module PortsHelper
 
   end
   
+  def port_search_truncate( ports )
+    if ports.nil?
+      return nil
+    end
+    return parse_ports( ports )
+  end
+  
+  
 end
