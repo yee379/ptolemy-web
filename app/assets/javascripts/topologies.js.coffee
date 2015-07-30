@@ -56,7 +56,7 @@ class @TopologyPane
       
     
   zoom_and_pan: () =>
-    # console.log "zoom " + d3.event.translate + ', ' + d3.event.scale
+    console.log "zoom " + d3.event.translate + ', ' + d3.event.scale
     unless @drag_node 
       @VIS.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
     return
@@ -97,7 +97,7 @@ class @TopologyPane
   collide: (alpha) =>
     q = d3.geom.quadtree(@NODES)
     that = @
-    padding = 12
+    padding = 25
     return (d) ->
       r = d.size + that.radius.domain()[1] + padding
       nx1 = d.x - r
@@ -167,8 +167,8 @@ class @TopologyPane
         that.start() #if _repulse
 
   on_link_click: (d) =>
-    # console.log "clicked: " + d.stats['port']
-    # d.popover(
+    console.log "clicked: %o", d3.select(d)[0][0]['id']
+    # $('#'+d3.select(d)[0][0]['id']).popover(
     #   content: 'blah'
     # )
     window.open d.charts['port']
