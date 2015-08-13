@@ -4,7 +4,7 @@ class Replacement < ActiveRecord::Base
   belongs_to :property
   belongs_to :replacement_hardware, class_name: "Hardware", :foreign_key => 'replacement_hardware_id'  
   
-  scope :old, where( 'updated_at < ?', Time.now - (2600*24*14) )
+  #scope :old, where( 'updated_at < ?', Time.now - (2600*24*14) )
   
   # scope :device_like, lambda { |v| joins(:entity).where( entity.device => regexp ?, v  }
   
