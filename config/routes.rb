@@ -29,7 +29,7 @@ PtolemyWeb::Application.routes.draw do
 
   get '/ports/location', to: 'ports#location', :as => 'port_location'
   get '/ports/:device', to: 'ports#index', :constraints => { :device => @pcre }
-  get '/ports', to: 'ports#index', as: 'ports', :constraints => { :device => @pcre }, :as => 'network_ports'
+  get '/ports', to: 'ports#index', :constraints => { :device => @pcre }, :as => 'network_ports'
 
   get '/api/ports/neighbours', to: 'ports#api_port_neighbours', :as => 'api_port_neighbours'
   get '/api/ports/alias', to: 'ports#api_port_alias', :as => 'api_port_aliases'
