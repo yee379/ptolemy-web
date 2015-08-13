@@ -22,22 +22,29 @@
 summ = {}
 for d in [ "out", "in" ]
   summ[d] = []
-  for r in [ "rtr-border1.slac.stanford.edu", "rtr-border2.slac.stanford.edu" ]
-    for i in [ "Te1.1", "Te2.1", "Gi5.1" ]
-      summ[d].push( "port.util."+d+"/"+r+"/"+i )
+  # for r in [ "rtr-border1.slac.stanford.edu", "rtr-border2.slac.stanford.edu" ]
+  #   for i in [ "Te1.1", "Te2.1", "Gi5.1" ]
+  #     summ[d].push( "port.util."+d+"/"+r+"/"+i )
+  summ[d] = [ 'port.util.'+d+'/rtr-border1.slac.stanford.edu/Te1.1', 'port.util.'+d+'/rtr-border1.slac.stanford.edu/Te2.1', 'port.util.'+d+'/rtr-border2.slac.stanford.edu/HundredGigE0.0.0.0', 'port.util.'+d+'/rtr-border2.slac.stanford.edu/TenGigE0.1.0.4' ]
+
+colours = ["#3182bd","#31a354"]
 
 metrics = [
   {
     alias: 'out',
     metric: summ['out'],
-    height: 200,
+    collate: 'max'
+    height: 200
+    colours: colours
     klass: 'up'
   },
   {
     alias: 'in',
     metric: summ['in'],
-    multiply: -1,
-    height: 200,
+    collate: 'max'
+    multiply: -1
+    height: 200
+    colours: colours
     klass: 'down'
   }
 ]
