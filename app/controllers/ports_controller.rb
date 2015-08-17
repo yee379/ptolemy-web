@@ -3,6 +3,8 @@ class PortsController < ApplicationController
   include PortsHelper
   include DelegatesHelper
 
+  # protect_from_forgery with: :null_session, if: Proc.new { |c| c.request.format == 'application/json' }
+  
   def api_index
     p = device_params
     p.delete('format')

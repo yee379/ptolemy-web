@@ -1,9 +1,7 @@
 class DelegatesController < ApplicationController
   
   # include DelegatesHelper
-  # turn off crsf for now
-  # skip_before_filter :verify_authenticity_token  
-
+ 
   # before_action :set_delegate, only: [:update]
 
   # GET /delegates
