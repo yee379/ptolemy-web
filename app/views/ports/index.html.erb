@@ -109,7 +109,10 @@ submit_port_edit = ( row, aoMeta, orig_row ) ->
     else
       data['voice_vlan'] = false
       
-  console.log data
+  # add csrf token
+  data['authenticity_token'] = "<%= form_authenticity_token %>"
+  
+  console.log "DATA: %o", data
   # ajax request to delegate
   item = row.children('td:nth-child(1)').children('i')
   $.ajax(
