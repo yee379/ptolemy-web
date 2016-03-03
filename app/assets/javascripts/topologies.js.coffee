@@ -227,6 +227,7 @@ class @TopologyPane
       .append("svg:g")
       .attr("class", "node")
       .call d3.behavior.drag()
+        .origin (d) -> d
         .on("dragstart", 
           (d, i) -> 
             console.log "dragstart " + d.id
@@ -239,6 +240,7 @@ class @TopologyPane
           d.py += d3.event.dy
           d.x += d3.event.dx
           d.y += d3.event.dy
+          d3.select(this).attr("cx",d.x).attr("cy",d.y)
           that.tick()
         )
         .on("dragend", (d, i) -> 
@@ -260,9 +262,14 @@ class @TopologyPane
         that.delete_node d
       )
       .on( "dblclick", (d) ->
-        # console.log "unpinning node " + d.id
+        console.log "unpinning node " + d.id
         d.fixed = false
         that.tick()
+      ).on( "drag", (d,i) ->
+        console.log "drag"
+        d.x += d3.event.x
+        d.y += d3.event.y
+        d3.select(this).attr("cx",d.x).attr("cy",d.y)
       )
     # text
     N.append("svg:text")
