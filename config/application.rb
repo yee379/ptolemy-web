@@ -20,7 +20,7 @@ module PtolemyWeb
     config.assets.initialize_on_precompile = false
 
     # need to add swfs to assets for dataTables
-    config.serve_static_assets = true
+    config.serve_static_files = true
 
     # Enable the asset pipeline
     config.assets.enabled = true
