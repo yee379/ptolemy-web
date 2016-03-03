@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', github: 'rails/rails', branch: '4-1-stable'
+gem 'rails', git: 'https://github.com/rails/rails', branch: '4-2-stable'
 gem 'actionpack-action_caching'
 
 # database
@@ -16,21 +16,22 @@ gem 'rubytree'
 
 gem 'turbolinks'
 gem 'jquery-rails'
-gem 'jquery-datatables-rails', github: 'rweng/jquery-datatables-rails'
+gem 'jquery-datatables-rails', git: 'https://github.com/rweng/jquery-datatables-rails'
 gem 'rails-timeago'
 gem 'dygraphs-rails'
 gem 'underscore-rails'
 gem 'd3_rails'
 gem 'twitter-bootstrap-rails', '= 2.2.8'
 gem 'less-rails'
-gem 'coffee-rails', github: 'rails/coffee-rails'
+gem 'coffee-rails', git: 'https://github.com/rails/coffee-rails'
 gem 'coffeebeans'
 gem 'jquery-ui-rails'
+gem 'multi_json'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   github: 'rails/sass-rails', branch: '4-0-stable'
+  gem 'sass-rails',   git: 'https://github.com/rails/sass-rails', branch: '5-0-stable'
   
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', platforms: :ruby
@@ -64,7 +65,7 @@ gem 'jbuilder', '~> 1.0.1'
 # gem 'debugger'
 
 # UI middleware
-gem 'passenger', github: 'FooBarWidget/passenger'
+gem 'passenger', git: 'https://github.com/FooBarWidget/passenger', branch: 'stable-5.0', submodules: true
 gem 'rack-webauth'
 
 # rabbit
