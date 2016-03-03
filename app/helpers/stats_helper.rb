@@ -25,9 +25,11 @@ module StatsHelper
                   p = params['physical_port'].gsub('.','/')
                   mod, field = v.gsub('$','').split("__")
                   # logger.info "looking up MOD %s FIELD %s ( d=%s, p=%s )" % [mod,field, d, p]
-                  i = mod.constantize.find_by_device_and_physical_port( d, p ).data[field]
+                  i = Rails.cache.fetch( "ports/%s/%s/%s" % [ d, p, field ], expires_in: 15.minutes ) do
+                    mod.constantize.find_by_device_and_physical_port( d, p ).data[field]
+                  end
                   v = "%.12f" % [ 1 / (i.to_f * 1000000 ) ]
-                  # logger.debug "      LOOKUP on %s, field %s (%s %s) = %s" % [ mod,field,d,p,v ]
+                  logger.debug "LOOKUP on %s, field %s (%s %s) = %s -> %s" % [ mod,field,d,p,i,v ]
                 end
               end
               s = "%s(%s%s" % [ f, s, v == nil ? ')' : ',%s)' % [ v.to_s ] ]
@@ -125,6 +127,7 @@ module StatsHelper
     # logger.debug 'graphite: http://' + server + u
     req = Net::HTTP::Get.new( u )
     s = Net::HTTP.new( server )
+    s.read_timeout = 30
     s.request( req )
   end
     
@@ -142,7 +145,7 @@ module StatsHelper
       if params['metric'].include? '.'
         metric = params['metric'].split('.').last
       end
-      # logger.debug "cache key=%s\tmetric=%s->%s\tdata=%s" % [k,params['metric'],metric,data[i]]
+      # logger.debug "redis cache: key=%s\tmetric=%s->%s\tdata=%s" % [k,params['metric'],metric,data[i]]
       unless data[i][metric].nil?
         # TODO not always has device param
         out << '%s/%s,%s,%s,%s|None,%s' % [params['metric'],params['device'],params['from'],params['until'], params['until'].to_i - params['from'].to_i,data[i][metric]]
