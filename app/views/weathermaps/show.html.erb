@@ -20,7 +20,7 @@ green = '#c4df9b'
 orange = '#fdc68a'
 red = '#f7977a'
 
-tricolour = d3.scale.linear().domain( [0,0.40,0.60,1] ).range( [ green, orange, red, 'black'] )
+tricolour = d3.scale.linear().domain( [0,0.30,0.60,1] ).range( [ green, orange, red, '8B0000' ] )
 colour_scale = (num) -> 
 	if isNaN(num) then grey else if num > 1 then return 'black' else tricolour(num)
 
