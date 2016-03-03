@@ -16,28 +16,13 @@ tricolour = d3.scale.threshold().domain( [0,10,100] ).range( [ '#c2c2c2', '#c4df
 colour_scale = (num) -> 
   if isNaN(num) then '#c2c2c2' else tricolour(num)
 
-tile = new TileView( '#summary', delay=60000, step=60000 )
+tile = new TileView( '#summary', delay=30000, step=30000 )
 tile.add
     width: 120
     height: 120
-    metric: 'ptolemy.edu.stanford.slac.swh-b006.reachability.ping.Ping.loss'
+    metric: 'ptolemy.edu.stanford.slac.<%= @device =>.reachability.ping.Ping.loss'
     scale: colour_scale 
-    url: '/performance/' + device
-
-# 
-# metrics = [
-#   {
-#     metric: 'loss'
-#     scale: d3.scale.ordinal( [0,1,2,null] ).range( [-2,2,-1,null] )
-#     extent: [-2,2]
-#   },{
-#     metric: 'ping'
-#     extent: [0,1]
-#   }
-# ]
-# 
-# view = new HorizonView( '#cubism', delay=60000, step=60000, extent=[0,1] )
-# view.add metrics, device
+    url: '/performance/device/' + device
 
 <% end %>
   
