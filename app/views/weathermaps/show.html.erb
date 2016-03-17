@@ -77,23 +77,31 @@ get_device_and_port_from_id = (id) ->
     parts = id.replace(/__/g,'.').split('_')
     return [ parts[1], parts[2] ]
 
+
+
 $('body').popover
     'selector': 'path'
     'container': 'body'
     'html': true
-    'width': '300px'
+    'width': '360px'
     'title': () ->
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
-        '<a href="' + '/graphs.horizon/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>'
+        '<a href="' + '/graphs.horizon/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>' + '<button type="button" id="close" class="close">&times;</button>'
     'content': () ->
         this.id
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
         url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked'
-        '<iframe src="'+url+'" frameBorder="0" width="300px" height="166px"></iframe>'
+        '<iframe src="'+url+'" frameBorder="0" width="360px" height="180px"></iframe>'
     'trigger': 'click'
     'placement': 'right'
+    
+$(document).on 'click', '.popover .close', () ->
+  console.log 'hello %o', $(this).parents('.popover')
+  $(this).parents('.popover').popover('hide')
+  # $(this).popover('hide')
+
 
 
 

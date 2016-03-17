@@ -3,6 +3,9 @@
   <div class="row span12">
     <h1><span id="metric"></span></h1>
   </div>
+  <div class="pull-left">
+    <p><span id="extra"><%= @extra %></span></p>
+  </div>
   <div class="pull-right">
     <div id="autoupdate" class="btn-group">
       <button type="button" class="btn btn-default">Auto Update</button>
@@ -166,8 +169,8 @@ get_group = ( metric ) ->
     colours = ["#3182bd","#31a354"]
     
     return {
-      delay: 60,
-      step: 60,
+      delay: 300,
+      step: 300,
       metrics: [
         {
           alias: 'out (bits)'
