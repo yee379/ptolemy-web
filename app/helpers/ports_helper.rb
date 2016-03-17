@@ -87,5 +87,26 @@ module PortsHelper
     return parse_ports( ports )
   end
   
+  def stitch_port( params, delim='/' )
+    port = params[:p1]
+    port = port + delim + params[:p2] if params.has_key? :p2
+    port = port + delim + params[:p3] if params.has_key? :p3
+    port = port + delim + params[:p4] if params.has_key? :p4
+    port
+  end
+  
+  def pformat_neighbours( ports )
+    # returns human readable output of peers and hosts of the active record Port
+    p = ports.first
+    devices = []
+    p.peers.each do |d|
+      devices << '%s %s' % [ d['peer_device'], d['peer_physical_port'] ] unless d['peer_device'].nil?
+    end
+    hosts = []
+    p.hosts.each do |p|
+      hosts << '%s (%s@%s)' % [p['hostname'], p['ip_address'], p['mac_address'] ] unless p['mac_address'].nil?
+    end
+    'peers: %s and %s' % [ devices, hosts ]
+  end
   
 end
