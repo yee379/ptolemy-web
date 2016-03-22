@@ -88,25 +88,47 @@ module PortsHelper
   end
   
   def stitch_port( params, delim='/' )
-    port = params[:p1]
-    port = port + delim + params[:p2] if params.has_key? :p2
-    port = port + delim + params[:p3] if params.has_key? :p3
-    port = port + delim + params[:p4] if params.has_key? :p4
-    port
+    if params.has_key? :physical_port
+       return params['physical_port'].gsub('.', delim)
+    else
+      port = params[:p1]
+      port = port + delim + params[:p2] if params.has_key? :p2
+      port = port + delim + params[:p3] if params.has_key? :p3
+      port = port + delim + params[:p4] if params.has_key? :p4
+      return port
+    end
   end
   
   def pformat_neighbours( ports )
     # returns human readable output of peers and hosts of the active record Port
     p = ports.first
-    devices = []
-    p.peers.each do |d|
-      devices << '%s %s' % [ d['peer_device'], d['peer_physical_port'] ] unless d['peer_device'].nil?
+    unless p.nil?
+      devices = []
+      unless p.peers.nil?
+        p.peers.each do |d|
+          unless d['peer_device'].nil?
+            this = '%s:%s' * [ d['peer_device'], d['peer_physical_port'] ]
+            devices <<  this unless devices.include? this
+          end
+        end
+      end
+      hosts = []
+      unless p.hosts.nil?
+        p.hosts.each do |p|
+          unless p['mac_address'].nil?
+            this = '%s (%s@%s)' % [p['hostname'], p['ip_address'], p['mac_address'] ] 
+            hosts << this unless hosts.include? this
+          end
+        end
+      end
     end
-    hosts = []
-    p.hosts.each do |p|
-      hosts << '%s (%s@%s)' % [p['hostname'], p['ip_address'], p['mac_address'] ] unless p['mac_address'].nil?
+    if devices.length > 0
+      'Peer(s) %s' % devices.join( ', ' )
+    elsif hosts.length > 0 
+      'Host(s) %s' % hosts.join( ', ' )
+    else
+      'Peer(s) %s, Host(s) %s' % [ devices, hosts ]
     end
-    'peers: %s and %s' % [ devices, hosts ]
   end
   
 end

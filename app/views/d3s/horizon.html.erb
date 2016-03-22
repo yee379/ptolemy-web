@@ -3,20 +3,22 @@
   <div class="row span12">
     <h1><span id="metric"></span></h1>
   </div>
-  <div class="pull-left">
-    <p><span id="extra"><%= @extra %></span></p>
-  </div>
-  <div class="pull-right">
-    <div id="autoupdate" class="btn-group">
-      <button type="button" class="btn btn-default">Auto Update</button>
+  <div>
+    <div class="pull-left">
+      <p><span id="extra"><%= @extra %></span></p>
     </div>
-    <div id="step" class="btn-group">
-      <button type="button" class="btn btn-default" id='60'>1min</button>
-      <button type="button" class="btn btn-default" id='300'>5min</button>
-      <button type="button" class="btn btn-default" id='1800'>30min</button>
-      <button type="button" class="btn btn-default" id='3600'>1hour</button>
-      <button type="button" class="btn btn-default" id='10800'>3hour</button>
-      <button type="button" class="btn btn-default" id='21600'>6hour</button>
+    <div class="pull-right">
+      <div id="autoupdate" class="btn-group">
+        <button type="button" class="btn btn-default">Auto Update</button>
+      </div>
+      <div id="step" class="btn-group">
+        <button type="button" class="btn btn-default" id='60'>1min</button>
+        <button type="button" class="btn btn-default" id='300'>5min</button>
+        <button type="button" class="btn btn-default" id='1800'>30min</button>
+        <button type="button" class="btn btn-default" id='3600'>1hour</button>
+        <button type="button" class="btn btn-default" id='10800'>3hour</button>
+        <button type="button" class="btn btn-default" id='21600'>6hour</button>
+      </div>
     </div>
   </div>
 <% end %>
