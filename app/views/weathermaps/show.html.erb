@@ -58,7 +58,7 @@ $('svg').find('path').each (i,p) ->
         # assume port_<router>_<port>_<direction>
         # substitute '__' with 'dot
         mtr = 'port.util.pc.' + a[3] + '/' + a[1].replace(/__/g,'.') + '/' + a[2].replace(/__/g,'.')
-        console.log mtr
+        # console.log mtr
         c = 
             target: '#' + p.id
             scale:  colour_scale
@@ -98,9 +98,8 @@ $('body').popover
     'placement': 'right'
     
 $(document).on 'click', '.popover .close', () ->
-  console.log 'hello %o', $(this).parents('.popover')
-  $(this).parents('.popover').popover('hide')
-  # $(this).popover('hide')
+  # console.log 'hello %o', $(this).parents('.popover')
+  $(this).parents('.popover').hide()
 
 
 
