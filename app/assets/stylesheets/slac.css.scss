@@ -1,5 +1,12 @@
 
-@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);
+/*@import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:400,700);*/
+
+@font-face {
+  font-family: 'YanoneKaffeesatz-Regular';
+  src:url('YanoneKaffeesatz-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 h1 {
   font-size: 3.2em;
@@ -17,7 +24,7 @@ h2 {
 }
 
 h1, h2, h3, h4 {
-  font-family: "Yanone Kaffeesatz";
+  font-family: "YanoneKaffeesatz-Regular", sans-serif;
   text-rendering: optimizeLegibility;
 }
 

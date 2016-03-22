@@ -30,7 +30,7 @@ class CfmsController < ApplicationController
   def delegate_search( ip )
 
     uuid = SecureRandom.uuid
-    msg = prepare_request( uuid, {}, { 'hardblockqueue.search' => true, 'ip' => ip, 'regex' => true } )
+    msg = prepare_request( uuid, {}, { 'hardblockqueue.search' => true, 'ip' => ip, 'regex' => true, 'operator' => '~' } )
   
     # conn = connect( vhost: '/delegated-test')
     conn = connect( )
