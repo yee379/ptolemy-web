@@ -107,8 +107,8 @@ module PortsHelper
       unless p.peers.nil?
         p.peers.each do |d|
           unless d['peer_device'].nil?
-            this = '%s:%s' * [ d['peer_device'], d['peer_physical_port'] ]
-            devices <<  this unless devices.include? this
+            this = '%s:%s' % [ d['peer_device'], d['peer_physical_port'] ]
+            devices << this unless devices.include? this
           end
         end
       end
