@@ -63,7 +63,7 @@ class CubismView
     @ctx = cubism.context()
     @id = d3.select(selector)
     @size = $(selector).width()
-
+    
     @ctx
       .serverDelay(@delay)
       .clientDelay(@delay)
@@ -220,9 +220,9 @@ class TileView extends CubismView
 
 class HorizonView extends CubismView
 
-  constructor: ( selector, @delay=60000, @step=300000, @delta=2, @axis_on=["top","bottom"] ) ->
-    super( selector, step=@delay, step=@step, delta=@delay )
-    console.log "AXIS: %o", @axis_on
+  constructor: ( selector, @delay=60000, @step=300000, @yaxis=false, @axis=["top","bottom"], @delta=2 ) ->
+    super( selector, delay=@delay, step=@step, delta=@delta )
+    console.log "YAXIS: %s", @yaxis
     
   setup: ( selector ) ->
     @type = 'horizon'
@@ -254,7 +254,7 @@ class HorizonView extends CubismView
     w = if @id[0][0]? then @id[0][0].clientWidth else 100
     ticks = parseInt( w / 75 )
     @axis = @id.selectAll(".axis")
-        .data( @axis_on )
+        .data( @axis )
       .enter()
         .append("div")
         .attr("class", (d) -> 

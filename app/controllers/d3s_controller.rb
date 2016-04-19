@@ -1,4 +1,5 @@
 class D3sController < ApplicationController
+  
   before_action :set_params
 
   include PortsHelper
@@ -11,6 +12,7 @@ class D3sController < ApplicationController
     end
     if params.has_key? :layout and params[:layout] == 'naked'
       @layout = params[:layout]
+      @axis =  params[:axis]
       # params['axis_on'] = 'bottom'
       render 'd3s/horizon', :layout => params[:layout]
     end
@@ -20,7 +22,7 @@ class D3sController < ApplicationController
   private
 
     def set_params
-      params.permit(:metric,:device,:physical_port,:source,:target,:axis_on,:layout)
+      params.permit(:metric,:device,:physical_port,:source,:target,:axis,:layout)
     end
 
 end

@@ -92,8 +92,8 @@ $('body').popover
         this.id
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
-        url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked'
-        '<iframe src="'+url+'" frameBorder="0" width="360px" height="180px"></iframe>'
+        url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked&axis=bottom'
+        '<iframe src="'+url+'" frameBorder="0" width="360px" height="140px"></iframe>'
     'trigger': 'click'
     'placement': 'right'
     

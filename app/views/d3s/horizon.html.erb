@@ -22,7 +22,6 @@
     </div>
   </div>
 <% end %>
-
   <div id="horizon" class="row span12"></div>
 </div>
 
@@ -336,7 +335,11 @@ create_horizon = ( metrics, step, delay ) ->
   d = delay
   if not $('#autoupdate button').hasClass( 'btn-primary' )
     d = 0
-  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000<% if params.has_key? :axis_on %>, axis_on=["<%= params[:axis_on] %>"]<% end %> )
+  axis = [ 'top', 'bottom' ]
+  <% unless @axis.nil? %>
+  axis = ["<%= @axis %>"]
+  <% end %>
+  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000, yaxis=true, axis=axis )
   view.add metrics
   return view
 
