@@ -90,6 +90,19 @@ PtolemyWeb::Application.routes.draw do
     :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre },
     :as => 'port_timeseries'
 
+  get 'grafana/:metric' => 'grafanas#index',
+    :constraints => { :metric => @pcre },
+    :as => 'grafana'
+  get 'grafana/:metric/:device/:physical_port' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2/:p3' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2/:p3/:p4' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+
+
   get 'graphs.horizon/:metric' => 'd3s#horizon',
     :constraints => { :metric => @pcre }
   get 'graphs.horizon/:metric/:device' => 'd3s#horizon', 

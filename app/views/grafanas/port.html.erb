@@ -1,0 +1,22 @@
+<div class="row row-fluid">
+<% unless @layout == 'naked' %>
+  <div class="row span12">
+    <h1><span id="metric"></span></h1>
+  </div>
+  <div>
+    <div class="pull-left">
+      <p><span id="extra"><%= @extra %></span></p>
+    </div>
+  </div>
+<% end %>
+  <div id="grafana" class="row span12">
+<iframe src="http://grafana.slac.stanford.edu/dashboard/db/network-port?theme=light&var-device=<%= @device %>&var-port=<%= @port %>" width="100%" height="760px" frameborder="0" onload="resizeIframe(this)"></iframe>
+  </div>
+</div>
+
+<!-- doesn't workk CORS -->
+<script type="text/javascript">
+  function resizeIframe(iframe) {
+    iframe.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+  }
+</script>   
