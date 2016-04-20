@@ -6,12 +6,12 @@ class GrafanasController < ApplicationController
     
   
   def port
-  #   # add the neighbour port information if displaying ports
-  #   # if params.has_key? :metric and params[:metric] == 'port'
-  #   #   ports = Port.where( :device => params[:device], :physical_port => stitch_port( params ) )
-  #   #   @extra = pformat_neighbours( ports )
-  #   # end
-  # end
+    # add the neighbour port information if displaying ports
+    if params.has_key? :metric and params[:metric] == 'port'
+      ports = Port.where( :device => params[:device], :physical_port => stitch_port( params ) )
+      @extra = pformat_neighbours( ports )
+    end
+    @fqdn = params[:device]
     @device = params[:device].split('.').reverse!.join('.')
     @port = stitch_port( params, delimiter='.' )
   end
