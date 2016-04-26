@@ -35,7 +35,7 @@
 
 jQuery ->
 
-  metric = $(location).attr('href').replace( /^.+\/grafana(\.\w+)?\//, '' )
+  metric = $(location).attr('href').replace( /^.+\/(grafana|graphs)(\.\w+)?\//, '' )
   $('span#metric').text( metric )
 
   # static base url for graphs

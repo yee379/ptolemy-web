@@ -80,15 +80,16 @@ PtolemyWeb::Application.routes.draw do
 
   # graphs
   # resources :dygraphs
-  get 'graphs/:metric' => 'dygraphs#index',
-    :constraints => { :metric => @pcre },
-    :as => 'timeseries'
-  get 'graphs/:metric/:device' => 'dygraphs#index', 
-    :constraints => { :device => @pcre, :metric => @pcre },
-    :as => 'device_timeseries'
-  get 'graphs/:metric/:device/:physical_port' => 'dygraphs#index', 
-    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre },
-    :as => 'port_timeseries'
+  get 'graphs/:metric' => 'grafanas#index',
+    :constraints => { :metric => @pcre }
+  get 'graphs/:metric/:device/:physical_port' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2/:p3' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2/:p3/:p4' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
 
   get 'grafana/:metric' => 'grafanas#index',
     :constraints => { :metric => @pcre },

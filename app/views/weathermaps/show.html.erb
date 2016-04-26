@@ -87,11 +87,14 @@ $('body').popover
     'title': () ->
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
-        '<a href="' + '/graphs.horizon/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>' + '<button type="button" id="close" class="close">&times;</button>'
+        '<a href="' + '/graphs/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>' + '<button type="button" id="close" class="close">&times;</button>'
     'content': () ->
         this.id
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
+        # device = item['device'].split('.').reverse().join('.')
+        # url = 'http://grafana.slac.stanford.edu/dashboard/db/network-port?panelId=1&fullscreen&theme=light&from=now-2d&to=now&var-device=' + device + '&var-port=' + item['physical_port']
+        # '<iframe src="'+url+'" frameBorder="0" width="450" height="400" scrolling="no" style="border: 0px none; margin-top: -145px"></iframe>'
         url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked&axis=bottom'
         '<iframe src="'+url+'" frameBorder="0" width="360px" height="140px"></iframe>'
     'trigger': 'click'
