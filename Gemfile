@@ -66,7 +66,7 @@ gem 'jbuilder', '~> 1.0.1'
 
 # UI middleware
 gem 'passenger', git: 'https://github.com/FooBarWidget/passenger', branch: 'stable-5.0', submodules: true
-gem 'rack-webauth'
+gem 'rack-webauth', git: 'https://github.com/yee379/rack-webauth.git', branch: 'master', submodules: true
 
 # rabbit
 gem 'bunny'
