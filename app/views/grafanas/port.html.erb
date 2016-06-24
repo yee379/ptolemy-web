@@ -40,7 +40,7 @@ jQuery ->
 
   # static base url for graphs
   step = $('#step button.btn-primary').attr('id')
-  grafana_pane = "<%= request.protocol %>://grafana.slac.stanford.edu/dashboard/db/network-port?theme=light&var-device=<%= @device %>&var-port=<%= @port %>&var-max_bw=<%= @speed %>&var-max_pkts=<%= @packets %>"
+  grafana_pane = "<%= request.protocol %>grafana.slac.stanford.edu/dashboard/db/network-port?theme=light&var-device=<%= @device %>&var-port=<%= @port %>&var-max_bw=<%= @speed %>&var-max_pkts=<%= @packets %>"
 
   # initiate
   $('#pane').attr( 'src', grafana_pane + "&from=now-" + step + "&to=now" )
