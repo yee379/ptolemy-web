@@ -22,6 +22,9 @@ RUN rm /etc/nginx/sites-enabled/default
 ADD nginx.conf /etc/nginx/sites-enabled/webapp.conf
 ADD rails-env.conf /etc/nginx/main.d/rails-env.conf
 
+# ruby version
+RUN ruby-switch --set ruby2.2
+
 # Install bundle of gems
 WORKDIR /tmp
 ADD Gemfile /tmp/
@@ -33,18 +36,22 @@ ENV HTTP_PROXY 'http://sccs-ytl.slac.stanford.edu:3128'
 ENV HTTPS_PROXY 'https://sccs-ytl.slac.stanford.edu:3128'
 
 # bundle install
-RUN bundle install
-
-# un-env proxy
-ENV HTTP_PROXY ""
-ENV HTTPS_PROXY ""
-
-# assets
-# RUN bundle exec rake assets:precompile -q
+# RUN /usr/local/bin/bundle update 
+RUN /usr/local/bin/bundle install
+# --deployment --without test development doc
 
 # Add the Rails app
 ADD . /home/app/webapp
 RUN chown -R app:app /home/app/webapp
+
+# assets
+# WORKDIR /home/app/webapp
+# RUN RAILS_ENV=production rake assets:precompile
+# RUN bundle exec rake assets:precompile -q
+
+# un-env proxy
+ENV HTTP_PROXY ""
+ENV HTTPS_PROXY ""
 
 # Clean up APT and bundler when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
