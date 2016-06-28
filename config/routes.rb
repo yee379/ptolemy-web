@@ -146,10 +146,12 @@ PtolemyWeb::Application.routes.draw do
   # device status
   get 'performance/devices' => 'performances#devices',
     :as => 'devices_dashboard'
-  get 'performance/device/:device' => 'performances#device',
+  # get 'performance/device/:device' => 'performances#device',
+  get 'performance/device/:device' => 'grafanas#device',
     :constraints => { :device => @pcre },
     :as => 'performance_device'
-  get 'performance/device' => 'performances#device',
+  # get 'performance/device' => 'performances#device',
+  get 'performance/device' => 'grafanas#device',
     :constraints => { :device => @pcre },
     :as => 'new_performance_device'
   get 'ping/:device' => 'performances#device_ping',

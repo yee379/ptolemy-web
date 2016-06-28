@@ -24,6 +24,13 @@ class GrafanasController < ApplicationController
     @packets = @speed / 64
   end
   
+  
+  def device
+    @fqdn = params[:device]
+    @device = params[:device].split('.').reverse!.join('.')
+  end
+    
+  
   private
 
     def set_params
