@@ -70,3 +70,6 @@ gem 'rack-webauth', git: 'https://github.com/yee379/rack-webauth.git', branch: '
 
 # rabbit
 gem 'bunny'
+
+# 12factor
+gem 'rails_12factor', group: :production
