@@ -58,7 +58,7 @@ $('svg').find('path').each (i,p) ->
         # assume port_<router>_<port>_<direction>
         # substitute '__' with 'dot
         mtr = 'port.util.pc.' + a[3] + '/' + a[1].replace(/__/g,'.') + '/' + a[2].replace(/__/g,'.')
-        console.log mtr
+        # console.log mtr
         c = 
             target: '#' + p.id
             scale:  colour_scale
@@ -77,23 +77,33 @@ get_device_and_port_from_id = (id) ->
     parts = id.replace(/__/g,'.').split('_')
     return [ parts[1], parts[2] ]
 
+
+
 $('body').popover
     'selector': 'path'
     'container': 'body'
     'html': true
-    'width': '300px'
+    'width': '360px'
     'title': () ->
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
-        '<a href="' + '/graphs.horizon/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>'
+        '<a href="' + '/graphs/port/'+item['device']+'/'+item['physical_port'] + '">' + item['device'] + '/' + item['physical_port'] + '</a>' + '<button type="button" id="close" class="close">&times;</button>'
     'content': () ->
         this.id
         item = LOOKUP[this.id]
         # console.log "%s -> %o", this.id, item
-        url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked'
-        '<iframe src="'+url+'" frameBorder="0" width="300px" height="166px"></iframe>'
+        # device = item['device'].split('.').reverse().join('.')
+        # url = 'http://grafana.slac.stanford.edu/dashboard/db/network-port?panelId=1&fullscreen&theme=light&from=now-2d&to=now&var-device=' + device + '&var-port=' + item['physical_port']
+        # '<iframe src="'+url+'" frameBorder="0" width="450" height="400" scrolling="no" style="border: 0px none; margin-top: -145px"></iframe>'
+        url = '/graphs.horizon/utilisation/'+item['device']+'/'+item['physical_port']+'?layout=naked&axis=bottom'
+        '<iframe src="'+url+'" frameBorder="0" width="360px" height="140px"></iframe>'
     'trigger': 'click'
     'placement': 'right'
+    
+$(document).on 'click', '.popover .close', () ->
+  # console.log 'hello %o', $(this).parents('.popover')
+  $(this).parents('.popover').hide()
+
 
 
 

@@ -80,15 +80,29 @@ PtolemyWeb::Application.routes.draw do
 
   # graphs
   # resources :dygraphs
-  get 'graphs/:metric' => 'dygraphs#index',
+  get 'graphs/:metric' => 'grafanas#index',
+    :constraints => { :metric => @pcre }
+  get 'graphs/:metric/:device/:physical_port' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2/:p3' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'graphs/:metric/:device/:p1/:p2/:p3/:p4' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+
+  get 'grafana/:metric' => 'grafanas#index',
     :constraints => { :metric => @pcre },
-    :as => 'timeseries'
-  get 'graphs/:metric/:device' => 'dygraphs#index', 
-    :constraints => { :device => @pcre, :metric => @pcre },
-    :as => 'device_timeseries'
-  get 'graphs/:metric/:device/:physical_port' => 'dygraphs#index', 
-    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre },
-    :as => 'port_timeseries'
+    :as => 'grafana'
+  get 'grafana/:metric/:device/:physical_port' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre, :physical_port => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2/:p3' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+  get 'grafana/:metric/:device/:p1/:p2/:p3/:p4' => 'grafanas#port', 
+    :constraints => { :device => @pcre, :metric => @pcre }
+
 
   get 'graphs.horizon/:metric' => 'd3s#horizon',
     :constraints => { :metric => @pcre }
@@ -132,10 +146,12 @@ PtolemyWeb::Application.routes.draw do
   # device status
   get 'performance/devices' => 'performances#devices',
     :as => 'devices_dashboard'
-  get 'performance/device/:device' => 'performances#device',
+  # get 'performance/device/:device' => 'performances#device',
+  get 'performance/device/:device' => 'grafanas#device',
     :constraints => { :device => @pcre },
     :as => 'performance_device'
-  get 'performance/device' => 'performances#device',
+  # get 'performance/device' => 'performances#device',
+  get 'performance/device' => 'grafanas#device',
     :constraints => { :device => @pcre },
     :as => 'new_performance_device'
   get 'ping/:device' => 'performances#device_ping',

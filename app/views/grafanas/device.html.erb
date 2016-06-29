@@ -1,0 +1,70 @@
+<div class="row row-fluid">
+  <div class="span1">
+    <%= image_tag "pulse1.svg", :width=>63 %>
+  </div>
+  <div class="row span11">
+    <h1><span id="metric">Performance of <%= @fqdn %></span></h1>
+  </div>
+  <div>
+    <div class="pull-left">
+      <p><span id="extra"><%= @extra %></span></p>
+    </div>
+    <div class="pull-right">
+      <div id="autoupdate" class="btn-group">
+        <button type="button" class="btn btn-default disabled">Auto Update</button>
+      </div>
+      <div id="step" class="btn-group">
+        <button type="button" class="btn btn-default btn-primary" id='2d'>2d</button>
+        <button type="button" class="btn btn-default" id='2w'>2w</button>
+        <button type="button" class="btn btn-default" id='2M'>2M</button>
+        <button type="button" class="btn btn-default" id='6M'>6M</button>
+        <button type="button" class="btn btn-default" id='2y'>2y</button>
+      </div>
+    </div>
+  </div>
+  <div id="grafana" class="row span12" style="overflow: hidden;">
+    <iframe id="pane" src="" width="100%" height="1100px" frameborder="0" scrolling="no" style="border: 0px none; margin-top: -115px"></iframe>
+  </div>
+</div>
+
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  # doesn't work because of CORS?
+  resizeIframe = (iframe) ->
+    iframe.height = $('#pane')[0].contentWindow.document.body.scrollHeight + "px"
+    
+  # static base url for graphs
+  step = $('#step button.btn-primary').attr('id')
+  grafana_pane = "<%= request.protocol %>grafana.slac.stanford.edu/dashboard/db/network-switch-status?theme=light&var-device=<%= @device %>&var-port=<%= @port %>"
+
+  # initiate
+  $('#pane')
+    .attr( 'src', grafana_pane + "&from=now-" + step + "&to=now" )
+    # .load () =>
+    #   resizeIframe(@)
+
+  # change
+  $('#step button').on( 'click', (e) ->
+    # remove primary on others
+    time_window = $(this)[0].id
+    $('#step button').removeClass( 'btn-primary' )
+    $(this).addClass( 'btn-primary' )
+    step = $('#step button.btn-primary').attr('id')
+    # refresh iframe
+    $('#pane')
+      .attr( 'src', grafana_pane + "&from=now-" + step + "&to=now" )
+      # .load () =>
+      #   resizeIframe(@)
+  ) 
+
+  # auto update
+  # $('#autoupdate button').on( 'click', (e) ->
+  #   if $(this).hasClass( 'btn-primary' )
+  #     $(this).removeClass( 'btn-primary' )
+  #   else
+  #     $(this).addClass( 'btn-primary' )
+  # )
+
+<% end %>

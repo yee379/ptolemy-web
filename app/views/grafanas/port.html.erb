@@ -1,0 +1,67 @@
+<div class="row row-fluid">
+  <div class="row span12">
+    <h1><span id="metric"></span></h1>
+  </div>
+  <div>
+    <div class="pull-left">
+      <p><span id="extra"><%= @extra %></span></p>
+    </div>
+    <div class="pull-right">
+      <div id="autoupdate" class="btn-group">
+        <button type="button" class="btn btn-default disabled">Auto Update</button>
+      </div>
+      <div id="step" class="btn-group">
+        <button type="button" class="btn btn-default btn-primary" id='2d'>2d</button>
+        <button type="button" class="btn btn-default" id='2w'>2w</button>
+        <button type="button" class="btn btn-default" id='2M'>2M</button>
+        <button type="button" class="btn btn-default" id='6M'>6M</button>
+        <button type="button" class="btn btn-default" id='2y'>2y</button>
+      </div>
+    </div>
+  </div>
+  <div id="grafana" class="row span12" style="overflow: hidden;">
+    <iframe id="pane" src="" width="100%" height="760px" frameborder="0" onload="resizeIframe(this)" scrolling="no" style="border: 0px none; margin-top: -115px"></iframe>
+  </div>
+</div>
+
+<!-- doesn't workk CORS -->
+<script type="text/javascript">
+  function resizeIframe(iframe) {
+    iframe.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+  }
+</script>   
+  
+<%= coffee_script_tag do %>
+
+jQuery ->
+
+  metric = $(location).attr('href').replace( /^.+\/(grafana|graphs)(\.\w+)?\//, '' )
+  $('span#metric').text( metric )
+
+  # static base url for graphs
+  step = $('#step button.btn-primary').attr('id')
+  grafana_pane = "<%= request.protocol %>grafana.slac.stanford.edu/dashboard/db/network-port?theme=light&var-device=<%= @device %>&var-port=<%= @port %>&var-max_bw=<%= @speed %>&var-max_pkts=<%= @packets %>"
+
+  # initiate
+  $('#pane').attr( 'src', grafana_pane + "&from=now-" + step + "&to=now" )
+
+  # change
+  $('#step button').on( 'click', (e) ->
+    # remove primary on others
+    time_window = $(this)[0].id
+    $('#step button').removeClass( 'btn-primary' )
+    $(this).addClass( 'btn-primary' )
+    step = $('#step button.btn-primary').attr('id')
+    # refresh iframe
+    $('#pane').attr( 'src', grafana_pane + "&from=now-" + step + "&to=now" )
+  ) 
+
+  # auto update
+  # $('#autoupdate button').on( 'click', (e) ->
+  #   if $(this).hasClass( 'btn-primary' )
+  #     $(this).removeClass( 'btn-primary' )
+  #   else
+  #     $(this).addClass( 'btn-primary' )
+  # )
+
+<% end %>

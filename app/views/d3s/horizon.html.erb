@@ -3,21 +3,25 @@
   <div class="row span12">
     <h1><span id="metric"></span></h1>
   </div>
-  <div class="pull-right">
-    <div id="autoupdate" class="btn-group">
-      <button type="button" class="btn btn-default">Auto Update</button>
+  <div>
+    <div class="pull-left">
+      <p><span id="extra"><%= @extra %></span></p>
     </div>
-    <div id="step" class="btn-group">
-      <button type="button" class="btn btn-default" id='60'>1min</button>
-      <button type="button" class="btn btn-default" id='300'>5min</button>
-      <button type="button" class="btn btn-default" id='1800'>30min</button>
-      <button type="button" class="btn btn-default" id='3600'>1hour</button>
-      <button type="button" class="btn btn-default" id='10800'>3hour</button>
-      <button type="button" class="btn btn-default" id='21600'>6hour</button>
+    <div class="pull-right">
+      <div id="autoupdate" class="btn-group">
+        <button type="button" class="btn btn-default">Auto Update</button>
+      </div>
+      <div id="step" class="btn-group">
+        <button type="button" class="btn btn-default" id='60'>1min</button>
+        <button type="button" class="btn btn-default" id='300'>5min</button>
+        <button type="button" class="btn btn-default" id='1800'>30min</button>
+        <button type="button" class="btn btn-default" id='3600'>1hour</button>
+        <button type="button" class="btn btn-default" id='10800'>3hour</button>
+        <button type="button" class="btn btn-default" id='21600'>6hour</button>
+      </div>
     </div>
   </div>
 <% end %>
-
   <div id="horizon" class="row span12"></div>
 </div>
 
@@ -166,8 +170,8 @@ get_group = ( metric ) ->
     colours = ["#3182bd","#31a354"]
     
     return {
-      delay: 60,
-      step: 60,
+      delay: 300,
+      step: 300,
       metrics: [
         {
           alias: 'out (bits)'
@@ -331,7 +335,11 @@ create_horizon = ( metrics, step, delay ) ->
   d = delay
   if not $('#autoupdate button').hasClass( 'btn-primary' )
     d = 0
-  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000<% if params.has_key? :axis_on %>, axis_on=["<%= params[:axis_on] %>"]<% end %> )
+  axis = [ 'top', 'bottom' ]
+  <% unless @axis.nil? %>
+  axis = ["<%= @axis %>"]
+  <% end %>
+  view = new HorizonView( '#horizon', delay=d*1000, step=step*1000, yaxis=true, axis=axis )
   view.add metrics
   return view
 
